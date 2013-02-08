@@ -59,7 +59,7 @@ typedef enum
 
   error = [[NSError alloc] initWithDomain: @"MPEdn" code: code
                                  userInfo: @{NSLocalizedDescriptionKey : desc,
-                                             NSUnderlyingErrorKey : error}];
+                                             NSUnderlyingErrorKey : error ? error : [NSNull null]}];
 }
 
 #pragma mark - Tokeniser
@@ -203,10 +203,19 @@ static BOOL is_sym_punct (unichar ch)
   {
     double number = strtod (numberStrUtf8, &numberStrEnd);
     
-    if (numberStrUtf8 != numberStrEnd)
+    if (numberStrEnd - numberStrUtf8 == endIdx - startIdx)
     {
-      token = TOKEN_NUMBER;
-      tokenValue = [NSNumber numberWithDouble: number];
+      if ([numberStr characterAtIndex: [numberStr length] - 1] == '.')
+      {
+        // strtod happily allows "1." as a legal number
+        token = TOKEN_ERROR;
+        [self raiseError: ERROR_INVALID_NUMBER
+                 message: @"Trailing '.' on number: \"%@\"", numberStr];
+      } else
+      {
+        token = TOKEN_NUMBER;
+        tokenValue = [NSNumber numberWithDouble: number];
+      }
     } else
     {
       token = TOKEN_ERROR;
@@ -217,7 +226,7 @@ static BOOL is_sym_punct (unichar ch)
   {
     long int number = strtol (numberStrUtf8, &numberStrEnd, 10);
     
-    if (numberStrUtf8 != numberStrEnd)
+    if (numberStrEnd - numberStrUtf8 == endIdx - startIdx)
     {
       token = TOKEN_NUMBER;
       tokenValue = [NSNumber numberWithLong: number];
