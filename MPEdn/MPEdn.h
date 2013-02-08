@@ -1,13 +1,18 @@
-//
-//  MPEdn.h
-//  MPEdn
-//
-//  Created by Matthew Phillips on 8/02/13.
-//  Copyright (c) 2013 Matthew Phillips. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
 
-@interface MPEdn : NSObject
+typedef enum
+{
+  ERROR_INVALID_NUMBER = 1
+} EdnParserErrorCode;
+
+@interface NSString (MPEdn)
+
+- (id) ednStringToObject;
+
+@end
+
+@interface NSObject (MPEdn)
+
+- (NSString *) objectToEdnString;
 
 @end

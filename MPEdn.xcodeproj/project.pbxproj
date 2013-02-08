@@ -16,6 +16,7 @@
 		C9FD3A4A16C4D04800F3757E /* libMPEdn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FD3A3116C4D04700F3757E /* libMPEdn.a */; };
 		C9FD3A5016C4D04800F3757E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C9FD3A4E16C4D04800F3757E /* InfoPlist.strings */; };
 		C9FD3A5316C4D04800F3757E /* MPEdnTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FD3A5216C4D04800F3757E /* MPEdnTests.m */; };
+		C9FD3A5C16C4D0F100F3757E /* MPEdn.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FD3A3B16C4D04700F3757E /* MPEdn.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -252,6 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9FD3A5316C4D04800F3757E /* MPEdnTests.m in Sources */,
+				C9FD3A5C16C4D0F100F3757E /* MPEdn.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
