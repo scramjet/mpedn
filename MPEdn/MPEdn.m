@@ -38,6 +38,19 @@ typedef enum
                                              NSUnderlyingErrorKey : error ? error : [NSNull null]}];
 }
 
+- (void) setInputString: (NSString *) str
+{
+  [self reset];
+  
+  inputStr = str;
+  inputStrLen = [inputStr length];
+}
+
+- (NSString *) inputString
+{
+  return inputStr;
+}
+
 - (NSError *) error
 {
   return error;
@@ -264,10 +277,7 @@ static BOOL is_sym_punct (unichar ch)
 
 - (id) parseString: (NSString *) str
 {
-  [self reset];
-  
-  inputStr = str;
-  inputStrLen = [inputStr length];
+  self.inputString = str;
   
   id value = [self parseNextValue];
   
@@ -279,7 +289,7 @@ static BOOL is_sym_punct (unichar ch)
     startIdx = endIdx = inputStrLen;
 
     [self raiseError: ERROR_MULTIPLE_VALUES
-             message: @"More than one value supplied when only one expected"];
+             message: @"More than one value supplied, but only one expected"];
     
     return nil;
   }

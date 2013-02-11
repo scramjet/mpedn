@@ -72,10 +72,24 @@
   MPAssertParseOK (@"\n 1", @1, @"Newlines and space");
   MPAssertParseOK (@"\r\n 1", @1, @"Newlines and space");
   
-  STAssertEqualObjects ([@" ; comment\n 1" ednStringToObject], @1, @"Comment and space");
+  MPAssertParseOK (@" ; comment\n 1", @1, @"Comment and space");
   
   // errors
   MPAssertParseError (@"; comment", @"Comment with no value");
+}
+
+- (void) testMultipleValues
+{
+  MPEdnParser *parser = [MPEdnParser new];
+  
+  parser.inputString = @" 1 2 ";
+  
+  id value1 = [parser parseNextValue];
+  id value2 = [parser parseNextValue];
+  
+  STAssertEqualObjects (value1, @1, @"Value 1");
+  STAssertEqualObjects (value2, @2, @"Value 2");
+  STAssertTrue (parser.complete, @"Complete");
 }
 
 @end

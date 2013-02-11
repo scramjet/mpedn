@@ -20,6 +20,7 @@ typedef enum
   NSError *error;
 }
 
+@property (readwrite) NSString *inputString;
 @property (readonly) NSError *error;
 @property (readonly) BOOL complete;
 
