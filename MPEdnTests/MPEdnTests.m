@@ -92,4 +92,20 @@
   STAssertTrue (parser.complete, @"Complete");
 }
 
+- (void) testStrings
+{
+  MPAssertParseOK (@"\"\"", @"", @"String");
+  MPAssertParseOK (@"\"hello\"", @"hello", @"String");
+  MPAssertParseOK (@"\"hello\t\\\"there\\\"\"", @"hello\t\"there\"", @"String with escapes");
+  
+  // errors
+  MPAssertParseError (@"\"hello", @"Unterminated string");
+  MPAssertParseError (@"\"\\a\"", @"Invalid escape");
+}
+
+//- (void) testListsAndVectors
+//{
+//  MPAssertParseOK (@"{", @1, @"Comment and space");
+//}
+
 @end

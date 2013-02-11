@@ -6,7 +6,8 @@ typedef enum
   TOKEN_NONE = 0xF00000,  // NB: outside UTF-16 range
   TOKEN_ERROR,
   TOKEN_SET_OPEN,
-  TOKEN_NUMBER
+  TOKEN_NUMBER,
+  TOKEN_STRING
 } Token;
 
 @implementation MPEdnParser
@@ -24,18 +25,21 @@ typedef enum
 
 - (void) raiseError: (NSInteger) code message: (NSString *) message, ...
 {
-  va_list args;
-  va_start (args, message);
-  
-  NSString *desc = [[NSString alloc] initWithFormat: message arguments: args];
+  if (!error)
+  {
+    va_list args;
+    va_start (args, message);
+    
+    NSString *desc = [[NSString alloc] initWithFormat: message arguments: args];
 
-  va_end (args);
+    va_end (args);
 
-  token = TOKEN_ERROR;
-  
-  error = [[NSError alloc] initWithDomain: @"MPEdn" code: code
-                                 userInfo: @{NSLocalizedDescriptionKey : desc,
-                                             NSUnderlyingErrorKey : error ? error : [NSNull null]}];
+    token = TOKEN_ERROR;
+    
+    error = [[NSError alloc]
+             initWithDomain: @"MPEdn" code: code
+                                  userInfo: @{NSLocalizedDescriptionKey : desc}];
+  }
 }
 
 - (void) setInputString: (NSString *) str
@@ -67,6 +71,11 @@ static BOOL is_sym_punct (unichar ch)
            ch == '+' || ch == '-' || ch == '.' || ch == '=' || ch == '?' ||
            ch == '_' || ch == '/'));
 }
+
+//- (unichar) currentChar
+//{
+//  return (endIdx < inputStrLen) ? [inputStr characterAtIndex: endIdx] : 0;
+//}
 
 - (unichar) advanceStartIdx
 {
@@ -258,9 +267,66 @@ static BOOL is_sym_punct (unichar ch)
   
 }
 
+static void appendCharacter (NSMutableString *str, unichar ch)
+{
+  // TODO make this faster
+  [str appendString: [NSString stringWithCharacters: &ch length: 1]];
+}
+
 - (void) readStringToken
 {
+  unichar ch = [self advanceEndIdx];  // skip
+  NSMutableString *str = [[NSMutableString alloc] initWithCapacity: 30];
   
+  while (ch != '"' && endIdx < inputStrLen)
+  {
+    if (ch == '\\')
+    {
+      ch = [self advanceEndIdx];
+      
+      switch (ch)
+      {
+        case '\n':
+          appendCharacter (str, '\n');
+          break;
+        case '\t':
+          appendCharacter (str, '\t');
+          break;
+        case '\r':
+          appendCharacter (str, '\r');
+          break;
+        case '\\':
+          appendCharacter (str, '\\');
+          break;
+        case '"':
+          appendCharacter (str, '"');
+          break;
+        default:
+          [self raiseError: ERROR_INVALID_ESCAPE
+                   message: @"Invalid escape sequence: \\%C", ch];
+      }
+    } else
+    {
+      appendCharacter (str, ch);
+    }
+    
+    ch = [self advanceEndIdx];
+  }
+  
+  if (ch == '"')
+  {
+    [self advanceEndIdx]; // skip "
+   
+    if (!error)
+    {
+      token = TOKEN_STRING;
+      tokenValue = str;
+    }
+  } else
+  {
+    [self raiseError: ERROR_UNTERMINATED_STRING
+             message: @"Unterminated string"];
+  }
 }
 
 - (void) readTagName
@@ -313,6 +379,7 @@ static BOOL is_sym_punct (unichar ch)
   switch (token)
   {
     case TOKEN_NUMBER:
+    case TOKEN_STRING:
       return tokenValue;
     case TOKEN_ERROR:
     case TOKEN_SET_OPEN:
