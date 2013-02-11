@@ -298,6 +298,16 @@ static BOOL is_sym_punct (unichar ch)
 
 - (void) readKeywordToken
 {
+  unichar ch;
+  
+  do
+  {
+    ch = [self advanceEndIdx];
+  } while (isalnum (ch) || is_sym_punct (ch));
+  
+  token = TOKEN_KEYWORD;
+  tokenValue =
+    [inputStr substringWithRange: NSMakeRange (startIdx, endIdx - startIdx)];
 }
 
 // TODO make this faster
