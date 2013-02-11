@@ -115,6 +115,11 @@
   MPAssertParseOK (@"abc/de:fg", [MPEdnSymbol symbolWithName: @"abc/de:fg"], @"Symbol");
   MPAssertParseOK (@"+abc", [MPEdnSymbol symbolWithName: @"+abc"], @"Symbol");
   MPAssertParseOK (@".abc", [MPEdnSymbol symbolWithName: @".abc"], @"Symbol");
+  
+  MPAssertParseOK (@"true", @YES, @"Boolean");
+  MPAssertParseOK (@"false", @NO, @"Boolean");
+  
+  MPAssertParseOK (@"nil", [NSNull null], @"Nil");
 }
 
 //- (void) testListsAndVectors
