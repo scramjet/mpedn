@@ -9,43 +9,17 @@ typedef enum
   TOKEN_NUMBER
 } Token;
 
-@interface MPEdnParser : NSObject
-{
-  NSString *inputStr;
-  NSUInteger startIdx;
-  NSUInteger endIdx;
-  NSUInteger inputStrLen;
-  Token token;
-  id tokenValue;
-  NSError *error;
-}
-
-- (id) initWithString: (NSString *) initStr;
-
-- (id) parseExpr;
-
-- (void) nextToken;
-
-@end
-
 @implementation MPEdnParser
 
-- (id) initWithString: (NSString *) initStr
+- (void) reset
 {
-  if (self = [super init])
-  {
-    inputStr = initStr;
-    inputStrLen = [inputStr length];
-    startIdx = 0;
-    endIdx = 0;
-    token = TOKEN_NONE;
-    tokenValue = nil;
-    error = nil;
-    
-    [self nextToken];
-  }
-  
-  return self;
+  inputStr = nil;
+  inputStrLen = 0;
+  startIdx = 0;
+  endIdx = 0;
+  token = TOKEN_NONE;
+  tokenValue = nil;
+  error = nil;
 }
 
 - (void) raiseError: (NSInteger) code message: (NSString *) message, ...
@@ -60,6 +34,11 @@ typedef enum
   error = [[NSError alloc] initWithDomain: @"MPEdn" code: code
                                  userInfo: @{NSLocalizedDescriptionKey : desc,
                                              NSUnderlyingErrorKey : error ? error : [NSNull null]}];
+}
+
+- (NSError *) error
+{
+  return error;
 }
 
 #pragma mark - Tokeniser
@@ -256,6 +235,18 @@ static BOOL is_sym_punct (unichar ch)
 
 #pragma mark - Parser
 
+- (id) parseString: (NSString *) str
+{
+  [self reset];
+  
+  inputStr = str;
+  inputStrLen = [inputStr length];
+
+  [self nextToken];
+  
+  return [self parseExpr];
+}
+
 - (id) parseExpr
 {
   switch (token)
@@ -266,7 +257,11 @@ static BOOL is_sym_punct (unichar ch)
     case TOKEN_SET_OPEN:
       return nil;
     default:
+    {
+      [self raiseError: ERROR_NO_EXPRESSION
+               message: @"No value found in expression"];
       return nil;
+    }
   }
 }
 
@@ -276,9 +271,9 @@ static BOOL is_sym_punct (unichar ch)
 
 - (id) ednStringToObject
 {
-  MPEdnParser *parser = [[MPEdnParser alloc] initWithString: self];
+  MPEdnParser *parser = [MPEdnParser new];
   
-  return [parser parseExpr];
+  return [parser parseString: self];
 }
 
 @end

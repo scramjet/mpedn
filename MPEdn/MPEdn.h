@@ -2,8 +2,29 @@
 
 typedef enum
 {
-  ERROR_INVALID_NUMBER = 1
+  ERROR_OK,
+  ERROR_INVALID_NUMBER,
+  ERROR_NO_EXPRESSION
 } EdnParserErrorCode;
+
+@interface MPEdnParser : NSObject
+{
+  NSString *inputStr;
+  NSUInteger startIdx;
+  NSUInteger endIdx;
+  NSUInteger inputStrLen;
+  NSUInteger token;
+  id tokenValue;
+  NSError *error;
+}
+
+@property (readonly) NSError *error;
+
+- (void) reset;
+
+- (id) parseString: (NSString *) str;
+
+@end
 
 @interface NSString (MPEdn)
 
