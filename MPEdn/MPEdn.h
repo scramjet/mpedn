@@ -5,7 +5,8 @@ typedef enum
   ERROR_OK,
   ERROR_INVALID_NUMBER,
   ERROR_NO_EXPRESSION,
-  ERROR_UNSUPPORTED_FEATURE
+  ERROR_UNSUPPORTED_FEATURE,
+  ERROR_MULTIPLE_VALUES,
 } EdnParserErrorCode;
 
 @interface MPEdnParser : NSObject
@@ -20,10 +21,13 @@ typedef enum
 }
 
 @property (readonly) NSError *error;
+@property (readonly) BOOL complete;
 
 - (void) reset;
 
 - (id) parseString: (NSString *) str;
+
+- (id) parseNextValue;
 
 @end
 

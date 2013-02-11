@@ -69,14 +69,8 @@ static BOOL is_sym_punct (unichar ch)
   return (endIdx < inputStrLen) ? [inputStr characterAtIndex: endIdx] : 0;
 }
 
-// NB: this does not handle symbols and keywords containing Unicode code points
-// > 0xFFFF (i.e. characters that require representation using UTF-16 surrogate
-// pairs). It *does* however support all Unicode points in strings.
-- (void) nextToken
+- (unichar) skipSpaceAndComments
 {
-  tokenValue = nil;
-  startIdx = endIdx;
-  
   if (startIdx < inputStrLen)
   {
     unichar ch = [inputStr characterAtIndex: startIdx];
@@ -98,6 +92,23 @@ static BOOL is_sym_punct (unichar ch)
 
     endIdx = startIdx;
 
+    return ch;
+  } else
+  {
+    return 0;
+  }
+}
+
+// NB: this does not handle symbols and keywords containing Unicode code points
+// > 0xFFFF (i.e. characters that require representation using UTF-16 surrogate
+// pairs). It *does* however support all Unicode points in strings.
+- (void) nextToken
+{
+  tokenValue = nil;
+  unichar ch = [self skipSpaceAndComments];
+
+  if (startIdx < inputStrLen)
+  {
     unichar lookahead =
       startIdx + 1 < inputStrLen ? [inputStr characterAtIndex: startIdx + 1] : 0;
 
@@ -244,16 +255,45 @@ static BOOL is_sym_punct (unichar ch)
 
 #pragma mark - Parser
 
+- (BOOL) complete
+{
+  [self skipSpaceAndComments];
+  
+  return startIdx >= inputStrLen;
+}
+
 - (id) parseString: (NSString *) str
 {
   [self reset];
   
   inputStr = str;
   inputStrLen = [inputStr length];
+  
+  id value = [self parseNextValue];
+  
+  if (self.complete)
+  {
+    return value;
+  } else
+  {
+    startIdx = endIdx = inputStrLen;
 
+    [self raiseError: ERROR_MULTIPLE_VALUES
+             message: @"More than one value supplied when only one expected"];
+    
+    return nil;
+  }
+}
+
+- (id) parseNextValue
+{
   [self nextToken];
   
-  return [self parseExpr];
+  id value = [self parseExpr];
+  
+  startIdx = endIdx;
+  
+  return value;
 }
 
 - (id) parseExpr
