@@ -1,4 +1,5 @@
-#import "MPEDN.h"
+#import "MPEdn.h"
+#import "MPEdnSymbol.h"
 
 // A token is one of these or just a single character.
 typedef enum
@@ -7,8 +8,16 @@ typedef enum
   TOKEN_ERROR,
   TOKEN_SET_OPEN,
   TOKEN_NUMBER,
-  TOKEN_STRING
+  TOKEN_STRING,
+  TOKEN_NAME,
+  TOKEN_KEYWORD,
+  TOKEN_CHARACTER,
 } Token;
+
+static void appendCharacter (NSMutableString *str, unichar ch)
+{
+  [str appendString: [NSString stringWithCharacters: &ch length: 1]];
+}
 
 @implementation MPEdnParser
 
@@ -69,7 +78,7 @@ static BOOL is_sym_punct (unichar ch)
   return (ch >= '!' && ch <= '_' &&
           (ch == '!' || ch == '$' || ch == '%' || ch == '&' || ch == '*' ||
            ch == '+' || ch == '-' || ch == '.' || ch == '=' || ch == '?' ||
-           ch == '_' || ch == '/'));
+           ch == '_' || ch == '/' || ch == ':' || ch == '#'));
 }
 
 - (unichar) currentEndIdxChar
@@ -150,6 +159,12 @@ static BOOL is_sym_punct (unichar ch)
         [self readNameToken];
       else
         [self readNumberToken];
+    } else if (ch == ':')
+    {
+      [self readKeywordToken];
+    } else if (ch == '\\')
+    {
+      [self readCharacterToken];
     } else if (ch == '#')
     {
       if (lookahead == '{')
@@ -262,17 +277,30 @@ static BOOL is_sym_punct (unichar ch)
   }
 }
 
-- (void) readNameToken
+- (void) readCharacterToken
 {
   
 }
 
-static void appendCharacter (NSMutableString *str, unichar ch)
+- (void) readNameToken
 {
-  // TODO make this faster
-  [str appendString: [NSString stringWithCharacters: &ch length: 1]];
+  unichar ch;
+  
+  do
+  {
+    ch = [self advanceEndIdx];
+  } while (isalnum (ch) || is_sym_punct (ch));
+  
+  token = TOKEN_NAME;
+  tokenValue =
+    [inputStr substringWithRange: NSMakeRange (startIdx, endIdx - startIdx)];
 }
 
+- (void) readKeywordToken
+{
+}
+
+// TODO make this faster
 - (void) readStringToken
 {
   unichar ch = [self advanceEndIdx];  // skip "
@@ -386,6 +414,16 @@ static void appendCharacter (NSMutableString *str, unichar ch)
     case TOKEN_NUMBER:
     case TOKEN_STRING:
       return tokenValue;
+    case TOKEN_NAME:
+      // TODO check symbol namespace ('/) validity
+      if ([tokenValue isEqualToString: @"true"])
+        return @YES;
+      else if ([tokenValue isEqualToString: @"false"])
+        return @NO;
+      if ([tokenValue isEqualToString: @"nil"])
+        return [NSNull null];
+      else
+        return [MPEdnSymbol symbolWithName: tokenValue];
     case TOKEN_ERROR:
     case TOKEN_SET_OPEN:
       return nil;
@@ -393,6 +431,7 @@ static void appendCharacter (NSMutableString *str, unichar ch)
     {
       [self raiseError: ERROR_NO_EXPRESSION
                message: @"No value found in expression"];
+
       return nil;
     }
   }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C92B5E7116C8C78200BEFCCA /* MPEdnSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */; };
+		C92B5E7216C8C78200BEFCCA /* MPEdnSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */; };
 		C9FD3A3516C4D04700F3757E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FD3A3416C4D04700F3757E /* Foundation.framework */; };
 		C9FD3A3A16C4D04700F3757E /* MPEdn.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C9FD3A3916C4D04700F3757E /* MPEdn.h */; };
 		C9FD3A3C16C4D04700F3757E /* MPEdn.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FD3A3B16C4D04700F3757E /* MPEdn.m */; };
@@ -43,6 +45,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C92B5E6F16C8C78200BEFCCA /* MPEdnSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnSymbol.h; sourceTree = "<group>"; };
+		C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnSymbol.m; sourceTree = "<group>"; };
 		C9FD3A3116C4D04700F3757E /* libMPEdn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMPEdn.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9FD3A3416C4D04700F3757E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C9FD3A3816C4D04700F3757E /* MPEdn-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MPEdn-Prefix.pch"; sourceTree = "<group>"; };
@@ -114,6 +118,8 @@
 			children = (
 				C9FD3A3916C4D04700F3757E /* MPEdn.h */,
 				C9FD3A3B16C4D04700F3757E /* MPEdn.m */,
+				C92B5E6F16C8C78200BEFCCA /* MPEdnSymbol.h */,
+				C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */,
 				C9FD3A3716C4D04700F3757E /* Supporting Files */,
 			);
 			path = MPEdn;
@@ -245,6 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9FD3A3C16C4D04700F3757E /* MPEdn.m in Sources */,
+				C92B5E7116C8C78200BEFCCA /* MPEdnSymbol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +261,7 @@
 			files = (
 				C9FD3A5316C4D04800F3757E /* MPEdnTests.m in Sources */,
 				C9FD3A5C16C4D0F100F3757E /* MPEdn.m in Sources */,
+				C92B5E7216C8C78200BEFCCA /* MPEdnSymbol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,6 +407,7 @@
 				C9FD3A5816C4D04800F3757E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C9FD3A5916C4D04800F3757E /* Build configuration list for PBXNativeTarget "MPEdnTests" */ = {
 			isa = XCConfigurationList;
@@ -407,6 +416,7 @@
 				C9FD3A5B16C4D04800F3757E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

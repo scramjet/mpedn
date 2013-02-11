@@ -1,6 +1,7 @@
 #import "MPEdnTests.h"
 
-#import "MPEDN.h"
+#import "MPEdn.h"
+#import "MPEdnSymbol.h"
 
 #define MPAssertParseOK(expr, correctValue, message)    \
 {                                          \
@@ -106,6 +107,14 @@
   // errors
   MPAssertParseError (@"\"hello", @"Unterminated string");
   MPAssertParseError (@"\"\\a\"", @"Invalid escape");
+}
+
+- (void) testSymbols
+{
+  MPAssertParseOK (@"a", [MPEdnSymbol symbolWithName: @"a"], @"Symbol");
+  MPAssertParseOK (@"abc/de:fg", [MPEdnSymbol symbolWithName: @"abc/de:fg"], @"Symbol");
+  MPAssertParseOK (@"+abc", [MPEdnSymbol symbolWithName: @"+abc"], @"Symbol");
+  MPAssertParseOK (@".abc", [MPEdnSymbol symbolWithName: @".abc"], @"Symbol");
 }
 
 //- (void) testListsAndVectors
