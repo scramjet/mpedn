@@ -72,10 +72,10 @@ static BOOL is_sym_punct (unichar ch)
            ch == '_' || ch == '/'));
 }
 
-//- (unichar) currentChar
-//{
-//  return (endIdx < inputStrLen) ? [inputStr characterAtIndex: endIdx] : 0;
-//}
+- (unichar) currentEndIdxChar
+{
+  return (endIdx < inputStrLen) ? [inputStr characterAtIndex: endIdx] : 0;
+}
 
 - (unichar) advanceStartIdx
 {
@@ -275,7 +275,7 @@ static void appendCharacter (NSMutableString *str, unichar ch)
 
 - (void) readStringToken
 {
-  unichar ch = [self advanceEndIdx];  // skip
+  unichar ch = [self advanceEndIdx];  // skip "
   NSMutableString *str = [[NSMutableString alloc] initWithCapacity: 30];
   
   while (ch != '"' && endIdx < inputStrLen)
@@ -305,12 +305,17 @@ static void appendCharacter (NSMutableString *str, unichar ch)
           [self raiseError: ERROR_INVALID_ESCAPE
                    message: @"Invalid escape sequence: \\%C", ch];
       }
+      
+      ch = [self advanceEndIdx];
     } else
     {
-      appendCharacter (str, ch);
+      NSRange chRange = [inputStr rangeOfComposedCharacterSequenceAtIndex: endIdx];
+      
+      [str appendString: [inputStr substringWithRange: chRange]];
+      
+      endIdx += chRange.length;
+      ch = [self currentEndIdxChar];
     }
-    
-    ch = [self advanceEndIdx];
   }
   
   if (ch == '"')
