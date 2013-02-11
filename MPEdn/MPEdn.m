@@ -198,12 +198,14 @@ static BOOL is_sym_punct (unichar ch)
 
   if (ch == 'm' || ch == 'M' || ch == 'n' || ch == 'N')
   {
-    ch = [self advanceEndIdx];
+    [self advanceEndIdx];
     
     [self raiseError: ERROR_UNSUPPORTED_FEATURE
              message: @"M and N number suffixes are not supported"];
+    
+    return;
   }
-  
+
   // NB: NSNumberFormatter throws exceptions on error and may or may not parse
   // floats according to the spec. Using strtod and and strtol instead.
   NSString *numberStr =
@@ -330,9 +332,7 @@ static BOOL is_sym_punct (unichar ch)
 
 - (id) ednStringToObject
 {
-  MPEdnParser *parser = [MPEdnParser new];
-  
-  return [parser parseString: self];
+  return [[MPEdnParser new] parseString: self];
 }
 
 @end
