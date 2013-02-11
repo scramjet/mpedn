@@ -4,7 +4,8 @@ typedef enum
 {
   ERROR_OK,
   ERROR_INVALID_NUMBER,
-  ERROR_NO_EXPRESSION
+  ERROR_NO_EXPRESSION,
+  ERROR_UNSUPPORTED_FEATURE
 } EdnParserErrorCode;
 
 @interface MPEdnParser : NSObject

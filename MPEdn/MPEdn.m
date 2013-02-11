@@ -31,6 +31,8 @@ typedef enum
 
   va_end (args);
 
+  token = TOKEN_ERROR;
+  
   error = [[NSError alloc] initWithDomain: @"MPEdn" code: code
                                  userInfo: @{NSLocalizedDescriptionKey : desc,
                                              NSUnderlyingErrorKey : error ? error : [NSNull null]}];
@@ -170,6 +172,16 @@ static BOOL is_sym_punct (unichar ch)
       ch = [self advanceEndIdx];
   }
 
+  if (ch == 'm' || ch == 'M' || ch == 'n' || ch == 'N')
+  {
+    ch = [self advanceEndIdx];
+    
+    [self raiseError: ERROR_UNSUPPORTED_FEATURE
+             message: @"M and N number suffixes are not supported"];
+  }
+  
+  // NB: NSNumberFormatter throws exceptions on error and may or may not parse
+  // floats according to the spec. Using strtod and and strtol instead.
   NSString *numberStr =
     [inputStr substringWithRange: NSMakeRange (startIdx, endIdx - startIdx)];
                           
@@ -187,7 +199,6 @@ static BOOL is_sym_punct (unichar ch)
       if ([numberStr characterAtIndex: [numberStr length] - 1] == '.')
       {
         // strtod happily allows "1." as a legal number
-        token = TOKEN_ERROR;
         [self raiseError: ERROR_INVALID_NUMBER
                  message: @"Trailing '.' on number: \"%@\"", numberStr];
       } else
@@ -197,7 +208,6 @@ static BOOL is_sym_punct (unichar ch)
       }
     } else
     {
-      token = TOKEN_ERROR;
       [self raiseError: ERROR_INVALID_NUMBER
                message: @"Invalid floating point number: \"%@\"", numberStr];
     }
@@ -211,7 +221,6 @@ static BOOL is_sym_punct (unichar ch)
       tokenValue = [NSNumber numberWithLong: number];
     } else
     {
-      token = TOKEN_ERROR;
       [self raiseError: ERROR_INVALID_NUMBER
                message: @"Invalid integer: \"%@\"", numberStr];
     }

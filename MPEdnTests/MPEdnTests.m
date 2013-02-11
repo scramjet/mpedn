@@ -42,6 +42,9 @@
   STAssertEqualObjects ([@"-42.2e-2" ednStringToObject], @-42.2e-2, @"Float");
   STAssertEqualObjects ([@".2" ednStringToObject], @.2, @"Float");
   
+  // does not allow M or N (not implemented)
+  MPAssertParseError (@"1.0M", @"Float");
+  
   // errors
   MPAssertParseError (@".", @"Float");
   MPAssertParseError (@"1.", @"Float");
