@@ -196,7 +196,7 @@
 {
   MPEdnParser *parser = [MPEdnParser new];
   
-  parser.inputString = @"1 \"abc\" {:a 1 :foo [1 2 3]}";
+  parser.inputString = @"1 \"abc\" {:a 1, :foo [1 2 3]}";
   
   while (!parser.complete)
   {

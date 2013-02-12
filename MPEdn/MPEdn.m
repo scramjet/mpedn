@@ -89,6 +89,11 @@ static BOOL is_sym_punct (unichar ch)
   return (endIdx < inputStrLen) ? [inputStr characterAtIndex: endIdx] : 0;
 }
 
+- (unichar) charAt: (NSUInteger) index
+{
+  return (index < inputStrLen) ? [inputStr characterAtIndex: index] : 0;
+}
+
 - (unichar) advanceStartIdx
 {
   startIdx++;
@@ -154,9 +159,6 @@ static BOOL is_sym_punct (unichar ch)
 
   if (startIdx < inputStrLen)
   {
-    unichar lookahead =
-      startIdx + 1 < inputStrLen ? [inputStr characterAtIndex: startIdx + 1] : 0;
-
     if (ch == '{' || ch == '[' || ch == '(' || ch == '}' || ch == ']' || ch == ')')
     {
       token = ch;
@@ -169,7 +171,7 @@ static BOOL is_sym_punct (unichar ch)
       [self readNumberToken];
     } else if (ch == '+' || ch == '-' || ch == '.')
     {
-      if (isalpha (lookahead))
+      if (isalpha ([self charAt: startIdx + 1]))
         [self readNameToken];
       else
         [self readNumberToken];
@@ -181,6 +183,8 @@ static BOOL is_sym_punct (unichar ch)
       [self readCharacterToken];
     } else if (ch == '#')
     {
+      unichar lookahead = [self charAt: startIdx + 1];
+      
       if (lookahead == '{')
       {
         token = TOKEN_SET_OPEN;
