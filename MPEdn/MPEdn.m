@@ -511,7 +511,7 @@ static BOOL is_sym_punct (unichar ch)
     case '[':
     case '(':
     {
-      [self parseList];
+      return [self parseList];
     }
     default:
     {
@@ -582,7 +582,32 @@ static BOOL is_sym_punct (unichar ch)
 
 - (NSArray *) parseList
 {
+  unichar end = token == '[' ? ']' : ')';
   
+  NSMutableArray *list = [NSMutableArray new];
+  
+  [self nextToken];
+  
+  while (token != end && !error && endIdx < inputStrLen)
+  {
+    id value = [self parseExpr];
+    
+    if (value)
+      [list addObject: value];
+  }
+  
+  if (token == end)
+  {
+    [self nextToken];
+    
+    return list;
+  } else
+  {
+    [self raiseError: UNTERMINATED_COLLECTION
+             message: @"Unterminated list (missing '%C')", end];
+    
+    return nil;
+  }
 }
 
 @end

@@ -170,6 +170,28 @@
   MPAssertParseError (@"{}}", @"Map");
 }
 
+- (void) testLists
+{
+  MPAssertParseOK (@"[]", @[], @"Empty list");
+  {
+    id list = @[@"a", @1];
+    MPAssertParseOK (@"[:a, 1]", list, @"List");
+    MPAssertParseOK (@"(:a, 1)", list, @"List");
+  }
+  
+  {
+    id list = @[@{@"a" : @1}, @2];
+    MPAssertParseOK (@"[{:a 1}, 2]", list, @"List");
+  }
+  
+  // errors
+  MPAssertParseError (@"[", @"List");
+  MPAssertParseError (@"(", @"List");
+  MPAssertParseError (@"(]", @"List");
+  MPAssertParseError (@"(:a, :b]", @"List");
+  MPAssertParseError (@"[]]", @"List");
+}
+
 //- (void) testListsAndVectors
 //{
 //  MPAssertParseOK (@"{", @1, @"Comment and space");
