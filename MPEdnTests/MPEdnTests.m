@@ -153,6 +153,23 @@
   MPAssertParseError (@"#{}}", @"Set");
 }
 
+- (void) testMaps
+{
+  MPAssertParseOK (@"{}", [NSDictionary dictionary], @"Empty map");
+  {
+    id map = @{@"a" : @1};
+    MPAssertParseOK (@"{:a, 1}", map, @"Map");
+  }
+  {
+    id map = @{@"a" : @1, @"b" : @"c"};
+    MPAssertParseOK (@"{:a 1, \"b\" :c}", map, @"Map");
+  }
+ 
+  // errors
+  MPAssertParseError (@"{", @"Map");
+  MPAssertParseError (@"{}}", @"Map");
+}
+
 //- (void) testListsAndVectors
 //{
 //  MPAssertParseOK (@"{", @1, @"Comment and space");

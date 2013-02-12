@@ -544,7 +544,7 @@ static BOOL is_sym_punct (unichar ch)
     return set;
   } else
   {
-    [self raiseError: UNTERMINATED_SET
+    [self raiseError: UNTERMINATED_COLLECTION
              message: @"Unterminated set (missing '}')"];
     
     return nil;
@@ -553,7 +553,31 @@ static BOOL is_sym_punct (unichar ch)
 
 - (NSDictionary *) parseMap
 {
+  NSMutableDictionary *map = [NSMutableDictionary new];
   
+  [self nextToken];
+  
+  while (token != '}' && !error && endIdx < inputStrLen)
+  {
+    id key = [self parseExpr];
+    id value = [self parseExpr];
+
+    if (key && value)
+      [map setObject: value forKey: key];
+  }
+  
+  if (token == '}')
+  {
+    [self nextToken];
+    
+    return map;
+  } else
+  {
+    [self raiseError: UNTERMINATED_COLLECTION
+             message: @"Unterminated map (missing '}')"];
+    
+    return nil;
+  }
 }
 
 - (NSArray *) parseList
