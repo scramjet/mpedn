@@ -77,7 +77,7 @@ static void appendCharacter (NSMutableString *str, unichar ch)
 static BOOL is_sym_punct (unichar ch)
 {
   // NB: '/' is added to the specified EDN set of punctuation allowed in
-  // symbol names. The check for its valid use is done by the parser.
+  // symbol names. The check for its valid use will be done by the parser.
   return (ch >= '!' && ch <= '_' &&
           (ch == '!' || ch == '$' || ch == '%' || ch == '&' || ch == '*' ||
            ch == '+' || ch == '-' || ch == '.' || ch == '=' || ch == '?' ||
@@ -123,8 +123,9 @@ static BOOL is_sym_punct (unichar ch)
         ch = [self advanceStartIdx];
       }
     }
-
-    endIdx = startIdx;
+    
+    if (endIdx < startIdx)
+      endIdx = startIdx;
 
     return ch;
   } else
@@ -483,9 +484,14 @@ static BOOL is_sym_punct (unichar ch)
     case TOKEN_STRING:
     case TOKEN_KEYWORD:
     case TOKEN_CHARACTER:
-    {
       return [self consumeToken];
-    }
+    case '{':
+      return [self parseMap];
+    case '[':
+    case '(':
+      return [self parseList];
+    case TOKEN_SET_OPEN:
+      return [self parseSet];
     case TOKEN_NAME:
     {
       id value = [self consumeToken];
@@ -500,26 +506,11 @@ static BOOL is_sym_punct (unichar ch)
       else
         return [MPEdnSymbol symbolWithName: value];
     }
-    case TOKEN_SET_OPEN:
-    {
-      return [self parseSet];
-    }
-    case '{':
-    {
-      return [self parseMap];
-    }
-    case '[':
-    case '(':
-    {
-      return [self parseList];
-    }
     default:
-    {
       [self raiseError: ERROR_NO_EXPRESSION
                message: @"No value found in expression"];
 
       return nil;
-    }
   }
 }
 

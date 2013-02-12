@@ -83,7 +83,7 @@
 {
   MPEdnParser *parser = [MPEdnParser new];
   
-  parser.inputString = @" 1 2 ";
+  parser.inputString = @"1 2 ";
   
   id value1 = [parser parseNextValue];
   id value2 = [parser parseNextValue];
@@ -192,9 +192,29 @@
   MPAssertParseError (@"[]]", @"List");
 }
 
-//- (void) testListsAndVectors
-//{
-//  MPAssertParseOK (@"{", @1, @"Comment and space");
-//}
+- (void) testGeneralUsage
+{
+  MPEdnParser *parser = [MPEdnParser new];
+  
+  parser.inputString = @"1 \"abc\" {:a 1 :foo [1 2 3]}";
+  
+  while (!parser.complete)
+  {
+    id value = [parser parseNextValue];
+    
+    NSLog (@"Value %@", value);
+    
+    STAssertNotNil (value, @"Value");
+  }
+  
+  parser.inputString = @"[:unterminated";
+  
+  id value = [parser parseNextValue];
+  
+  STAssertNil (value, @"Nil on parse error");
+  STAssertNotNil (parser.error, @"Error set on parse error");
+  
+  NSLog (@"Error: %@", parser.error);
+}
 
 @end
