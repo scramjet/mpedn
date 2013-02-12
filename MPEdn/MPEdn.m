@@ -305,9 +305,18 @@ static BOOL is_sym_punct (unichar ch)
     ch = [self advanceEndIdx];
   } while (isalnum (ch) || is_sym_punct (ch));
   
-  token = TOKEN_KEYWORD;
-  tokenValue =
-    [inputStr substringWithRange: NSMakeRange (startIdx, endIdx - startIdx)];
+  NSInteger length = endIdx - startIdx - 1;
+  
+  if (length > 0)
+  {
+    token = TOKEN_KEYWORD;
+    tokenValue =
+      [inputStr substringWithRange: NSMakeRange (startIdx + 1, length)];
+  } else
+  {
+    [self raiseError: ERROR_INVALID_KEYWORD
+             message: @"Empty keyword not allowed"];
+  }
 }
 
 // TODO make this faster
@@ -454,6 +463,7 @@ static BOOL is_sym_punct (unichar ch)
   {
     case TOKEN_NUMBER:
     case TOKEN_STRING:
+    case TOKEN_KEYWORD:
       return tokenValue;
     case TOKEN_NAME:
       // TODO check symbol namespace ('/) validity

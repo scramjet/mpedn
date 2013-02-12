@@ -122,6 +122,15 @@
   MPAssertParseOK (@"nil", [NSNull null], @"Nil");
 }
 
+- (void) testKeywords
+{
+  MPAssertParseOK (@":a", @"a", @"Keyword");
+  MPAssertParseOK (@":abc", @"abc", @"Keyword");
+  MPAssertParseOK (@":abc.def/ghi", @"abc.def/ghi", @"Keyword");
+  
+  MPAssertParseError (@":", @"Keyword");
+}
+
 //- (void) testListsAndVectors
 //{
 //  MPAssertParseOK (@"{", @1, @"Comment and space");
