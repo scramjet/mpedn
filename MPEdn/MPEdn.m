@@ -314,48 +314,79 @@ static BOOL is_sym_punct (unichar ch)
 - (void) readStringToken
 {
   unichar ch = [self advanceEndIdx];  // skip "
-  NSMutableString *str = [[NSMutableString alloc] initWithCapacity: 30];
+  BOOL hasEscapes = NO;
+  NSString *stringValue;
   
-  while (ch != '"' && endIdx < inputStrLen)
+  // fast path for strings not needing escape processing
+  while (ch != '"' && !hasEscapes && endIdx < inputStrLen)
   {
     if (ch == '\\')
     {
-      ch = [self advanceEndIdx];
-      
-      switch (ch)
-      {
-        case '\n':
-          appendCharacter (str, '\n');
-          break;
-        case '\t':
-          appendCharacter (str, '\t');
-          break;
-        case '\r':
-          appendCharacter (str, '\r');
-          break;
-        case '\\':
-          appendCharacter (str, '\\');
-          break;
-        case '"':
-          appendCharacter (str, '"');
-          break;
-        default:
-          [self raiseError: ERROR_INVALID_ESCAPE
-                   message: @"Invalid escape sequence: \\%C", ch];
-      }
-      
-      ch = [self advanceEndIdx];
+      hasEscapes = YES;
     } else
     {
       NSRange chRange = [inputStr rangeOfComposedCharacterSequenceAtIndex: endIdx];
-      
-      [str appendString: [inputStr substringWithRange: chRange]];
       
       endIdx += chRange.length;
       ch = [self currentEndIdxChar];
     }
   }
   
+  if (!hasEscapes)
+  {
+    stringValue =
+      [inputStr substringWithRange: NSMakeRange (startIdx + 1, endIdx - startIdx - 1)];
+  } else
+  {
+    NSMutableString *str = [[NSMutableString alloc] initWithCapacity: 30];
+
+    // reset endIdx
+    endIdx = startIdx;
+    ch = [self advanceEndIdx];
+
+    while (ch != '"' && endIdx < inputStrLen)
+    {
+      if (ch == '\\')
+      {
+        ch = [self advanceEndIdx];
+        
+        switch (ch)
+        {
+          case '\n':
+            appendCharacter (str, '\n');
+            break;
+          case '\t':
+            appendCharacter (str, '\t');
+            break;
+          case '\r':
+            appendCharacter (str, '\r');
+            break;
+          case '\\':
+            appendCharacter (str, '\\');
+            break;
+          case '"':
+            appendCharacter (str, '"');
+            break;
+          default:
+            [self raiseError: ERROR_INVALID_ESCAPE
+                     message: @"Invalid escape sequence: \\%C", ch];
+        }
+        
+        ch = [self advanceEndIdx];
+      } else
+      {
+        NSRange chRange = [inputStr rangeOfComposedCharacterSequenceAtIndex: endIdx];
+        
+        [str appendString: [inputStr substringWithRange: chRange]];
+        
+        endIdx += chRange.length;
+        ch = [self currentEndIdxChar];
+      }
+    }
+    
+    stringValue = str;
+  }
+
   if (ch == '"')
   {
     [self advanceEndIdx]; // skip "
@@ -363,7 +394,7 @@ static BOOL is_sym_punct (unichar ch)
     if (!error)
     {
       token = TOKEN_STRING;
-      tokenValue = str;
+      tokenValue = stringValue;
     }
   } else
   {

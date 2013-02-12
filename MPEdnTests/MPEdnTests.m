@@ -100,7 +100,7 @@
   MPAssertParseOK (@"\"hello\t\\\"there\\\"\"", @"hello\t\"there\"", @"String with escapes");
   
   // unicode (UTF-16)
-  NSString *smiley = [NSString stringWithUTF8String: "\xF0\x9F\x98\x84"];
+  NSString *smiley = [NSString stringWithUTF8String: "hello \xF0\x9F\x98\x84 smiley"];
   NSString *str = [NSString stringWithFormat: @"\"%@\"", smiley];
   MPAssertParseOK (str, smiley, @"String with Unicode");
   
