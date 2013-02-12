@@ -28,6 +28,11 @@
          [[object name] isEqualToString: name];
 }
 
+- (NSUInteger) hash
+{
+  return [name hash];
+}
+
 - (NSString *) description
 {
   return [NSString stringWithFormat: @"Symbol: %@", name];

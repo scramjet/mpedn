@@ -5,6 +5,7 @@
 typedef enum
 {
   TOKEN_NONE = 0xF00000,  // NB: outside UTF-16 range
+  TOKEN_END,
   TOKEN_ERROR,
   TOKEN_SET_OPEN,
   TOKEN_NUMBER,
@@ -57,6 +58,8 @@ static void appendCharacter (NSMutableString *str, unichar ch)
   
   inputStr = str;
   inputStrLen = [inputStr length];
+  
+  [self nextToken];
 }
 
 - (NSString *) inputString
@@ -107,7 +110,7 @@ static BOOL is_sym_punct (unichar ch)
     unichar ch = [inputStr characterAtIndex: startIdx];
     
     // skip white space and comments
-    while ((isspace (ch) || ch == ';') && startIdx < inputStrLen)
+    while ((isspace (ch) || ch == ',' || ch == ';') && startIdx < inputStrLen)
     {
       if (ch == ';')
       {
@@ -130,11 +133,21 @@ static BOOL is_sym_punct (unichar ch)
   }
 }
 
+- (id) consumeToken
+{
+  id value = tokenValue;
+  
+  [self nextToken];
+  
+  return value;
+}
+
 // NB: this does not handle symbols and keywords containing Unicode code points
 // > 0xFFFF (i.e. characters that require representation using UTF-16 surrogate
 // pairs). It *does* however support all Unicode points in strings.
 - (void) nextToken
 {
+  startIdx = endIdx;
   tokenValue = nil;
   unichar ch = [self skipSpaceAndComments];
 
@@ -143,7 +156,7 @@ static BOOL is_sym_punct (unichar ch)
     unichar lookahead =
       startIdx + 1 < inputStrLen ? [inputStr characterAtIndex: startIdx + 1] : 0;
 
-    if (ch == '{' || ch == '[' || ch == '(')
+    if (ch == '{' || ch == '[' || ch == '(' || ch == '}' || ch == ']' || ch == ')')
     {
       token = ch;
       endIdx = startIdx + 1;
@@ -181,10 +194,17 @@ static BOOL is_sym_punct (unichar ch)
       {
         [self readTagName];
       }
-    } else
+    } else if (isalpha (ch) || is_sym_punct (ch))
     {
       [self readNameToken];
+    } else
+    {
+      [self raiseError: ERROR_INVALID_TOKEN
+               message: @"Unparseable character %C", ch];
     }
+  } else
+  {
+    token = TOKEN_END;
   }
 }
 
@@ -296,6 +316,7 @@ static BOOL is_sym_punct (unichar ch)
     [inputStr substringWithRange: NSMakeRange (startIdx, endIdx - startIdx)];
 }
 
+// TODO intern strings?
 - (void) readKeywordToken
 {
   unichar ch;
@@ -319,14 +340,13 @@ static BOOL is_sym_punct (unichar ch)
   }
 }
 
-// TODO make this faster
 - (void) readStringToken
 {
   unichar ch = [self advanceEndIdx];  // skip "
   BOOL hasEscapes = NO;
   NSString *stringValue;
   
-  // fast path for strings not needing escape processing
+  // check for fast path for strings not needing escape processing
   while (ch != '"' && !hasEscapes && endIdx < inputStrLen)
   {
     if (ch == '\\')
@@ -343,10 +363,14 @@ static BOOL is_sym_punct (unichar ch)
   
   if (!hasEscapes)
   {
+    // fast path: just make a substring
     stringValue =
       [inputStr substringWithRange: NSMakeRange (startIdx + 1, endIdx - startIdx - 1)];
   } else
   {
+    // slow path: scan each character and append
+    // TODO make this faster: use a character buffer rather than NSMutableString
+    // to avoid creating lots of temp strings in appendString.
     NSMutableString *str = [[NSMutableString alloc] initWithCapacity: 30];
 
     // reset endIdx
@@ -448,13 +472,7 @@ static BOOL is_sym_punct (unichar ch)
 
 - (id) parseNextValue
 {
-  [self nextToken];
-  
-  id value = [self parseExpr];
-  
-  startIdx = endIdx;
-  
-  return value;
+  return [self parseExpr];
 }
 
 - (id) parseExpr
@@ -464,20 +482,37 @@ static BOOL is_sym_punct (unichar ch)
     case TOKEN_NUMBER:
     case TOKEN_STRING:
     case TOKEN_KEYWORD:
-      return tokenValue;
+    case TOKEN_CHARACTER:
+    {
+      return [self consumeToken];
+    }
     case TOKEN_NAME:
+    {
+      id value = [self consumeToken];
+      
       // TODO check symbol namespace ('/) validity
-      if ([tokenValue isEqualToString: @"true"])
+      if ([value isEqualToString: @"true"])
         return @YES;
-      else if ([tokenValue isEqualToString: @"false"])
+      else if ([value isEqualToString: @"false"])
         return @NO;
-      if ([tokenValue isEqualToString: @"nil"])
+      if ([value isEqualToString: @"nil"])
         return [NSNull null];
       else
-        return [MPEdnSymbol symbolWithName: tokenValue];
-    case TOKEN_ERROR:
+        return [MPEdnSymbol symbolWithName: value];
+    }
     case TOKEN_SET_OPEN:
-      return nil;
+    {
+      return [self parseSet];
+    }
+    case '{':
+    {
+      return [self parseMap];
+    }
+    case '[':
+    case '(':
+    {
+      [self parseList];
+    }
     default:
     {
       [self raiseError: ERROR_NO_EXPRESSION
@@ -486,6 +521,44 @@ static BOOL is_sym_punct (unichar ch)
       return nil;
     }
   }
+}
+
+- (NSSet *) parseSet
+{
+  NSMutableSet *set = [NSMutableSet new];
+  
+  [self nextToken];
+  
+  while (token != '}' && !error && endIdx < inputStrLen)
+  {
+    id value = [self parseExpr];
+    
+    if (value)
+      [set addObject: value];
+  }
+  
+  if (token == '}')
+  {
+    [self nextToken];
+    
+    return set;
+  } else
+  {
+    [self raiseError: UNTERMINATED_SET
+             message: @"Unterminated set (missing '}')"];
+    
+    return nil;
+  }
+}
+
+- (NSDictionary *) parseMap
+{
+  
+}
+
+- (NSArray *) parseList
+{
+  
 }
 
 @end

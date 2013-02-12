@@ -72,7 +72,7 @@
   MPAssertParseOK (@"\t 1", @1, @"Tabs and space");
   MPAssertParseOK (@"\n 1", @1, @"Newlines and space");
   MPAssertParseOK (@"\r\n 1", @1, @"Newlines and space");
-  
+  MPAssertParseOK (@",1,", @1, @"Commas");
   MPAssertParseOK (@" ; comment\n 1", @1, @"Comment and space");
   
   // errors
@@ -120,6 +120,10 @@
   MPAssertParseOK (@"false", @NO, @"Boolean");
   
   MPAssertParseOK (@"nil", [NSNull null], @"Nil");
+  
+  MPAssertParseError (@"}", @"Not a symbol");
+  MPAssertParseError (@"]", @"Not a symbol");
+  MPAssertParseError (@")", @"Not a symbol");
 }
 
 - (void) testKeywords
@@ -129,6 +133,24 @@
   MPAssertParseOK (@":abc.def/ghi", @"abc.def/ghi", @"Keyword");
   
   MPAssertParseError (@":", @"Keyword");
+}
+
+- (void) testSets
+{
+  MPAssertParseOK (@"#{}", [NSSet set], @"Empty set");
+  MPAssertParseOK (@"#{1}", [NSSet setWithArray: @[@1]], @"Set");
+  {
+    id items = [NSSet setWithArray: @[@1, @2, @3]];
+    MPAssertParseOK (@"#{1, 2, 3}", items, @"Set");
+  }
+  {
+    id items = [NSSet setWithArray: @[@1, @"abc", @"def"]];
+    MPAssertParseOK (@"#{1, \"abc\", :def}", items, @"Set");
+  }
+  
+  // errors
+  MPAssertParseError (@"#{", @"Set");
+  MPAssertParseError (@"#{}}", @"Set");
 }
 
 //- (void) testListsAndVectors
