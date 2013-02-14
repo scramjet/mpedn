@@ -27,20 +27,6 @@
 
 @implementation MPEdnTests
 
-//- (void)setUp
-//{
-//    [super setUp];
-//    
-//    // Set-up code here.
-//}
-//
-//- (void)tearDown
-//{
-//    // Tear-down code here.
-//    
-//    [super tearDown];
-//}
-
 - (void) testNumbers
 {
   // int
@@ -217,9 +203,7 @@
 
 - (void) testTaggedValues
 {
-  MPEdnParser *parser = [MPEdnParser new];
-  
-  id map = [parser parseString: @"#hello {:a 1}"];
+  id map = [@"#hello {:a 1}" ednStringToObject];
   
   STAssertEqualObjects (@"hello", [MPEdnParser tagForValue: map], @"Tag");
   

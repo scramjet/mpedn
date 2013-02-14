@@ -697,6 +697,8 @@ static BOOL is_sym_punct (unichar ch)
     return [MPEdnSymbol symbolWithName: value];
 }
 
+// TODO in future we may want to allow a user-defined call back to handle the
+// tag and pre-process/transform the value.
 - (id) parseTag
 {
   NSString *tag = [self consumeTokenValue];
