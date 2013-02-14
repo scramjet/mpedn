@@ -203,6 +203,18 @@
   MPAssertParseError (@"#_ 1 \"", @"Discard");
 }
 
+- (void) testCharacters
+{
+  MPAssertParseOK (@"\\a", @'a', @"Character");
+  MPAssertParseOK (@"\\newline", @'\n', @"Character");
+  MPAssertParseOK (@"\\tab", @'\t', @"Character");
+  MPAssertParseOK (@"\\return", @'\r', @"Character");
+  MPAssertParseOK (@"\\space", @' ', @"Character");
+  
+  MPAssertParseError (@"\\", @"Character");
+  MPAssertParseError (@"\\hello", @"Character");
+}
+
 - (void) testGeneralUsage
 {
   MPEdnParser *parser = [MPEdnParser new];
