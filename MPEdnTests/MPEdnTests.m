@@ -192,6 +192,17 @@
   MPAssertParseError (@"[]]", @"List");
 }
 
+- (void) testDiscard
+{
+  MPAssertParseOK (@"#_ 1 2", @2, @"Discard");
+  MPAssertParseOK (@"#_1 2", @2, @"Discard");
+  MPAssertParseOK (@"#_[1 2 3] 2", @2, @"Discard");
+  
+  MPAssertParseError (@"#_", @"Discard");
+  MPAssertParseError (@"#_ \"", @"Discard");
+  MPAssertParseError (@"#_ 1 \"", @"Discard");
+}
+
 - (void) testGeneralUsage
 {
   MPEdnParser *parser = [MPEdnParser new];

@@ -103,6 +103,8 @@ static BOOL is_sym_punct (unichar ch)
 
 - (unichar) advanceEndIdx
 {
+  // TODO could use rangeOfComposedCharacterSequenceAtIndex here if we wanted
+  // to support surrogate pairs outside of strings (and be slower)
   endIdx++;
   
   return (endIdx < inputStrLen) ? [inputStr characterAtIndex: endIdx] : 0;
@@ -193,8 +195,15 @@ static BOOL is_sym_punct (unichar ch)
       {
         endIdx = startIdx + 2;
         [self nextToken];
-        [self parseExpr];
-        [self nextToken];
+        
+        if (token != TOKEN_END || token != TOKEN_ERROR)
+        {
+          [self parseExpr];
+        } else
+        {
+          [self raiseError: ERROR_INVALID_DISCARD
+                   message: @"No expression following discard (#_) symbol"];
+        }
       } else
       {
         [self readTagName];
@@ -539,7 +548,7 @@ static BOOL is_sym_punct (unichar ch)
     return set;
   } else
   {
-    [self raiseError: UNTERMINATED_COLLECTION
+    [self raiseError: ERROR_UNTERMINATED_COLLECTION
              message: @"Unterminated set (missing '}')"];
     
     return nil;
@@ -568,7 +577,7 @@ static BOOL is_sym_punct (unichar ch)
     return map;
   } else
   {
-    [self raiseError: UNTERMINATED_COLLECTION
+    [self raiseError: ERROR_UNTERMINATED_COLLECTION
              message: @"Unterminated map (missing '}')"];
     
     return nil;
@@ -598,7 +607,7 @@ static BOOL is_sym_punct (unichar ch)
     return list;
   } else
   {
-    [self raiseError: UNTERMINATED_COLLECTION
+    [self raiseError: ERROR_UNTERMINATED_COLLECTION
              message: @"Unterminated list (missing '%C')", end];
     
     return nil;
