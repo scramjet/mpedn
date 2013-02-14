@@ -13,6 +13,7 @@ typedef enum
   ERROR_INVALID_KEYWORD,
   ERROR_INVALID_DISCARD,
   ERROR_INVALID_CHARACTER,
+  ERROR_INVALID_TAG,
   ERROR_UNTERMINATED_COLLECTION
 } EdnParserErrorCode;
 
@@ -30,6 +31,8 @@ typedef enum
 @property (readwrite) NSString *inputString;
 @property (readonly) NSError *error;
 @property (readonly) BOOL complete;
+
++ (NSString *) tagForValue: (id) value;
 
 - (void) reset;
 

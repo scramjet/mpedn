@@ -1,5 +1,9 @@
+#import <objc/objc-runtime.h>
+
 #import "MPEdn.h"
 #import "MPEdnSymbol.h"
+
+NSString * const MPEDN_TAG_NAME = @"MPEDN_TagName";
 
 // A token is one of these or just a single character.
 typedef enum
@@ -13,6 +17,7 @@ typedef enum
   TOKEN_NAME,
   TOKEN_KEYWORD,
   TOKEN_CHARACTER,
+  TOKEN_TAG
 } Token;
 
 static void appendCharacter (NSMutableString *str, unichar ch)
@@ -21,6 +26,13 @@ static void appendCharacter (NSMutableString *str, unichar ch)
 }
 
 @implementation MPEdnParser
+
+#pragma mark - Init
+
++ (NSString *) tagForValue: (id) value
+{
+  return objc_getAssociatedObject (value, (__bridge const void *)MPEDN_TAG_NAME);
+}
 
 - (void) reset
 {
@@ -141,7 +153,7 @@ static BOOL is_sym_punct (unichar ch)
   }
 }
 
-- (id) consumeToken
+- (id) consumeTokenValue
 {
   id value = tokenValue;
   
@@ -499,7 +511,24 @@ static BOOL is_sym_punct (unichar ch)
 
 - (void) readTagName
 {
+  unichar ch;
   
+  do
+  {
+    ch = [self advanceEndIdx];
+  } while (isalnum (ch) || is_sym_punct (ch));
+  
+  NSInteger tagLen = endIdx - startIdx - 1;
+  
+  if (tagLen > 0)
+  {
+    token = TOKEN_TAG;
+    tokenValue = [inputStr substringWithRange: NSMakeRange (startIdx + 1, tagLen)];
+  } else
+  {
+    [self raiseError: ERROR_INVALID_TAG
+             message: @"Empty tag not allowed"];
+  }
 }
 
 #pragma mark - Parser
@@ -544,7 +573,7 @@ static BOOL is_sym_punct (unichar ch)
     case TOKEN_STRING:
     case TOKEN_KEYWORD:
     case TOKEN_CHARACTER:
-      return [self consumeToken];
+      return [self consumeTokenValue];
     case '{':
       return [self parseMap];
     case '[':
@@ -553,24 +582,16 @@ static BOOL is_sym_punct (unichar ch)
     case TOKEN_SET_OPEN:
       return [self parseSet];
     case TOKEN_NAME:
-    {
-      id value = [self consumeToken];
-      
-      // TODO check symbol namespace ('/) validity
-      if ([value isEqualToString: @"true"])
-        return @YES;
-      else if ([value isEqualToString: @"false"])
-        return @NO;
-      if ([value isEqualToString: @"nil"])
-        return [NSNull null];
-      else
-        return [MPEdnSymbol symbolWithName: value];
-    }
+      return [self parseName];
+    case TOKEN_TAG:
+      return [self parseTag];
     default:
+    {
       [self raiseError: ERROR_NO_EXPRESSION
                message: @"No value found in expression"];
 
       return nil;
+    }
   }
 }
 
@@ -661,7 +682,51 @@ static BOOL is_sym_punct (unichar ch)
   }
 }
 
+- (id) parseName
+{
+  id value = [self consumeTokenValue];
+  
+  // TODO check symbol namespace ('/) validity
+  if ([value isEqualToString: @"true"])
+    return @YES;
+  else if ([value isEqualToString: @"false"])
+    return @NO;
+  if ([value isEqualToString: @"nil"])
+    return [NSNull null];
+  else
+    return [MPEdnSymbol symbolWithName: value];
+}
+
+- (id) parseTag
+{
+  NSString *tag = [self consumeTokenValue];
+  
+  if (token != TOKEN_TAG)
+  {
+    id value = [self parseExpr];
+    
+    if (!error)
+    {
+      objc_setAssociatedObject (value, (__bridge const void *)MPEDN_TAG_NAME,
+                                tag, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+      
+      return value;
+    } else
+    {
+      return nil;
+    }
+  } else
+  {
+    [self raiseError: ERROR_INVALID_TAG
+             message: @"Cannot follow a tag with another tag"];
+    
+    return nil;
+  }
+}
+
 @end
+
+#pragma mark - Category methods
 
 @implementation NSString (MPEdn)
 

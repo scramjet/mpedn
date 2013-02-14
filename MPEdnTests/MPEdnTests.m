@@ -215,6 +215,20 @@
   MPAssertParseError (@"\\hello", @"Character");
 }
 
+- (void) testTaggedValues
+{
+  MPEdnParser *parser = [MPEdnParser new];
+  
+  id map = [parser parseString: @"#hello {:a 1}"];
+  
+  STAssertEqualObjects (@"hello", [MPEdnParser tagForValue: map], @"Tag");
+  
+  MPAssertParseError (@"#", @"Tag");
+  MPAssertParseError (@"# {", @"Tag");
+  MPAssertParseError (@"# #", @"Tag");
+  MPAssertParseError (@"#tag #tag {}", @"Tag");
+}
+
 - (void) testGeneralUsage
 {
   MPEdnParser *parser = [MPEdnParser new];
