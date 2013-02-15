@@ -192,6 +192,7 @@
 - (void) testCharacters
 {
   MPAssertParseOK (@"\\a", @'a', @"Character");
+  MPAssertParseOK (@"\\ ", @' ', @"Character");
   MPAssertParseOK (@"\\newline", @'\n', @"Character");
   MPAssertParseOK (@"\\tab", @'\t', @"Character");
   MPAssertParseOK (@"\\return", @'\r', @"Character");
