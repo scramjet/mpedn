@@ -17,7 +17,8 @@ typedef enum
   TOKEN_NAME,
   TOKEN_KEYWORD,
   TOKEN_CHARACTER,
-  TOKEN_TAG
+  TOKEN_TAG,
+  TOKEN_DISCARD
 } Token;
 
 static void appendCharacter (NSMutableString *str, unichar ch)
@@ -218,17 +219,8 @@ static BOOL is_sym_punct (unichar ch)
         endIdx = startIdx + 2;
       } else if (lookahead == '_')
       {
+        token = TOKEN_DISCARD;
         endIdx = startIdx + 2;
-        [self nextToken];
-        
-        if (token != TOKEN_END && token != TOKEN_ERROR)
-        {
-          [self parseExpr];
-        } else
-        {
-          [self raiseError: ERROR_INVALID_DISCARD
-                   message: @"No expression following discard (#_) symbol"];
-        }
       } else
       {
         [self readTagName];
@@ -591,6 +583,8 @@ static BOOL is_sym_punct (unichar ch)
       return [self parseName];
     case TOKEN_TAG:
       return [self parseTag];
+    case TOKEN_DISCARD:
+      return [self parseDiscard];
     default:
     {
       [self raiseError: ERROR_NO_EXPRESSION
@@ -727,6 +721,23 @@ static BOOL is_sym_punct (unichar ch)
   {
     [self raiseError: ERROR_INVALID_TAG
              message: @"Cannot follow a tag with another tag"];
+    
+    return nil;
+  }
+}
+
+- (id) parseDiscard
+{
+  [self nextToken];
+  [self parseExpr];
+  
+  if (token != TOKEN_END && token != TOKEN_ERROR)
+  {
+    return [self parseExpr];
+  } else
+  {
+    [self raiseError: ERROR_INVALID_DISCARD
+             message: @"No expression following discard (#_) symbol"];
     
     return nil;
   }
