@@ -330,8 +330,11 @@ static BOOL is_sym_punct (unichar ch)
 
 - (void) readCharacterToken
 {
+  [self advanceEndIdx];
+  
   unichar ch;
   
+  // read at least one character
   do
   {
     ch = [self advanceEndIdx];

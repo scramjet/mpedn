@@ -6,18 +6,19 @@
 {
   outputStr = [NSMutableString new];
   
-  if ([value isKindOfClass: [NSNumber class]])
+  if (value == nil || value == [NSNull null])
+    [outputStr appendString: @"nil"];
+  else if ([value isKindOfClass: [NSNumber class]])
     [self outputNumber: value];
-  
+
   return outputStr;
 }
 
 - (void) outputNumber: (NSNumber *) value
 {
-  char type = *[value objCType];
-  NSLog (@"**** type %c", type);
+  NSLog (@"*** type %@", NSStringFromClass ([value class]));
   
-  switch (type)
+  switch ([value objCType] [0])
   {
     case 'i':
     case 'q':
@@ -28,6 +29,19 @@
     case 'f':
       [outputStr appendFormat: @"%g", [value doubleValue]];
       break;
+    case 'c':
+    {
+      if ([NSStringFromClass ([value class]) isEqualToString: @"__NSCFBoolean"])
+        [outputStr appendString: [value boolValue] ? @"true" : @"false"];
+      else
+        [outputStr appendFormat: @"\\%c", [value charValue]];
+      
+      break;
+    default:
+      [NSException raise: @"MPEdnWriterException"
+                  format: @"Don't know how to handle NSNumber "
+                           "value %@, class %@", value, [value class]];
+    }
   }
 }
 
