@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C92B5E7116C8C78200BEFCCA /* MPEdnSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */; };
 		C92B5E7216C8C78200BEFCCA /* MPEdnSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */; };
+		C953E0AD16CDC852007E1043 /* MPEdnParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C953E0AC16CDC852007E1043 /* MPEdnParser.m */; };
 		C9FD3A3516C4D04700F3757E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FD3A3416C4D04700F3757E /* Foundation.framework */; };
 		C9FD3A3A16C4D04700F3757E /* MPEdn.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C9FD3A3916C4D04700F3757E /* MPEdn.h */; };
 		C9FD3A3C16C4D04700F3757E /* MPEdn.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FD3A3B16C4D04700F3757E /* MPEdn.m */; };
@@ -17,7 +18,7 @@
 		C9FD3A4716C4D04800F3757E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FD3A3416C4D04700F3757E /* Foundation.framework */; };
 		C9FD3A4A16C4D04800F3757E /* libMPEdn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FD3A3116C4D04700F3757E /* libMPEdn.a */; };
 		C9FD3A5016C4D04800F3757E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C9FD3A4E16C4D04800F3757E /* InfoPlist.strings */; };
-		C9FD3A5316C4D04800F3757E /* MPEdnTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FD3A5216C4D04800F3757E /* MPEdnTests.m */; };
+		C9FD3A5316C4D04800F3757E /* MPEdnParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FD3A5216C4D04800F3757E /* MPEdnParserTests.m */; };
 		C9FD3A5C16C4D0F100F3757E /* MPEdn.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FD3A3B16C4D04700F3757E /* MPEdn.m */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +48,8 @@
 /* Begin PBXFileReference section */
 		C92B5E6F16C8C78200BEFCCA /* MPEdnSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnSymbol.h; sourceTree = "<group>"; };
 		C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnSymbol.m; sourceTree = "<group>"; };
+		C953E0AB16CDC852007E1043 /* MPEdnParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnParser.h; sourceTree = "<group>"; };
+		C953E0AC16CDC852007E1043 /* MPEdnParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnParser.m; sourceTree = "<group>"; };
 		C9FD3A3116C4D04700F3757E /* libMPEdn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMPEdn.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9FD3A3416C4D04700F3757E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C9FD3A3816C4D04700F3757E /* MPEdn-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MPEdn-Prefix.pch"; sourceTree = "<group>"; };
@@ -57,8 +60,8 @@
 		C9FD3A4516C4D04800F3757E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		C9FD3A4D16C4D04800F3757E /* MPEdnTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MPEdnTests-Info.plist"; sourceTree = "<group>"; };
 		C9FD3A4F16C4D04800F3757E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		C9FD3A5116C4D04800F3757E /* MPEdnTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPEdnTests.h; sourceTree = "<group>"; };
-		C9FD3A5216C4D04800F3757E /* MPEdnTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPEdnTests.m; sourceTree = "<group>"; };
+		C9FD3A5116C4D04800F3757E /* MPEdnParserTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPEdnParserTests.h; sourceTree = "<group>"; };
+		C9FD3A5216C4D04800F3757E /* MPEdnParserTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPEdnParserTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +121,8 @@
 			children = (
 				C9FD3A3916C4D04700F3757E /* MPEdn.h */,
 				C9FD3A3B16C4D04700F3757E /* MPEdn.m */,
+				C953E0AB16CDC852007E1043 /* MPEdnParser.h */,
+				C953E0AC16CDC852007E1043 /* MPEdnParser.m */,
 				C92B5E6F16C8C78200BEFCCA /* MPEdnSymbol.h */,
 				C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */,
 				C9FD3A3716C4D04700F3757E /* Supporting Files */,
@@ -136,8 +141,8 @@
 		C9FD3A4B16C4D04800F3757E /* MPEdnTests */ = {
 			isa = PBXGroup;
 			children = (
-				C9FD3A5116C4D04800F3757E /* MPEdnTests.h */,
-				C9FD3A5216C4D04800F3757E /* MPEdnTests.m */,
+				C9FD3A5116C4D04800F3757E /* MPEdnParserTests.h */,
+				C9FD3A5216C4D04800F3757E /* MPEdnParserTests.m */,
 				C9FD3A4C16C4D04800F3757E /* Supporting Files */,
 			);
 			path = MPEdnTests;
@@ -252,6 +257,7 @@
 			files = (
 				C9FD3A3C16C4D04700F3757E /* MPEdn.m in Sources */,
 				C92B5E7116C8C78200BEFCCA /* MPEdnSymbol.m in Sources */,
+				C953E0AD16CDC852007E1043 /* MPEdnParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,7 +265,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9FD3A5316C4D04800F3757E /* MPEdnTests.m in Sources */,
+				C9FD3A5316C4D04800F3757E /* MPEdnParserTests.m in Sources */,
 				C9FD3A5C16C4D0F100F3757E /* MPEdn.m in Sources */,
 				C92B5E7216C8C78200BEFCCA /* MPEdnSymbol.m in Sources */,
 			);

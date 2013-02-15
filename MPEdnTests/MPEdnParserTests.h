@@ -1,5 +1,5 @@
 #import <SenTestingKit/SenTestingKit.h>
 
-@interface MPEdnTests : SenTestCase
+@interface MPEdnParserTests : SenTestCase
 
 @end

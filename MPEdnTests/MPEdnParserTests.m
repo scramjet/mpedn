@@ -1,4 +1,4 @@
-#import "MPEdnTests.h"
+#import "MPEdnParserTests.h"
 
 #import "MPEdn.h"
 #import "MPEdnSymbol.h"
@@ -25,7 +25,7 @@
   STAssertTrue (parser.complete, message); \
 }
 
-@implementation MPEdnTests
+@implementation MPEdnParserTests
 
 - (void) testNumbers
 {
