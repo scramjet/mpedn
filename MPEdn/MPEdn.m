@@ -84,6 +84,19 @@ static void appendCharacter (NSMutableString *str, unichar ch)
   return error;
 }
 
+- (BOOL) complete
+{
+  if (error)
+  {
+    return true;
+  } else
+  {
+    [self skipSpaceAndComments];
+  
+    return startIdx >= inputStrLen;
+  }
+}
+
 #pragma mark - Tokeniser
 
 static BOOL is_sym_punct (unichar ch)
@@ -532,13 +545,6 @@ static BOOL is_sym_punct (unichar ch)
 }
 
 #pragma mark - Parser
-
-- (BOOL) complete
-{
-  [self skipSpaceAndComments];
-  
-  return startIdx >= inputStrLen;
-}
 
 - (id) parseString: (NSString *) str
 {

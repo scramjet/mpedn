@@ -80,11 +80,24 @@ typedef enum
  */
 @property (readonly) NSError *error;
 
+/**
+ * Becomes true when there are no more expressions to be parsed or the
+ * parser encounters an error.
+ *
+ * This is used when parsing multiple expressions using
+ * parseNextValue. See class documentation for MPEdnParser for an
+ * example.
+ */
 @property (readonly) BOOL complete;
 
+/**
+ * Get the tag associated with a parsed value, or nil if no tag.
+ *
+ * If the value parsed by MPEdnParser had a tag in front of it
+ * (e.g. `#mpedn/mytagname {:a 1}`), this retrieves the tag name
+ * (`mpedn/mytagname` in the example).
+ */
 + (NSString *) tagForValue: (id) value;
-
-- (void) reset;
 
 /**
  * Parse a string containing a single EDN value.
@@ -110,8 +123,18 @@ typedef enum
  * Parse and return the next value from the current input string
  * (inputString).
  * 
- * See the doc for the MPEdnParser class documentation for an example
- * of using this method to parse several values from the input.
+ * Example: parse all values in a string that may have zero or more
+ * EDN values:
+ *
+ *	MPEdnParser *parser = [MPEdnParser new];
+ *	parser.inputString = @"1 \"abc\" {:a 1, :foo [1 2 3]}";
+ *
+ *	while (!parser.complete)
+ *	{
+ *	  id value = [parser parseNextValue];
+ *	   
+ *	  NSLog (@"Value %@", value);
+ *	}
  *
  * @see parseString
  * @see [NSString(MPEdn) ednStringToObject]
