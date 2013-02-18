@@ -18,6 +18,7 @@ BOOL MPEdnIsCharacter (NSNumber *number)
 }
 
 NSMutableCharacterSet *QUOTE_CHARS;
+NSMutableCharacterSet *NON_KEYWORD_CHARS;
 
 @implementation MPEdnWriter
 
@@ -26,26 +27,61 @@ NSMutableCharacterSet *QUOTE_CHARS;
   [super initialize];
   
   QUOTE_CHARS = [NSMutableCharacterSet characterSetWithCharactersInString: @"\\\""];
+  
+  NON_KEYWORD_CHARS = [NSMutableCharacterSet characterSetWithCharactersInString: @".*+!-_?$%&=/"];
+  
+  [NON_KEYWORD_CHARS addCharactersInRange: NSMakeRange ('a', 'z' - 'a')];
+  [NON_KEYWORD_CHARS addCharactersInRange: NSMakeRange ('A', 'Z' - 'A')];
+  [NON_KEYWORD_CHARS addCharactersInRange: NSMakeRange ('0', '9' - '0')];
+  
+  [NON_KEYWORD_CHARS invert];
+}
+
+- (id) init
+{
+  if (self = [super init])
+  {
+    useKeywordsInMaps = YES;
+  }
+
+  return self;
+}
+
+- (BOOL) useKeywordsInMaps
+{
+  return useKeywordsInMaps;
+}
+
+- (void) setUseKeywordsInMaps: (BOOL) newValue
+{
+  useKeywordsInMaps = newValue;
 }
 
 - (NSString *) serialiseToEdn: (id) value;
 {
   outputStr = [NSMutableString new];
   
+  [self outputObject: value];
+  
+  return outputStr;
+}
+
+- (void) outputObject: (id) value
+{
   if (value == nil || value == [NSNull null])
     [outputStr appendString: @"nil"];
   else if ([value isKindOfClass: [NSNumber class]])
     [self outputNumber: value];
   else if ([value isKindOfClass: [NSString class]])
     [self outputString: value];
+  else if ([value isKindOfClass: [NSDictionary class]])
+    [self outputDictionary: value];
   else
   {
     [NSException raise: @"MPEdnWriterException"
                 format: @"Don't know how to handle value of type %@ ",
-                [value class]];
+     [value class]];
   }
-  
-  return outputStr;
 }
 
 - (void) outputNumber: (NSNumber *) value
@@ -116,6 +152,50 @@ NSMutableCharacterSet *QUOTE_CHARS;
     
     [outputStr appendString: @"\""];
   }
+}
+
+- (BOOL) outputKeyword: (NSString *) value
+{
+  if ([value rangeOfCharacterFromSet: NON_KEYWORD_CHARS].location == NSNotFound)
+  {
+    [outputStr appendString: @":"];
+    [outputStr appendString: value];
+    
+    return YES;
+  } else
+  {
+    return NO;
+  }
+}
+
+- (void) outputDictionary: (NSDictionary *) value
+{
+  BOOL firstItem = YES;
+
+  [outputStr appendString: @"{"];
+
+  for (id key in value)
+  {
+    if (!firstItem)
+      [outputStr appendString: @","];
+    
+    if (useKeywordsInMaps && [key isKindOfClass: [NSString class]])
+    {
+      if (![self outputKeyword: key])
+        [self outputObject: key];
+    } else
+    {
+      [self outputObject: key];
+    }
+
+    [outputStr appendString: @" "];
+    
+    [self outputObject: [value objectForKey: key]];
+    
+    firstItem = NO;
+  }
+  
+  [outputStr appendString: @"}"];
 }
 
 @end

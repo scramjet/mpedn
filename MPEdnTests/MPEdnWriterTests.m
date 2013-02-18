@@ -68,4 +68,18 @@
   MPAssertSerialisesOK ([NSNull null], @"nil");
 }
 
+- (void) testMaps
+{
+  MPAssertSerialisesOK (@{}, @"{}");
+  MPAssertSerialisesOK (@{@"a" : @1}, @"{:a 1}");
+  MPAssertSerialisesOK (@{@"a non keyword" : @1}, @"{\"a non keyword\" 1}");
+  
+  {
+    MPEdnWriter *writer = [MPEdnWriter new];
+    writer.useKeywordsInMaps = NO;
+
+    STAssertEqualObjects ([writer serialiseToEdn: @{@"a" : @1}], @"{\"a\" 1}", @"Serialise");
+  }
+}
+
 @end

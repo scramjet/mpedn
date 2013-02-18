@@ -6,7 +6,10 @@ BOOL MPEdnIsCharacter (NSNumber *number);
 @interface MPEdnWriter : NSObject
 {
   NSMutableString *outputStr;
+  BOOL useKeywordsInMaps;
 }
+
+@property (readwrite) BOOL useKeywordsInMaps;
 
 - (NSString *) serialiseToEdn: (id) value;
 
