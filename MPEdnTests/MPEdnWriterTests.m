@@ -60,6 +60,8 @@
   MPAssertSerialisesOK (@"a \" and a \\ in it", @"\"a \\\" and a \\\\ in it\"");
   MPAssertSerialisesOK (@"\\", @"\"\\\\\"");
   MPAssertSerialisesOK (@"\\\"", @"\"\\\\\\\"\"");
+  
+  STAssertEqualObjects ([@{@"a" : @1} objectToEdnString], @"{:a 1}", @"Test category");  
 }
 
 - (void) testNil

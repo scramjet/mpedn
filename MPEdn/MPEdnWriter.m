@@ -241,3 +241,12 @@ NSMutableCharacterSet *NON_KEYWORD_CHARS;
 }
 
 @end
+
+@implementation NSObject (MPEdn)
+
+- (NSString *) objectToEdnString
+{
+  return [[MPEdnWriter new] serialiseToEdn: self];
+}
+
+@end

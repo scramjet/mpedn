@@ -143,3 +143,12 @@ typedef enum
 
 @end
 
+@interface NSString (MPEdn)
+
+/**
+ * Shortcut to parse a single string with [MPEdnParser parseString:].
+ */
+- (id) ednStringToObject;
+
+@end
+

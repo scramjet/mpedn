@@ -754,3 +754,12 @@ static BOOL is_sym_punct (unichar ch)
 }
 
 @end
+
+@implementation NSString (MPEdn)
+
+- (id) ednStringToObject
+{
+  return [[MPEdnParser new] parseString: self];
+}
+
+@end

@@ -14,3 +14,9 @@ BOOL MPEdnIsCharacter (NSNumber *number);
 - (NSString *) serialiseToEdn: (id) value;
 
 @end
+
+@interface NSObject (MPEdn)
+
+- (NSString *) objectToEdnString;
+
+@end
