@@ -1,4 +1,4 @@
-#import <objc/objc-runtime.h>
+#import <objc/runtime.h>
 
 #import "MPEdn.h"
 #import "MPEdnSymbol.h"
@@ -330,56 +330,63 @@ static BOOL is_sym_punct (unichar ch)
 
 - (void) readCharacterToken
 {
-  [self advanceEndIdx];
-  
-  unichar ch;
-  
-  // read at least one character
-  do
+  if (startIdx + 1 >= inputStrLen)
   {
-    ch = [self advanceEndIdx];
-  } while (isalpha (ch));
-  
-  NSUInteger length = endIdx - startIdx - 1;
-  NSNumber *charValue = nil;
-  
-  if (length == 1)
-  {
-    unichar c = [inputStr characterAtIndex: startIdx + 1];
-    
-    if (c < 256)
-      charValue = [NSNumber numberWithUnsignedChar: c];
-    else
-    {
-      // TODO use [NSString stringWithFormat :@"%C", c]?
-      [self raiseError: ERROR_INVALID_CHARACTER
-               message: @"MPEdn cannot represent Unicode character points "
-                         "greater than 255"];
-    }
+    [self raiseError: ERROR_INVALID_CHARACTER
+             message: @"Missing character value following \\"];
   } else
   {
-    NSString *name =
-      [inputStr substringWithRange: NSMakeRange (startIdx + 1, length)];
+    [self advanceEndIdx];
     
-    if ([name isEqualToString: @"newline"])
-      charValue = @'\n';
-    else if ([name isEqualToString: @"space"])
-      charValue = @' ';
-    else if ([name isEqualToString: @"tab"])
-      charValue = @'\t';
-    else if ([name isEqualToString: @"return"])
-      charValue = @'\r';
-    else
+    unichar ch;
+    
+    // read at least one character
+    do
     {
-      [self raiseError: ERROR_INVALID_CHARACTER
-               message: @"Unknown character name '%@'", name];
+      ch = [self advanceEndIdx];
+    } while (isalpha (ch));
+    
+    NSUInteger length = endIdx - startIdx - 1;
+    NSNumber *charValue = nil;
+    
+    if (length == 1)
+    {
+      unichar c = [inputStr characterAtIndex: startIdx + 1];
+      
+      if (c < 256)
+        charValue = [NSNumber numberWithUnsignedChar: c];
+      else
+      {
+        // TODO use [NSString stringWithFormat :@"%C", c]?
+        [self raiseError: ERROR_INVALID_CHARACTER
+                 message: @"MPEdn cannot represent Unicode character points "
+                           "greater than 255"];
+      }
+    } else
+    {
+      NSString *name =
+        [inputStr substringWithRange: NSMakeRange (startIdx + 1, length)];
+      
+      if ([name isEqualToString: @"newline"])
+        charValue = @'\n';
+      else if ([name isEqualToString: @"space"])
+        charValue = @' ';
+      else if ([name isEqualToString: @"tab"])
+        charValue = @'\t';
+      else if ([name isEqualToString: @"return"])
+        charValue = @'\r';
+      else
+      {
+        [self raiseError: ERROR_INVALID_CHARACTER
+                 message: @"Unknown character name '%@'", name];
+      }
     }
-  }
-  
-  if (charValue)
-  {
-    token = TOKEN_CHARACTER;
-    tokenValue = charValue;
+    
+    if (charValue)
+    {
+      token = TOKEN_CHARACTER;
+      tokenValue = charValue;
+    }
   }
 }
 
