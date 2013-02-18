@@ -78,6 +78,8 @@ NSMutableCharacterSet *NON_KEYWORD_CHARS;
     [self outputDictionary: value];
   else if ([value isKindOfClass: [NSArray class]])
     [self outputArray: value];
+  else if ([value isKindOfClass: [NSSet class]])
+    [self outputSet: value];
   else
   {
     [NSException raise: @"MPEdnWriterException"
@@ -217,6 +219,25 @@ NSMutableCharacterSet *NON_KEYWORD_CHARS;
   }
   
   [outputStr appendString: @"]"];
+}
+
+- (void) outputSet: (NSSet *) value
+{
+  BOOL firstItem = YES;
+  
+  [outputStr appendString: @"#{"];
+  
+  for (id item in value)
+  {
+    if (!firstItem)
+      [outputStr appendString: @","];
+    
+    [self outputObject: item];
+    
+    firstItem = NO;
+  }
+  
+  [outputStr appendString: @"}"];
 }
 
 @end

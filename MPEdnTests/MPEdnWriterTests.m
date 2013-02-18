@@ -93,4 +93,17 @@
   }
 }
 
+- (void) testSets
+{
+  {
+    NSSet *set = [NSSet set];
+    MPAssertSerialisesOK (set, @"#{}");
+  }
+  
+  {
+    NSSet *set = [NSSet setWithArray: @[@1, @"a"]];
+    MPAssertSerialisesOK (set, @"#{\"a\",1}");
+  }
+}
+
 @end
