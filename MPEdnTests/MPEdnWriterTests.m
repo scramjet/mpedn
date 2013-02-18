@@ -82,4 +82,15 @@
   }
 }
 
+- (void) testLists
+{
+  MPAssertSerialisesOK (@[], @"[]");
+  MPAssertSerialisesOK (@[@1], @"[1]");
+  
+  {
+    NSArray *list = @[@"hello", @1];
+    MPAssertSerialisesOK (list, @"[\"hello\",1]");
+  }
+}
+
 @end
