@@ -34,13 +34,21 @@
   MPAssertSerialisesOK (@NO, @"false");
   
   // characters
+  // NSNumber is pretty broken wrt characters. [NSNumber numberWithChar: 'a']
+  // produces a number that is reported as a character, but '\n' doesn't. As
+  // as workaround, you can force a number to be seen as a character using
+  // MPEdnTagAsCharacter. See discussion here:
   // http://www.cocoabuilder.com/archive/cocoa/136956-nsnumber-is-completely-broken.html
   MPAssertSerialisesOK (@'a', @"\\a");
-  NSLog (@"********** %s", [[NSNumber numberWithChar: '\n'] objCType]);
-  NSLog (@"********** %@", [[NSNumber numberWithChar: '\n'] class]);
-  NSLog (@"********** %li", CFNumberGetType ((CFNumberRef)[NSNumber numberWithChar: '\n']));
 
-  MPAssertSerialisesOK ([NSNumber numberWithChar: '\n'], @"\\\n");
+  //  NSLog (@"********** %s", [[NSNumber numberWithChar: '\n'] objCType]);
+  //  NSLog (@"********** %@", [[NSNumber numberWithChar: '\n'] class]);
+  //  NSLog (@"********** %li", CFNumberGetType ((CFNumberRef)[NSNumber numberWithChar: '\n']));
+
+  {
+    NSNumber *newline = MPEdnTagAsCharacter ([NSNumber numberWithChar: '\n']);
+    MPAssertSerialisesOK (newline, @"\\\n");
+  }
 }
 
 - (void) testNil

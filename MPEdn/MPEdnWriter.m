@@ -1,5 +1,22 @@
 #import "MPEdnWriter.h"
 
+#import <objc/runtime.h>
+
+const NSString *MPEDN_CHARACTER_TAG = @"MPEDN_CHARACTER_TAG";
+
+NSNumber *MPEdnTagAsCharacter (NSNumber *number)
+{
+  objc_setAssociatedObject (number, (__bridge const void *)MPEDN_CHARACTER_TAG,
+                            @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+  
+  return number;
+}
+
+BOOL MPEdnIsCharacter (NSNumber *number)
+{
+  return objc_getAssociatedObject (number, (__bridge const void *)MPEDN_CHARACTER_TAG) != nil;
+}
+
 @implementation MPEdnWriter
 
 - (NSString *) serialiseToEdn: (id) value;
@@ -23,7 +40,10 @@
     case 'i':
     case 'q':
     case 's':
-      [outputStr appendFormat: @"%@", value];
+      if (MPEdnIsCharacter (value))
+        [outputStr appendFormat: @"\\%c", [value charValue]];
+      else
+        [outputStr appendFormat: @"%@", value];
       break;
     case 'd':
     case 'f':

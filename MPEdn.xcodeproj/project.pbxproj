@@ -17,7 +17,6 @@
 		C9FD3A3A16C4D04700F3757E /* MPEdn.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C9FD3A3916C4D04700F3757E /* MPEdn.h */; };
 		C9FD3A3C16C4D04700F3757E /* MPEdn.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FD3A3B16C4D04700F3757E /* MPEdn.m */; };
 		C9FD3A4416C4D04800F3757E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FD3A4316C4D04800F3757E /* SenTestingKit.framework */; };
-		C9FD3A4616C4D04800F3757E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FD3A4516C4D04800F3757E /* UIKit.framework */; };
 		C9FD3A4716C4D04800F3757E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FD3A3416C4D04700F3757E /* Foundation.framework */; };
 		C9FD3A4A16C4D04800F3757E /* libMPEdn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FD3A3116C4D04700F3757E /* libMPEdn.a */; };
 		C9FD3A5016C4D04800F3757E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C9FD3A4E16C4D04800F3757E /* InfoPlist.strings */; };
@@ -64,7 +63,6 @@
 		C9FD3A3B16C4D04700F3757E /* MPEdn.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPEdn.m; sourceTree = "<group>"; };
 		C9FD3A4216C4D04800F3757E /* MPEdnTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MPEdnTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9FD3A4316C4D04800F3757E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		C9FD3A4516C4D04800F3757E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		C9FD3A4D16C4D04800F3757E /* MPEdnTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MPEdnTests-Info.plist"; sourceTree = "<group>"; };
 		C9FD3A4F16C4D04800F3757E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C9FD3A5116C4D04800F3757E /* MPEdnParserTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPEdnParserTests.h; sourceTree = "<group>"; };
@@ -85,7 +83,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9FD3A4416C4D04800F3757E /* SenTestingKit.framework in Frameworks */,
-				C9FD3A4616C4D04800F3757E /* UIKit.framework in Frameworks */,
 				C9FD3A4716C4D04800F3757E /* Foundation.framework in Frameworks */,
 				C9FD3A4A16C4D04800F3757E /* libMPEdn.a in Frameworks */,
 			);
@@ -118,7 +115,6 @@
 			children = (
 				C9FD3A3416C4D04700F3757E /* Foundation.framework */,
 				C9FD3A4316C4D04800F3757E /* SenTestingKit.framework */,
-				C9FD3A4516C4D04800F3757E /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
