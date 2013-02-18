@@ -21,8 +21,8 @@ typedef enum
 } MPEdnParserErrorCode;
 
 /**
- * A parser for values encoded in EDN (extensible data notation). See
- * http://https://github.com/edn-format/edn.
+ * Parses values encoded in EDN (extensible data notation) into Cocoa
+ * objects. See http://https://github.com/edn-format/edn.
  *
  * If you want to simply parse a string containing EDN-encoded data,
  * you can use the [NSString(MPEdn) ednStringToObject] shortcut.
