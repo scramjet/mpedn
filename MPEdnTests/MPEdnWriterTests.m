@@ -51,6 +51,17 @@
   }
 }
 
+- (void) testStrings
+{
+  MPAssertSerialisesOK (@"", @"\"\"");
+  MPAssertSerialisesOK (@"hello", @"\"hello\"");
+  MPAssertSerialisesOK (@"a \n in it", @"\"a \n in it\"");
+  MPAssertSerialisesOK (@"a \" in it", @"\"a \\\" in it\"");
+  MPAssertSerialisesOK (@"a \" and a \\ in it", @"\"a \\\" and a \\\\ in it\"");
+  MPAssertSerialisesOK (@"\\", @"\"\\\\\"");
+  MPAssertSerialisesOK (@"\\\"", @"\"\\\\\\\"\"");
+}
+
 - (void) testNil
 {
   MPAssertSerialisesOK (nil, @"nil");
