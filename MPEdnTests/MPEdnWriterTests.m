@@ -61,6 +61,10 @@
   MPAssertSerialisesOK (@"a \" and a \\ in it", @"\"a \\\" and a \\\\ in it\"");
   MPAssertSerialisesOK (@"\\", @"\"\\\\\"");
   MPAssertSerialisesOK (@"\\\"", @"\"\\\\\\\"\"");
+  MPAssertSerialisesOK (@"\\ abc", @"\"\\\\ abc\"");
+  MPAssertSerialisesOK (@"abc \\", @"\"abc \\\\\"");
+  MPAssertSerialisesOK (@"abc \\e", @"\"abc \\\\e\"");
+  MPAssertSerialisesOK (@"a\\", @"\"a\\\\\"");
   
   STAssertEqualObjects ([@{@"a" : @1} objectToEdnString], @"{:a 1}", @"Test category");  
 }
