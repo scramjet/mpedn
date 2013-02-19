@@ -1,6 +1,7 @@
 #import "MPEdnWriterTests.h"
 
 #import "MPEdnWriter.h"
+#import "MPEdnSymbol.h"
 
 #define MPAssertSerialisesOK(value, correct)             \
 {                                                        \
@@ -106,6 +107,11 @@
     NSSet *set = [NSSet setWithArray: @[@1, @"a"]];
     MPAssertSerialisesOK (set, @"#{\"a\",1}");
   }
+}
+
+- (void) testSymbols
+{
+  MPAssertSerialisesOK ([MPEdnSymbol symbolWithName: @"my-symbol"], @"my-symbol");
 }
 
 @end

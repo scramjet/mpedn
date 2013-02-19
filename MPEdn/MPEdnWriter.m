@@ -15,6 +15,7 @@
  */
 
 #import "MPEdnWriter.h"
+#import "MPEdnSymbol.h"
 
 #import <objc/runtime.h>
 
@@ -96,6 +97,8 @@ NSMutableCharacterSet *NON_KEYWORD_CHARS;
     [self outputArray: value];
   else if ([value isKindOfClass: [NSSet class]])
     [self outputSet: value];
+  else if ([value isKindOfClass: [MPEdnSymbol class]])
+    [self outputSymbol: value];
   else
   {
     [NSException raise: @"MPEdnWriterException"
@@ -254,6 +257,11 @@ NSMutableCharacterSet *NON_KEYWORD_CHARS;
   }
   
   [outputStr appendString: @"}"];
+}
+
+- (void) outputSymbol: (MPEdnSymbol *) value
+{
+  [outputStr appendString: value.name];
 }
 
 @end
