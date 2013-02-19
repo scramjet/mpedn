@@ -17,7 +17,7 @@
 #import <Foundation/Foundation.h>
 
 /**
- * Codes for parse errors reported in EdnParse.error.
+ * Codes for parse errors reported in EdnParser.error.
  */
 typedef enum
 {
@@ -81,8 +81,8 @@ typedef enum
 /**
  * The string to parse.
  * 
- * You typically set this property and then use parseString: or
- * parseNextValue (in a loop).
+ * You typically set this property and then use parseNextValue (usually in a 
+ * loop gated by the complete property).
  */
 @property (readwrite) NSString *inputString;
 
@@ -100,9 +100,9 @@ typedef enum
  * Becomes true when there are no more expressions to be parsed or the
  * parser encounters an error.
  *
- * This is used when parsing multiple expressions using
- * parseNextValue. See class documentation for MPEdnParser for an
- * example.
+ * This is usually as the loop control when parsing multiple
+ * expressions with parseNextValue. See class documentation for
+ * MPEdnParser for an example.
  */
 @property (readonly) BOOL complete;
 
@@ -128,7 +128,7 @@ typedef enum
  * @param str The string to parse.
  *
  * @return The parsed value, or nil on error (in which case the error
- * property will be set).
+ * property will describe the problem).
  *
  * @see parseNextValue
  * @see [NSString(MPEdn) ednStringToObject]
@@ -136,8 +136,7 @@ typedef enum
 - (id) parseString: (NSString *) str;
 
 /**
- * Parse and return the next value from the current input string
- * (inputString).
+ * Parse and return the next value from the current input string.
  * 
  * Example: parse all values in a string that may have zero or more
  * EDN values:
@@ -167,4 +166,3 @@ typedef enum
 - (id) ednStringToObject;
 
 @end
-

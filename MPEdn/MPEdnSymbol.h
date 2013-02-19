@@ -16,13 +16,25 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ * Instances of this class are created by MPEdnParser to represent
+ * parsed EDN symbols.
+ *
+ * The MPEdnWriter class also supports outputting MPEdnSymbol's.
+ */
 @interface MPEdnSymbol : NSObject
 {
   NSString *name;
 }
 
+/**
+ * The symbol name.
+ */
 @property (readonly) NSString *name;
 
+/**
+ * Create a new symbol instance.
+ */
 + (MPEdnSymbol *) symbolWithName: (NSString *) name;
 
 @end

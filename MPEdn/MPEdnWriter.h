@@ -17,12 +17,18 @@
 #import <Foundation/Foundation.h>
 
 /**
- * NSNumber is pretty broken wrt characters. For example, `[NSNumber
- * numberWithChar: 'a']` produces an NSNumber that says it wraps a
- * character, but using numberWithChar with `\n` does not.
+ * Force a given number instance to be output as a character.
  *
- * As as workaround for this, you can force a number to be seen as a
- * character using MPEdnTagAsCharacter. See discussion here:
+ * NSNumber is quite broken for representing characters. For example,
+ * `[NSNumber numberWithChar: 'a']` produces an NSNumber that
+ * correctly indicates it wraps a character, but when using
+ * numberWithChar with `\n` it does not (meaning `\n` will be emitted
+ * as `10`).
+ *
+ * As as workaround, you can force a number to be seen as a character
+ * using MPEdnTagAsCharacter.
+ *
+ * See this discussion for more information on the NSNumber issue:
  * http://www.cocoabuilder.com/archive/cocoa/136956-nsnumber-is-completely-broken.html.
  *
  * @see MPEdnIsCharacter()
@@ -37,10 +43,9 @@ NSNumber *MPEdnTagAsCharacter (NSNumber *number);
 BOOL MPEdnIsCharacter (NSNumber *number);
 
 /**
- * Converts Cocoa data objects into EDN-formatted strings. See
- * http://https://github.com/edn-format/edn.
+ * Converts Cocoa data objects into EDN-formatted strings.
  * 
- * If you want to simple turn an object into an EDN string, use
+ * If you want to simply turn an object into an EDN string, use
  * objectToEdnString. Example:
  *
  *	[myObject objectToEdnString];
