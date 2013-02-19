@@ -51,17 +51,6 @@ static void appendCharacter (NSMutableString *str, unichar ch)
   return objc_getAssociatedObject (value, (__bridge const void *)MPEDN_TAG_NAME);
 }
 
-- (void) reset
-{
-  inputStr = nil;
-  inputStrLen = 0;
-  startIdx = 0;
-  endIdx = 0;
-  token = TOKEN_NONE;
-  tokenValue = nil;
-  error = nil;
-}
-
 - (void) raiseError: (NSInteger) code message: (NSString *) message, ...
 {
   if (!error)
@@ -83,7 +72,11 @@ static void appendCharacter (NSMutableString *str, unichar ch)
 
 - (void) setInputString: (NSString *) str
 {
-  [self reset];
+  startIdx = 0;
+  endIdx = 0;
+  token = TOKEN_NONE;
+  tokenValue = nil;
+  error = nil;
   
   inputStr = str;
   inputStrLen = [inputStr length];
