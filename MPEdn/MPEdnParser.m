@@ -370,8 +370,9 @@ static BOOL is_sym_punct (unichar ch)
       unichar c = [inputStr characterAtIndex: startIdx + 1];
       
       if (c < 256)
+      {
         charValue = [NSNumber numberWithUnsignedChar: c];
-      else
+      } else
       {
         // TODO use [NSString stringWithFormat :@"%C", c]?
         [self raiseError: ERROR_INVALID_CHARACTER
@@ -475,7 +476,8 @@ static BOOL is_sym_punct (unichar ch)
     // slow path: scan each character and append
     // TODO make this faster: use a character buffer rather than NSMutableString
     // to avoid creating lots of temp strings in appendString.
-    NSMutableString *str = [[NSMutableString alloc] initWithCapacity: 30];
+    NSMutableString *str =
+      [[NSMutableString alloc] initWithCapacity: endIdx - startIdx - 1];
 
     // reset endIdx
     endIdx = startIdx;
