@@ -207,7 +207,8 @@
   id map = [@"#hello {:a 1}" ednStringToObject];
   
   STAssertEqualObjects (@"hello", [MPEdnParser tagForValue: map], @"Tag");
-  
+  STAssertEqualObjects (@{@"a" : @1}, map, @"Tag");
+
   MPAssertParseError (@"#", @"Tag");
   MPAssertParseError (@"# {", @"Tag");
   MPAssertParseError (@"# #", @"Tag");
