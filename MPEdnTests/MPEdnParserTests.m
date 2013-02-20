@@ -83,7 +83,8 @@
 {
   MPAssertParseOK (@"\"\"", @"", @"String");
   MPAssertParseOK (@"\"hello\"", @"hello", @"String");
-  MPAssertParseOK (@"\"hello\t\\\"there\\\"\"", @"hello\t\"there\"", @"String with escapes");
+  MPAssertParseOK (@"\"hello\\t\\\"there\\\"\"", @"hello\t\"there\"", @"String with escapes");
+  MPAssertParseOK (@"\"\\\"\"", @"\"", @"String");
   
   // unicode (UTF-16)
   NSString *smiley = [NSString stringWithUTF8String: "hello \xF0\x9F\x98\x84 smiley"];
@@ -93,6 +94,7 @@
   // errors
   MPAssertParseError (@"\"hello", @"Unterminated string");
   MPAssertParseError (@"\"\\a\"", @"Invalid escape");
+  MPAssertParseError (@"\"\\\"", @"Invalid escape");
 }
 
 - (void) testSymbols

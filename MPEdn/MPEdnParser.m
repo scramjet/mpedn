@@ -37,14 +37,18 @@ typedef enum
   TOKEN_DISCARD
 } Token;
 
-static void appendCharacter (NSMutableString *str, unichar ch)
-{
-  [str appendString: [NSString stringWithCharacters: &ch length: 1]];
-}
-
 @implementation MPEdnParser
 
+NSMutableCharacterSet *QUOTE_CHARS;
+
 #pragma mark - Init
+
++ (void) initialize
+{
+  [super initialize];
+  
+  QUOTE_CHARS = [NSMutableCharacterSet characterSetWithCharactersInString: @"\\\""];
+}
 
 + (NSString *) tagForValue: (id) value
 {
@@ -143,6 +147,32 @@ static BOOL is_sym_punct (unichar ch)
   endIdx++;
   
   return (endIdx < inputStrLen) ? [inputStr characterAtIndex: endIdx] : 0;
+}
+
+- (unichar) advanceEndIdxToChar: (NSCharacterSet *) charset
+{
+  if (endIdx < inputStrLen)
+  {
+    NSRange range =
+      [inputStr rangeOfCharacterFromSet: charset
+                                options: NSLiteralSearch
+                                  range: NSMakeRange (endIdx, inputStrLen - endIdx)];
+    
+    if (range.location == NSNotFound)
+    {
+      endIdx = inputStrLen;
+      
+      return 0;
+    } else
+    {
+      endIdx = range.location;
+      
+      return [inputStr characterAtIndex: endIdx];
+    }
+  } else
+  {
+    return 0;
+  }
 }
 
 - (unichar) skipSpaceAndComments
@@ -440,98 +470,81 @@ static BOOL is_sym_punct (unichar ch)
 
 - (void) readStringToken
 {
-  unichar ch = [self advanceEndIdx];  // skip "
-  BOOL hasEscapes = NO;
-  NSString *stringValue;
+  endIdx++;  // skip "
   
-  // check for fast path for strings not needing escape processing
-  while (ch != '"' && !hasEscapes && endIdx < inputStrLen)
-  {
-    if (ch == '\\')
-    {
-      hasEscapes = YES;
-    } else
-    {
-      NSRange chRange = [inputStr rangeOfComposedCharacterSequenceAtIndex: endIdx];
-      
-      endIdx += chRange.length;
-      ch = [self currentEndIdxChar];
-    }
-  }
+  unichar ch = [self advanceEndIdxToChar: QUOTE_CHARS];
   
-  if (!hasEscapes)
+  if (ch == '"')
   {
-    // fast path: just make a substring
-    stringValue =
+    token = TOKEN_STRING;
+    tokenValue =
       [inputStr substringWithRange: NSMakeRange (startIdx + 1, endIdx - startIdx - 1)];
+    
+    [self advanceEndIdx]; // skip "
   } else
   {
-    // slow path: scan each character and append
-    // TODO make this faster: use a character buffer rather than NSMutableString
-    // to avoid creating lots of temp strings in appendString.
-    NSMutableString *str =
-      [[NSMutableString alloc] initWithCapacity: endIdx - startIdx - 1];
-
-    // reset endIdx
-    endIdx = startIdx;
-    ch = [self advanceEndIdx];
-
-    while (ch != '"' && endIdx < inputStrLen)
+    NSMutableString *stringValue = [NSMutableString new];
+    startIdx++;
+    
+    do
     {
+      if (endIdx > startIdx)
+        [stringValue appendString: [inputStr substringWithRange: NSMakeRange (startIdx, endIdx - startIdx)]];
+      
       if (ch == '\\')
       {
         ch = [self advanceEndIdx];
         
         switch (ch)
         {
-          case '\n':
-            appendCharacter (str, '\n');
+          case 'n':
+            [stringValue appendString: @"\n"];
             break;
-          case '\t':
-            appendCharacter (str, '\t');
+          case 't':
+            [stringValue appendString: @"\t"];
             break;
-          case '\r':
-            appendCharacter (str, '\r');
+          case 'r':
+            [stringValue appendString: @"\r"];
             break;
           case '\\':
-            appendCharacter (str, '\\');
+            [stringValue appendString: @"\\"];
             break;
           case '"':
-            appendCharacter (str, '"');
+            [stringValue appendString: @"\""];
+            break;
+          case 0:
+            [self raiseError: ERROR_INVALID_ESCAPE
+                     message: @"Missing character value in escape"];
             break;
           default:
             [self raiseError: ERROR_INVALID_ESCAPE
                      message: @"Invalid escape sequence: \\%C", ch];
         }
-        
-        ch = [self advanceEndIdx];
-      } else
-      {
-        NSRange chRange = [inputStr rangeOfComposedCharacterSequenceAtIndex: endIdx];
-        
-        [str appendString: [inputStr substringWithRange: chRange]];
-        
-        endIdx += chRange.length;
-        ch = [self currentEndIdxChar];
-      }
-    }
-    
-    stringValue = str;
-  }
 
-  if (ch == '"')
-  {
-    [self advanceEndIdx]; // skip "
-   
-    if (!error)
+        // swap start and end, advance end to next \ or "
+        endIdx++;
+        startIdx = endIdx;
+        ch = [self advanceEndIdxToChar: QUOTE_CHARS];
+      }
+    } while (ch != '"' && endIdx < inputStrLen && !error);
+    
+    if (ch == '"')
     {
-      token = TOKEN_STRING;
-      tokenValue = stringValue;
+      if (endIdx > startIdx)
+        [stringValue appendString: [inputStr substringWithRange: NSMakeRange (startIdx, endIdx - startIdx)]];
+      
+      [self advanceEndIdx]; // skip "
+      
+      if (!error)
+      {
+        token = TOKEN_STRING;
+        tokenValue = stringValue;
+      }
+    } else
+    {
+      [self raiseError: ERROR_UNTERMINATED_STRING
+               message: @"Unterminated string"];
     }
-  } else
-  {
-    [self raiseError: ERROR_UNTERMINATED_STRING
-             message: @"Unterminated string"];
   }
 }
 
