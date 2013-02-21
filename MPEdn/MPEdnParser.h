@@ -84,7 +84,7 @@ typedef enum
  * You typically set this property and then use parseNextValue (usually in a 
  * loop gated by the complete property).
  */
-@property (readwrite) NSString *inputString;
+@property (readwrite, retain) NSString *inputString;
 
 /** 
  * Set when the parser encounters a parse error.
