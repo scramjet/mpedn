@@ -120,8 +120,10 @@ NSMutableCharacterSet *NON_KEYWORD_CHARS;
         [outputStr appendFormat: @"%@", value];
       break;
     case 'd':
+      [outputStr appendFormat: @"%.15E", [value doubleValue]];
+      break;
     case 'f':
-      [outputStr appendFormat: @"%g", [value doubleValue]];
+      [outputStr appendFormat: @"%.7E", [value doubleValue]];
       break;
     case 'c':
     {
@@ -129,7 +131,7 @@ NSMutableCharacterSet *NON_KEYWORD_CHARS;
         [outputStr appendString: [value boolValue] ? @"true" : @"false"];
       else
         [outputStr appendFormat: @"\\%c", [value charValue]];
-      
+
       break;
     default:
       [NSException raise: @"MPEdnWriterException"

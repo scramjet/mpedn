@@ -26,9 +26,9 @@
   MPAssertSerialisesOK ([NSNumber numberWithLongLong: 1234], @"1234");
   MPAssertSerialisesOK ([NSNumber numberWithUnsignedLongLong: 1234], @"1234");
   
-  MPAssertSerialisesOK ([NSNumber numberWithDouble: 1.1], @"1.1");
-  MPAssertSerialisesOK ([NSNumber numberWithFloat: 1.1], @"1.1");
-  MPAssertSerialisesOK (@1.1e-5, @"1.1e-05");
+  MPAssertSerialisesOK ([NSNumber numberWithDouble: 1.1], @"1.100000000000000E+00");
+  MPAssertSerialisesOK ([NSNumber numberWithFloat: 1.1], @"1.1000000E+00");
+  MPAssertSerialisesOK (@1.1e-5, @"1.100000000000000E-05");
   
   // boolean
   MPAssertSerialisesOK (@YES, @"true");
