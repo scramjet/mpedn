@@ -54,9 +54,12 @@
 
 - (void) testStrings
 {
+  // TODO why does this sometimes not get called in time?
+  [MPEdnWriter initialize];
+  
   MPAssertSerialisesOK (@"", @"\"\"");
   MPAssertSerialisesOK (@"hello", @"\"hello\"");
-  MPAssertSerialisesOK (@"a \n in it", @"\"a \n in it\"");
+  MPAssertSerialisesOK (@"a \n in it", @"\"a \\n in it\"");
   MPAssertSerialisesOK (@"a \" in it", @"\"a \\\" in it\"");
   MPAssertSerialisesOK (@"a \" and a \\ in it", @"\"a \\\" and a \\\\ in it\"");
   MPAssertSerialisesOK (@"\\", @"\"\\\\\"");
@@ -65,6 +68,9 @@
   MPAssertSerialisesOK (@"abc \\", @"\"abc \\\\\"");
   MPAssertSerialisesOK (@"abc \\e", @"\"abc \\\\e\"");
   MPAssertSerialisesOK (@"a\\", @"\"a\\\\\"");
+  
+  MPAssertSerialisesOK (@"line 1\nline 2", @"\"line 1\\nline 2\"");
+  MPAssertSerialisesOK (@"line 1\r\nline 2", @"\"line 1\\r\\nline 2\"");
   
   STAssertEqualObjects ([@{@"a" : @1} objectToEdnString], @"{:a 1}", @"Test category");  
 }

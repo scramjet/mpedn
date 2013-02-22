@@ -34,8 +34,8 @@ BOOL MPEdnIsCharacter (NSNumber *number)
   return objc_getAssociatedObject (number, (__bridge const void *)MPEDN_CHARACTER_TAG) != nil;
 }
 
-NSMutableCharacterSet *QUOTE_CHARS;
-NSMutableCharacterSet *NON_KEYWORD_CHARS;
+NSCharacterSet *QUOTE_CHARS;
+NSCharacterSet *NON_KEYWORD_CHARS;
 
 @implementation MPEdnWriter
 
@@ -43,15 +43,18 @@ NSMutableCharacterSet *NON_KEYWORD_CHARS;
 {
   [super initialize];
   
-  QUOTE_CHARS = [NSMutableCharacterSet characterSetWithCharactersInString: @"\\\""];
+  QUOTE_CHARS = [NSCharacterSet characterSetWithCharactersInString: @"\\\"\n\r"];
   
-  NON_KEYWORD_CHARS = [NSMutableCharacterSet characterSetWithCharactersInString: @".*+!-_?$%&=/"];
+  NSMutableCharacterSet *nonKeywordChars =
+    [NSMutableCharacterSet characterSetWithCharactersInString: @".*+!-_?$%&=/"];
   
-  [NON_KEYWORD_CHARS addCharactersInRange: NSMakeRange ('a', 'z' - 'a')];
-  [NON_KEYWORD_CHARS addCharactersInRange: NSMakeRange ('A', 'Z' - 'A')];
-  [NON_KEYWORD_CHARS addCharactersInRange: NSMakeRange ('0', '9' - '0')];
+  [nonKeywordChars addCharactersInRange: NSMakeRange ('a', 'z' - 'a')];
+  [nonKeywordChars addCharactersInRange: NSMakeRange ('A', 'Z' - 'A')];
+  [nonKeywordChars addCharactersInRange: NSMakeRange ('0', '9' - '0')];
   
-  [NON_KEYWORD_CHARS invert];
+  [nonKeywordChars invert];
+  
+  NON_KEYWORD_CHARS = [nonKeywordChars copy];
 }
 
 - (id) init
@@ -159,9 +162,21 @@ NSMutableCharacterSet *NON_KEYWORD_CHARS;
     {
       if (quoteRange.location > start)
         [outputStr appendString: [value substringWithRange: NSMakeRange (start, quoteRange.location - start)]];
+
+      unichar quoteCh = [value characterAtIndex: quoteRange.location];
       
-      [outputStr appendFormat: @"\\%C", [value characterAtIndex: quoteRange.location]];
-      
+      switch (quoteCh)
+      {
+        case '\n':
+          [outputStr appendString: @"\\n"];
+          break;
+        case '\r':
+          [outputStr appendString: @"\\r"];
+          break;
+        default:
+          [outputStr appendFormat: @"\\%C", quoteCh];
+      }
+
       start = quoteRange.location + 1;
       
       if (start < valueLen)
