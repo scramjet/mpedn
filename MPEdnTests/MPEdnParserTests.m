@@ -45,7 +45,6 @@
   MPAssertParseError (@"1.0M", @"Float");
   
   // errors
-  MPAssertParseError (@".", @"Float");
   MPAssertParseError (@"1.", @"Float");
   MPAssertParseError (@"1e", @"Float");
   
@@ -109,6 +108,10 @@
   
   MPAssertParseOK (@"nil", [NSNull null], @"Nil");
   
+  MPAssertParseOK (@"+", [MPEdnSymbol symbolWithName: @"+"], @"Symbol");
+  MPAssertParseOK (@"-", [MPEdnSymbol symbolWithName: @"-"], @"Symbol");
+  MPAssertParseOK (@"+a", [MPEdnSymbol symbolWithName: @"+a"], @"Symbol");
+
   MPAssertParseError (@"}", @"Not a symbol");
   MPAssertParseError (@"]", @"Not a symbol");
   MPAssertParseError (@")", @"Not a symbol");

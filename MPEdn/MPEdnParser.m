@@ -238,7 +238,9 @@ static BOOL is_sym_punct (unichar ch)
       [self readNumberToken];
     } else if (ch == '+' || ch == '-' || ch == '.')
     {
-      if (isalpha ([self charAt: startIdx + 1]))
+      unichar lookahead = [self charAt: startIdx + 1];
+      
+      if (isalpha (lookahead) || lookahead == 0)
         [self readNameToken];
       else
         [self readNumberToken];
