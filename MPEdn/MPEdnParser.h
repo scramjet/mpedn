@@ -156,6 +156,24 @@ typedef enum
  */
 - (id) parseNextValue;
 
+/**
+ * Called by parser to create a new set instance. May be overridden to
+ * to use a custom set implementation.
+ */
+- (NSMutableSet *) newSet;
+
+/**
+ * Called by parser to create a new array instance. May be overridden to
+ * to use a custom array implementation.
+ */
+- (NSMutableArray *) newArray;
+
+/**
+ * Called by parser to create a new dictionary instance. May be
+ * overridden to to use a custom dictionary implementation.
+ */
+- (NSMutableDictionary *) newDictionary;
+
 @end
 
 @interface NSString (MPEdn)

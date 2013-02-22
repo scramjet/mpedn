@@ -574,6 +574,21 @@ static BOOL is_sym_punct (unichar ch)
 
 #pragma mark - Parser
 
+- (NSMutableSet *) newSet
+{
+  return [NSMutableSet new];
+}
+
+- (NSMutableArray *) newArray
+{
+  return [NSMutableArray new];
+}
+
+- (NSMutableDictionary *) newDictionary
+{
+  return [NSMutableDictionary new];
+}
+
 - (id) parseString: (NSString *) str
 {
   self.inputString = str;
@@ -633,7 +648,7 @@ static BOOL is_sym_punct (unichar ch)
 
 - (NSSet *) parseSet
 {
-  NSMutableSet *set = [NSMutableSet new];
+  NSMutableSet *set = [self newSet];
   
   [self nextToken];
   
@@ -661,7 +676,7 @@ static BOOL is_sym_punct (unichar ch)
 
 - (NSDictionary *) parseMap
 {
-  NSMutableDictionary *map = [NSMutableDictionary new];
+  NSMutableDictionary *map = [self newDictionary];
   
   [self nextToken];
   
@@ -692,7 +707,7 @@ static BOOL is_sym_punct (unichar ch)
 {
   unichar end = token == '[' ? ']' : ')';
   
-  NSMutableArray *list = [NSMutableArray new];
+  NSMutableArray *list = [self newArray];
   
   [self nextToken];
   
