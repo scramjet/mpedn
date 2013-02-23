@@ -1,0 +1,3 @@
+#!/bin/sh
+
+appledoc -h -p MPEdn -c "Matthew Phillips" --company-id mattp.name -o apidoc MPEdn
