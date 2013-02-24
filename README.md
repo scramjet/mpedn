@@ -30,7 +30,7 @@ To use the library, either:
 
 ## EDN To Cocoa Mapping
 
-* EDN map <-> NSDictionary (but see `[MPEdnParser newDictionary]` to override).
+* EDN map <-> `NSDictionary` (but see `[MPEdnParser newDictionary]` to override).
   
 * EDN list or vector <-> `NSArray` (but see `[MPEdnParser newArray]` to override).
   
@@ -46,7 +46,7 @@ To use the library, either:
 
 * EDN character <-> `NSNumber` (`numberWithUnsignedChar`). `NSNumber` appears to be quite broken for representing characters. For example, `[NSNumber numberWithChar: 'a']` produces an `NSNumber` that correctly indicates it wraps a character, but when using `numberWithChar` with `\n` it does not (meaning `\n` will be emitted as `10`). As as workaround, you can force a number to be seen as a character using `MPEdnTagAsCharacter()`.
 
-* EDN keyword <-> `NSString`. If the `MPEdnWriter.useKeywordsInMaps` property is true (the default), strings used as keys in maps will be output as keys if possible.
+* EDN keyword <-> `NSString`. If the `MPEdnWriter.useKeywordsInMaps` property is true (the default), strings used as keys in maps will be output as keywords if possible.
 
 * EDN symbol <-> `MPEdnSymbol`.
 
