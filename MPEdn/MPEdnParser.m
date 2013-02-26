@@ -39,7 +39,7 @@ typedef enum
 
 @implementation MPEdnParser
 
-NSMutableCharacterSet *QUOTE_CHARS;
+NSCharacterSet *QUOTE_CHARS;
 
 #pragma mark - Init
 
@@ -47,7 +47,7 @@ NSMutableCharacterSet *QUOTE_CHARS;
 {
   [super initialize];
   
-  QUOTE_CHARS = [NSMutableCharacterSet characterSetWithCharactersInString: @"\\\""];
+  QUOTE_CHARS = [NSCharacterSet characterSetWithCharactersInString: @"\\\""];
 }
 
 + (NSString *) tagForValue: (id) value
