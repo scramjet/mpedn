@@ -177,33 +177,27 @@ static BOOL is_sym_punct (unichar ch)
 
 - (unichar) skipSpaceAndComments
 {
-  if (startIdx < inputStrLen)
+  unichar ch = [self charAt: startIdx];
+  
+  // skip white space and comments
+  while ((isspace (ch) || ch == ',' || ch == ';') && startIdx < inputStrLen)
   {
-    unichar ch = [inputStr characterAtIndex: startIdx];
-    
-    // skip white space and comments
-    while ((isspace (ch) || ch == ',' || ch == ';') && startIdx < inputStrLen)
+    if (ch == ';')
     {
-      if (ch == ';')
-      {
-        while (ch != '\n' && startIdx < inputStrLen)
-          ch = [self advanceStartIdx];
-        
-        ch = [self advanceStartIdx];         // skip \n
-      } else
-      {
+      while (ch != '\n' && startIdx < inputStrLen)
         ch = [self advanceStartIdx];
-      }
+      
+      ch = [self advanceStartIdx];         // skip \n
+    } else
+    {
+      ch = [self advanceStartIdx];
     }
-    
-    if (endIdx < startIdx)
-      endIdx = startIdx;
-
-    return ch;
-  } else
-  {
-    return 0;
   }
+  
+  if (endIdx < startIdx)
+    endIdx = startIdx;
+
+  return ch;
 }
 
 - (id) consumeTokenValue
