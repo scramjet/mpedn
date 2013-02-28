@@ -54,9 +54,6 @@
 
 - (void) testStrings
 {
-  // TODO why does this sometimes not get called in time?
-  [MPEdnWriter initialize];
-  
   MPAssertSerialisesOK (@"", @"\"\"");
   MPAssertSerialisesOK (@"hello", @"\"hello\"");
   MPAssertSerialisesOK (@"a \n in it", @"\"a \\n in it\"");
