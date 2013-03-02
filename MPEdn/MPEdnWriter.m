@@ -34,27 +34,29 @@ BOOL MPEdnIsCharacter (NSNumber *number)
   return objc_getAssociatedObject (number, (__bridge const void *)MPEDN_CHARACTER_TAG) != nil;
 }
 
-NSCharacterSet *QUOTE_CHARS;
-NSCharacterSet *NON_KEYWORD_CHARS;
+static NSCharacterSet *QUOTE_CHARS;
+static NSCharacterSet *NON_KEYWORD_CHARS;
 
 @implementation MPEdnWriter
 
 + (void) initialize
 {
-  [super initialize];
-  
-  QUOTE_CHARS = [NSCharacterSet characterSetWithCharactersInString: @"\\\"\n\r"];
-  
-  NSMutableCharacterSet *nonKeywordChars =
-    [NSMutableCharacterSet characterSetWithCharactersInString: @".*+!-_?$%&=/"];
-  
-  [nonKeywordChars addCharactersInRange: NSMakeRange ('a', 'z' - 'a')];
-  [nonKeywordChars addCharactersInRange: NSMakeRange ('A', 'Z' - 'A')];
-  [nonKeywordChars addCharactersInRange: NSMakeRange ('0', '9' - '0')];
-  
-  [nonKeywordChars invert];
-  
-  NON_KEYWORD_CHARS = [nonKeywordChars copy];
+  if (self == [MPEdnWriter class])
+  {
+    QUOTE_CHARS = [NSCharacterSet characterSetWithCharactersInString: @"\\\"\n\r"];
+    
+    NSMutableCharacterSet *nonKeywordChars =
+      [NSMutableCharacterSet characterSetWithCharactersInString: @".*+!-_?$%&=/"];
+    
+    [nonKeywordChars addCharactersInRange: NSMakeRange ('a', 'z' - 'a')];
+    [nonKeywordChars addCharactersInRange: NSMakeRange ('A', 'Z' - 'A')];
+    [nonKeywordChars addCharactersInRange: NSMakeRange ('0', '9' - '0')];
+    
+    [nonKeywordChars invert];
+    
+    // make an immutable (faster) copy
+    NON_KEYWORD_CHARS = [nonKeywordChars copy];
+  }
 }
 
 - (id) init
