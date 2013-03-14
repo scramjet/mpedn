@@ -48,9 +48,9 @@ static NSCharacterSet *NON_KEYWORD_CHARS;
     NSMutableCharacterSet *nonKeywordChars =
       [NSMutableCharacterSet characterSetWithCharactersInString: @".*+!-_?$%&=/"];
     
-    [nonKeywordChars addCharactersInRange: NSMakeRange ('a', 'z' - 'a')];
-    [nonKeywordChars addCharactersInRange: NSMakeRange ('A', 'Z' - 'A')];
-    [nonKeywordChars addCharactersInRange: NSMakeRange ('0', '9' - '0')];
+    [nonKeywordChars addCharactersInRange: NSMakeRange ('a', 'z' - 'a' + 1)];
+    [nonKeywordChars addCharactersInRange: NSMakeRange ('A', 'Z' - 'A' + 1)];
+    [nonKeywordChars addCharactersInRange: NSMakeRange ('0', '9' - '0' + 1)];
     
     [nonKeywordChars invert];
     

@@ -121,4 +121,10 @@
   MPAssertSerialisesOK ([MPEdnSymbol symbolWithName: @"my-symbol"], @"my-symbol");
 }
 
+- (void) testKeywords
+{
+  MPAssertSerialisesOK (@{@"abc" : @1}, @"{:abc 1}");
+  MPAssertSerialisesOK (@{@"e4faee275bb1740e2001d285a052474300c6921a" : @1}, @"{:e4faee275bb1740e2001d285a052474300c6921a 1}");
+}
+
 @end
