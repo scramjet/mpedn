@@ -1,11 +1,22 @@
 #import "MPEdnWriterTests.h"
 
 #import "MPEdnWriter.h"
+#import "MPEdn.h"
 #import "MPEdnSymbol.h"
 
 #define MPAssertSerialisesOK(value, correct)             \
 {                                                        \
   MPEdnWriter *writer = [MPEdnWriter new];               \
+                                                         \
+  NSString *str = [writer serialiseToEdn: value];        \
+                                                         \
+  STAssertEqualObjects (str, correct, @"Serialise");     \
+}
+
+#define MPAssertSerialisesAutoKeywordsOK(value, correct) \
+{                                                        \
+  MPEdnWriter *writer = [MPEdnWriter new];               \
+  writer.useKeywordsInMaps = YES;                        \
                                                          \
   NSString *str = [writer serialiseToEdn: value];        \
                                                          \
@@ -69,7 +80,8 @@
   MPAssertSerialisesOK (@"line 1\nline 2", @"\"line 1\\nline 2\"");
   MPAssertSerialisesOK (@"line 1\r\nline 2", @"\"line 1\\r\\nline 2\"");
   
-  STAssertEqualObjects ([@{@"a" : @1} objectToEdnString], @"{:a 1}", @"Test category");  
+  STAssertEqualObjects ([@{@"a" : @1} objectToEdnString], @"{\"a\" 1}", @"Test category");
+  STAssertEqualObjects ([@{@"a" : @1} objectToEdnStringAutoKeywords], @"{:a 1}", @"Test category");
 }
 
 - (void) testNil
@@ -81,15 +93,10 @@
 - (void) testMaps
 {
   MPAssertSerialisesOK (@{}, @"{}");
-  MPAssertSerialisesOK (@{@"a" : @1}, @"{:a 1}");
+  MPAssertSerialisesOK (@{@"a" : @1}, @"{\"a\" 1}");
+  MPAssertSerialisesOK (@{[@"a" ednKeyword] : @1}, @"{:a 1}");
+  MPAssertSerialisesAutoKeywordsOK (@{@"a" : @1}, @"{:a 1}");
   MPAssertSerialisesOK (@{@"a non keyword" : @1}, @"{\"a non keyword\" 1}");
-  
-  {
-    MPEdnWriter *writer = [MPEdnWriter new];
-    writer.useKeywordsInMaps = NO;
-
-    STAssertEqualObjects ([writer serialiseToEdn: @{@"a" : @1}], @"{\"a\" 1}", @"Serialise");
-  }
 }
 
 - (void) testLists
@@ -123,8 +130,18 @@
 
 - (void) testKeywords
 {
-  MPAssertSerialisesOK (@{@"abc" : @1}, @"{:abc 1}");
-  MPAssertSerialisesOK (@{@"e4faee275bb1740e2001d285a052474300c6921a" : @1}, @"{:e4faee275bb1740e2001d285a052474300c6921a 1}");
+  MPAssertSerialisesOK ([@"abc" ednKeyword], @":abc");
+  
+  {
+    NSArray *list = @[[@"abc" ednKeyword], [@"def" ednKeyword]];
+    
+    MPAssertSerialisesOK (list, @"[:abc,:def]");
+  }
+  
+  // check auto keywords keyword character validity
+  MPAssertSerialisesAutoKeywordsOK (@{@"abc" : @1}, @"{:abc 1}");
+  MPAssertSerialisesAutoKeywordsOK (@{@":abc" : @1}, @"{\":abc\" 1}");
+  MPAssertSerialisesAutoKeywordsOK (@{@"e4faee275bb1740e2001d285a052474300c6921a" : @1}, @"{:e4faee275bb1740e2001d285a052474300c6921a 1}");
 }
 
 @end

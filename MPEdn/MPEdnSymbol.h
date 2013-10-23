@@ -37,4 +37,11 @@
  */
 + (MPEdnSymbol *) symbolWithName: (NSString *) name;
 
+/**
+ * Convenience method that simply returns the symbol name. The
+ * `ednName` method can be used to compare EDN keywords, symbols and
+ * string names without regard to type.
+ */
+- (NSString *) ednName;
+
 @end

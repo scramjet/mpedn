@@ -16,6 +16,7 @@
 
 #import "MPEdnWriter.h"
 #import "MPEdnSymbol.h"
+#import "MPEdnKeyword.h"
 
 #import <objc/runtime.h>
 
@@ -35,27 +36,18 @@ BOOL MPEdnIsCharacter (NSNumber *number)
 }
 
 static NSCharacterSet *QUOTE_CHARS;
-static NSCharacterSet *NON_KEYWORD_CHARS;
 
 @implementation MPEdnWriter
+{
+  NSMutableString *outputStr;
+  BOOL useKeywordsInMaps;
+}
 
 + (void) initialize
 {
   if (self == [MPEdnWriter class])
   {
     QUOTE_CHARS = [NSCharacterSet characterSetWithCharactersInString: @"\\\"\n\r"];
-    
-    NSMutableCharacterSet *nonKeywordChars =
-      [NSMutableCharacterSet characterSetWithCharactersInString: @".*+!-_?$%&=/"];
-    
-    [nonKeywordChars addCharactersInRange: NSMakeRange ('a', 'z' - 'a' + 1)];
-    [nonKeywordChars addCharactersInRange: NSMakeRange ('A', 'Z' - 'A' + 1)];
-    [nonKeywordChars addCharactersInRange: NSMakeRange ('0', '9' - '0' + 1)];
-    
-    [nonKeywordChars invert];
-    
-    // make an immutable (faster) copy
-    NON_KEYWORD_CHARS = [nonKeywordChars copy];
   }
 }
 
@@ -63,7 +55,7 @@ static NSCharacterSet *NON_KEYWORD_CHARS;
 {
   if (self = [super init])
   {
-    useKeywordsInMaps = YES;
+    useKeywordsInMaps = NO;
   }
 
   return self;
@@ -96,6 +88,8 @@ static NSCharacterSet *NON_KEYWORD_CHARS;
     [self outputNumber: value];
   else if ([value isKindOfClass: [NSString class]])
     [self outputString: value];
+  else if ([value isKindOfClass: [MPEdnKeyword class]])
+    [self outputKeyword: value];
   else if ([value isKindOfClass: [NSDictionary class]])
     [self outputDictionary: value];
   else if ([value isKindOfClass: [NSArray class]])
@@ -196,12 +190,18 @@ static NSCharacterSet *NON_KEYWORD_CHARS;
   }
 }
 
-- (BOOL) outputKeyword: (NSString *) value
+- (void) outputKeyword: (MPEdnKeyword *) value
 {
-  if ([value rangeOfCharacterFromSet: NON_KEYWORD_CHARS].location == NSNotFound)
+  [outputStr appendString: @":"];
+  [outputStr appendString: [value ednName]];
+}
+
+- (BOOL) outputKeywordNamed: (NSString *) name
+{
+  if ([MPEdnKeyword isValidKeyword: name])
   {
     [outputStr appendString: @":"];
-    [outputStr appendString: value];
+    [outputStr appendString: name];
     
     return YES;
   } else
@@ -223,7 +223,7 @@ static NSCharacterSet *NON_KEYWORD_CHARS;
     
     if (useKeywordsInMaps && [key isKindOfClass: [NSString class]])
     {
-      if (![self outputKeyword: key])
+      if (![self outputKeywordNamed: key])
         [self outputObject: key];
     } else
     {
@@ -285,11 +285,20 @@ static NSCharacterSet *NON_KEYWORD_CHARS;
 
 @end
 
-@implementation NSObject (MPEdn)
+@implementation NSObject (MPEdnWriter)
 
 - (NSString *) objectToEdnString
 {
   return [[MPEdnWriter new] serialiseToEdn: self];
+}
+
+- (NSString *) objectToEdnStringAutoKeywords
+{
+  MPEdnWriter *writer = [MPEdnWriter new];
+
+  writer.useKeywordsInMaps = YES;
+
+  return [writer serialiseToEdn: self];
 }
 
 @end

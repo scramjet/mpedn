@@ -122,11 +122,21 @@
 
 - (void) testKeywords
 {
-  MPAssertParseOK (@":a", @"a", @"Keyword");
-  MPAssertParseOK (@":abc", @"abc", @"Keyword");
-  MPAssertParseOK (@":abc.def/ghi", @"abc.def/ghi", @"Keyword");
+  MPAssertParseOK (@":a", [@"a" ednKeyword], @"Keyword");
+  MPAssertParseOK (@":abc", [@"abc" ednKeyword], @"Keyword");
+  MPAssertParseOK (@":abc.def/ghi", [@"abc.def/ghi" ednKeyword], @"Keyword");
   
   MPAssertParseError (@":", @"Keyword");
+  
+  // keyword accessed after parsing
+  STAssertTrue ([@":a" ednStringToObject] == [@"a" ednKeyword], @"Equal keyword");
+  
+  // keyword accessed before parsing
+  MPEdnKeyword *kwdB = [@"b" ednKeyword];
+  STAssertTrue ([@":b" ednStringToObject] == kwdB, @"Equal keyword");
+  
+  // keywords as strings
+  STAssertEqualObjects ([@":b" ednStringToObjectNoKeywords], @"b", @"Equal keyword");
 }
 
 - (void) testSets
@@ -138,7 +148,7 @@
     MPAssertParseOK (@"#{1, 2, 3}", items, @"Set");
   }
   {
-    id items = [NSSet setWithArray: @[@1, @"abc", @"def"]];
+    id items = [NSSet setWithArray: @[@1, @"abc", [@"def" ednKeyword]]];
     MPAssertParseOK (@"#{1, \"abc\", :def}", items, @"Set");
   }
   
@@ -151,11 +161,11 @@
 {
   MPAssertParseOK (@"{}", [NSDictionary dictionary], @"Empty map");
   {
-    id map = @{@"a" : @1};
+    id map = @{[@"a" ednKeyword] : @1};
     MPAssertParseOK (@"{:a, 1}", map, @"Map");
   }
   {
-    id map = @{@"a" : @1, @"b" : @"c"};
+    id map = @{[@"a" ednKeyword] : @1, @"b" : [@"c" ednKeyword]};
     MPAssertParseOK (@"{:a 1, \"b\" :c}", map, @"Map");
   }
  
@@ -168,13 +178,13 @@
 {
   MPAssertParseOK (@"[]", @[], @"Empty list");
   {
-    id list = @[@"a", @1];
+    id list = @[[@"a" ednKeyword], @1];
     MPAssertParseOK (@"[:a, 1]", list, @"List");
     MPAssertParseOK (@"(:a, 1)", list, @"List");
   }
   
   {
-    id list = @[@{@"a" : @1}, @2];
+    id list = @[@{[@"a" ednKeyword] : @1}, @2];
     MPAssertParseOK (@"[{:a 1}, 2]", list, @"List");
   }
   
@@ -215,7 +225,7 @@
   id map = [@"#hello {:a 1}" ednStringToObject];
   
   STAssertEqualObjects (@"hello", [MPEdnParser tagForValue: map], @"Tag");
-  STAssertEqualObjects (@{@"a" : @1}, map, @"Tag");
+  STAssertEqualObjects (@{[@"a" ednKeyword] : @1}, map, @"Tag");
 
   MPAssertParseError (@"#", @"Tag");
   MPAssertParseError (@"# {", @"Tag");

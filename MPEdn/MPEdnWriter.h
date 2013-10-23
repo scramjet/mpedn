@@ -46,19 +46,21 @@ BOOL MPEdnIsCharacter (NSNumber *number);
  * Converts Cocoa data objects into EDN-formatted strings.
  * 
  * If you want to simply turn an object into an EDN string, use
- * objectToEdnString. Example:
+ * [NSObject(MPEdnWriter) objectToEdnString]. Example:
  *
  *	[myObject objectToEdnString];
+ * 
+ * See also [NSObject(MPEdnWriter) objectToEdnString] and
+ * [NSObject(MPEdnWriter) objectToEdnStringAutoKeywords]
  */
 @interface MPEdnWriter : NSObject
-{
-  NSMutableString *outputStr;
-  BOOL useKeywordsInMaps;
-}
 
 /**
- * When set (the default), automatically output string keys in
+ * When true (defaults to false), automatically output string keys in
  * NSDictionary as EDN keywords where possible.
+ *
+ * This may be useful in the case where the dictionary keys are not
+ * MPEdnKeyword instances, but you wish to treat them all as such.
  */
 @property (readwrite) BOOL useKeywordsInMaps;
 
@@ -71,7 +73,7 @@ BOOL MPEdnIsCharacter (NSNumber *number);
 
 @end
 
-@interface NSObject (MPEdn)
+@interface NSObject (MPEdnWriter)
 
 /**
  * Shortcut to generate an EDN-formatted string for an object.
@@ -79,5 +81,14 @@ BOOL MPEdnIsCharacter (NSNumber *number);
  *  @see [MPEdnWriter serialiseToEdn]
  */
 - (NSString *) objectToEdnString;
+
+/**
+ * Shortcut to generate an EDN-formatted string for an object, with
+ * automatic conversion of dictionary keys to keywords (i.e. the
+ * `useKeywordsInMaps` property set to true).
+ *
+ *  @see [MPEdnWriter serialiseToEdn]
+ */
+- (NSString *) objectToEdnStringAutoKeywords;
 
 @end

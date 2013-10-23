@@ -20,6 +20,12 @@ And to generate EDN from a Cocoa object:
 
 See the headers for API docs.
 
+## Note To Users MPEdn 0.1
+
+Release 0.2 will break your code slightly -- sorry! The default setting for automatically outputting NSDictionary string keys as keywords (the `MPEdnWriter useKeywordsInMaps` property) has changed from YES to NO in 0.2. If you wish to preserve the 0.1 behaviour, use `objectToEdnStringAutoKeywords` rather than `objectToEdnString` to generate EDN output.
+
+Also, keywords are now realised as `MPEdnKeyword` instances rather than strings as in 0.1. To get the old behaviour, set the `keywordsAsStrings` property on MPEdnParser or use `[NSString ednStringToObjectKeywordsAsStrings]`.
+
 
 ## Using It In Your Project
 
@@ -50,7 +56,7 @@ To use the library, either:
 
 * EDN character <-> `NSNumber` (`numberWithUnsignedChar`). Note however that `NSNumber` appears to be quite broken when representing characters. For example, `[NSNumber numberWithChar: 'a']` produces a `NSNumber` that correctly indicates it wraps a character, but `numberWithChar` with `\n` does not, meaning `\n` will be emitted as `10`. As as workaround, you can force a number to be seen as a character using `MPEdnTagAsCharacter()`.
 
-* EDN keyword <-> `NSString`. If the `MPEdnWriter.useKeywordsInMaps` property is true (the default), strings used as keys in maps will be output as keywords if possible. Because EDN keywords get mapped to `NSString` MPEdn is "lossy" here: a read/write cycle will turn all keywords into strings. This setting mitigates this somewhat by turning strings back into keywords when they're used in a map, which is a common pattern, at least in Clojure. I'd be interested in feedback as to whether this is a generally-applicable default however.
+* EDN keyword <-> `MPEdnKeyword`. If the `MPEdnWriter.useKeywordsInMaps` property is true (the default is false as of 0.2), strings used as keys in NSDictionary's will be output as keywords if possible. Note that strings and keywords never compare as equal, so this could get confusing when reading a dictionary from an external service that uses keywords: in general, prefer explicit use of keywords where possible.
 
 * EDN symbol <-> `MPEdnSymbol`.
 

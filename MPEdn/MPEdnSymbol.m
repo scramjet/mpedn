@@ -37,6 +37,11 @@
   return name;
 }
 
+- (NSString *) ednName
+{
+  return name;
+}
+
 - (BOOL) isEqual: (id) object
 {
   return [object isKindOfClass: [MPEdnSymbol class]] &&

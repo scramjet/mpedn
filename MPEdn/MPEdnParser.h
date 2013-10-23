@@ -66,17 +66,11 @@ typedef enum
  *	}
  *
  * On a parse error, the error property will be set.
+ *
+ * See [NSString(MPEdnParser) ednStringToObject]
+ * and [NSString(MPEdnParser) ednStringToObjectKeywordsAsStrings]
  */
 @interface MPEdnParser : NSObject
-{
-  NSString *inputStr;
-  NSUInteger startIdx;
-  NSUInteger endIdx;
-  NSUInteger inputStrLen;
-  NSUInteger token;
-  id tokenValue;
-  NSError *error;
-}
 
 /**
  * The string to parse.
@@ -85,6 +79,12 @@ typedef enum
  * loop gated by the complete property).
  */
 @property (readwrite, retain) NSString *inputString;
+
+/**
+ * Set to true (the default is false) to instantiate all keywords as
+ * `NSString` instances rather than `MPEdnKeyword`.
+ */
+@property (readwrite) BOOL keywordsAsStrings;
 
 /** 
  * Set when the parser encounters a parse error.
@@ -157,30 +157,39 @@ typedef enum
 - (id) parseNextValue;
 
 /**
- * Called by parser to create a new set instance. May be overridden to
- * to use a custom set implementation.
+ * Called by parser to create a new set instance.
+ *
+ * May be overridden to to use a custom set implementation.
  */
 - (NSMutableSet *) newSet;
 
 /**
- * Called by parser to create a new array instance. May be overridden to
- * to use a custom array implementation.
+ * Called by parser to create a new array instance. 
+ *
+ * May be overridden to to use a custom array implementation.
  */
 - (NSMutableArray *) newArray;
 
 /**
- * Called by parser to create a new dictionary instance. May be
- * overridden to to use a custom dictionary implementation.
+ * Called by parser to create a new dictionary instance.
+ * 
+ * May be overridden to to use a custom dictionary implementation.
  */
 - (NSMutableDictionary *) newDictionary;
 
 @end
 
-@interface NSString (MPEdn)
+@interface NSString (MPEdnParser)
 
 /**
  * Shortcut to parse a single string with [MPEdnParser parseString:].
  */
 - (id) ednStringToObject;
+
+/**
+ * Shortcut to parse a single string with [MPEdnParser parseString:]
+ * with the `keywordsAsStrings` property set to true.
+ */
+- (id) ednStringToObjectNoKeywords;
 
 @end

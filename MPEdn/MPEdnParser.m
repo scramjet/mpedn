@@ -37,9 +37,21 @@ typedef enum
   TOKEN_DISCARD
 } Token;
 
-@implementation MPEdnParser
-
 static NSCharacterSet *QUOTE_CHARS;
+
+@implementation MPEdnParser
+{
+  NSString *inputStr;
+  NSUInteger startIdx;
+  NSUInteger endIdx;
+  NSUInteger inputStrLen;
+  NSUInteger token;
+  id tokenValue;
+  NSError *error;
+  BOOL keywordsAsStrings;
+}
+
+@synthesize keywordsAsStrings;
 
 #pragma mark - Init
 
@@ -441,7 +453,6 @@ static BOOL is_sym_punct (unichar ch)
     [inputStr substringWithRange: NSMakeRange (startIdx, endIdx - startIdx)];
 }
 
-// TODO intern strings?
 - (void) readKeywordToken
 {
   unichar ch;
@@ -456,8 +467,11 @@ static BOOL is_sym_punct (unichar ch)
   if (length > 0)
   {
     token = TOKEN_KEYWORD;
-    tokenValue =
+    
+    NSString *keyword =
       [inputStr substringWithRange: NSMakeRange (startIdx + 1, length)];
+    
+    tokenValue = keywordsAsStrings ? keyword : [keyword ednKeyword];
   } else
   {
     [self raiseError: ERROR_INVALID_KEYWORD
@@ -791,11 +805,20 @@ static BOOL is_sym_punct (unichar ch)
 
 @end
 
-@implementation NSString (MPEdn)
+@implementation NSString (MPEdnParser)
 
 - (id) ednStringToObject
 {
   return [[MPEdnParser new] parseString: self];
+}
+
+- (id) ednStringToObjectNoKeywords
+{
+  MPEdnParser *parser = [MPEdnParser new];
+  
+  parser.keywordsAsStrings = YES;
+  
+  return [parser parseString: self];
 }
 
 @end
