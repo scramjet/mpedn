@@ -75,6 +75,11 @@ static NSMutableDictionary *ednKeywordTable;
   return self == object;
 }
 
+- (NSComparisonResult) compare: (MPEdnKeyword *) object
+{
+  return [name compare: [object ednName]];
+}
+
 - (NSString *) description
 {
   return [NSString stringWithFormat: @":%@", name];
