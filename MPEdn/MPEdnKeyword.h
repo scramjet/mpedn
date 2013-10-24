@@ -29,7 +29,21 @@
  */
 @interface MPEdnKeyword : NSObject<NSCopying>
 
+/**
+ * Test if a given name is a valid EDN keyword.
+ *
+ * Valid characters in a keyword are any letter (upper or lower case),
+ * number, or any of the following characters: `*+!-_?$%&=/`.
+ */
 + (BOOL) isValidKeyword: (NSString *) name;
+
+/**
+ * Lookup/create a singleton keyword instance for a given name.
+ *
+ * It's usually easier to use [NSString(MPEdnKeyword) ednKeyword]
+ * instead of this method.
+ */
++ (MPEdnKeyword *) keyword: (NSString *) name;
 
 /**
  * Create a new instance with a given name.

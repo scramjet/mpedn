@@ -49,6 +49,23 @@ static NSMutableDictionary *ednKeywordTable;
   return [name rangeOfCharacterFromSet: NON_KEYWORD_CHARS].location == NSNotFound;
 }
 
++ (MPEdnKeyword *) keyword: (NSString *) name
+{
+  @synchronized (ednKeywordTable)
+  {
+    MPEdnKeyword *keyword = [ednKeywordTable objectForKey: name];
+    
+    if (!keyword)
+    {
+      keyword = [[MPEdnKeyword alloc] initWithName: name];
+      
+      [ednKeywordTable setObject: keyword forKey: name];
+    }
+    
+    return keyword;
+  }
+}
+
 - (instancetype) initWithName: (NSString *) initName
 {
   if (![MPEdnKeyword isValidKeyword: initName])
@@ -96,19 +113,7 @@ static NSMutableDictionary *ednKeywordTable;
 
 - (MPEdnKeyword *) ednKeyword
 {
-  @synchronized ([MPEdnKeyword class])
-  {
-    MPEdnKeyword *keyword = [ednKeywordTable objectForKey: self];
-    
-    if (!keyword)
-    {
-      keyword = [[MPEdnKeyword alloc] initWithName: self];
-      
-      [ednKeywordTable setObject: keyword forKey: self];
-    }
-    
-    return keyword;
-  }
+  return [MPEdnKeyword keyword: self];
 }
 
 - (NSString *) ednName
