@@ -56,16 +56,14 @@ To use the library, either:
 
 * EDN character <-> `NSNumber` (`numberWithUnsignedChar`). Note however that `NSNumber` appears to be quite broken when representing characters. For example, `[NSNumber numberWithChar: 'a']` produces a `NSNumber` that correctly indicates it wraps a character, but `numberWithChar` with `\n` does not, meaning `\n` will be emitted as `10`. As as workaround, you can force a number to be seen as a character using `MPEdnTagAsCharacter()`.
 
-* EDN keyword <-> `MPEdnKeyword`. If the `MPEdnWriter.useKeywordsInMaps` property is true (the default is false as of 0.2), strings used as keys in NSDictionary's will be output as keywords if possible. Note that strings and keywords never compare as equal, so this could get confusing when reading a dictionary from an external service that uses keywords: in general, prefer explicit use of keywords where possible.
+* EDN keyword <-> `MPEdnKeyword`. If the `MPEdnWriter.useKeywordsInMaps` property is true (the default is false as of 0.2), strings used as keys in `NSDictionary` will be output as keywords if possible. Note that strings and keywords never compare as equal, so this could get confusing when reading a dictionary from an external service that uses keywords: in general, prefer explicit use of keywords where possible.
 
 * EDN symbol <-> `MPEdnSymbol`.
 
-* EDN tagged values: Use `+[MPEdnParser tagForValue]` to retrieve the tag associated with the value.
+* EDN tagged values are translated by tag reader/writer classes implementing `MPEdnTaggedValueWriter` and/or `MPEdnTaggedValueReader` (see `MPEdnBase64Codec` for an example). You can allow any tag to be accepted by setting the `allowUnknownTags` property on `MPEdnParser`, and retreive tags read this way using `+[MPEdnParser tagForValue]`. `MPEdnWriter` does not currently check for values tagged by the parser, so we do not support roundtripping unknown tags yet.
 
 
 ## Notes
-
-* Tagged values would probably be better handled in future by registering a custom reader for them, since this is their usual purpose.
 
 * Symbols would probably be better handled in future by resolving them to a mapped value, either through a symbol table or a user-defined callback.
 
