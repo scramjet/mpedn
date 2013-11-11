@@ -11,10 +11,12 @@
  *  software in any fashion, you are agreeing to be bound by the terms
  *  of this license.
  *
- * You must not remove this notice, or any other, from this software.
+ *  You must not remove this notice, or any other, from this software.
  */
 
 #import <Foundation/Foundation.h>
+
+#import "MPEdnTaggedValueReader.h"
 
 /**
  * Codes for parse errors reported in EdnParser.error.
@@ -33,7 +35,9 @@ typedef enum
   ERROR_INVALID_DISCARD,
   ERROR_INVALID_CHARACTER,
   ERROR_INVALID_TAG,
-  ERROR_UNTERMINATED_COLLECTION
+  ERROR_UNTERMINATED_COLLECTION,
+  ERROR_NO_READER_FOR_TAG,
+  ERROR_TAG_READER_ERROR
 } MPEdnParserErrorCode;
 
 /**
@@ -73,6 +77,11 @@ typedef enum
 @interface MPEdnParser : NSObject
 
 /**
+ * The tag associated with a given value. See `allowUnknownTags`.
+ */
++ (NSString *) tagForValue: (id) value;
+
+/**
  * The string to parse.
  * 
  * You typically set this property and then use parseNextValue (usually in a 
@@ -107,13 +116,15 @@ typedef enum
 @property (readonly) BOOL complete;
 
 /**
- * Get the tag associated with a parsed value, or nil if no tag.
+ * When set (default is unset), allow any tag regardless of whether we
+ * have a reader for it: use [MPEdnParser tagForValue] to retreive
+ * tags from values. 
  *
- * If the value parsed by MPEdnParser had a tag in front of it
- * (e.g. `#mpedn/mytagname {:a 1}`), this retrieves the tag name
- * (`mpedn/mytagname` in the example).
+ * NB: MPEdnWriter does not currently check for values tagged by the
+ * parser in this way, so we do not support roundtripping unknown
+ * tags.
  */
-+ (NSString *) tagForValue: (id) value;
+@property (readwrite) BOOL allowUnknownTags;
 
 /**
  * Parse a string containing a single EDN value.
@@ -155,6 +166,16 @@ typedef enum
  * @see [NSString(MPEdn) ednStringToObject]
  */
 - (id) parseNextValue;
+
+/**
+ * Add a custom tag reader.
+ *
+ * You can use this to extend the EDN parser to support custom tagged
+ * types. See MPEdnBase64Codec for an example.
+ *
+ * @see [MPEdnWriter addTagWriter:]
+ */
+- (void) addTagReader: (id<MPEdnTaggedValueReader>) reader;
 
 /**
  * Called by parser to create a new set instance.

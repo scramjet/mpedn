@@ -17,6 +17,7 @@
 #import "MPEdnWriter.h"
 #import "MPEdnSymbol.h"
 #import "MPEdnKeyword.h"
+#import "MPEdnTaggedValueWriter.h"
 
 #import <objc/runtime.h>
 
@@ -41,6 +42,7 @@ static NSCharacterSet *QUOTE_CHARS;
 {
   NSMutableString *outputStr;
   BOOL useKeywordsInMaps;
+  NSMutableArray *writers;
 }
 
 + (void) initialize
@@ -56,6 +58,7 @@ static NSCharacterSet *QUOTE_CHARS;
   if (self = [super init])
   {
     useKeywordsInMaps = NO;
+    writers = [NSMutableArray new];
   }
 
   return self;
@@ -69,6 +72,22 @@ static NSCharacterSet *QUOTE_CHARS;
 - (void) setUseKeywordsInMaps: (BOOL) newValue
 {
   useKeywordsInMaps = newValue;
+}
+
+- (void) addTagWriter: (id<MPEdnTaggedValueWriter>) writer
+{
+  [writers addObject: writer];
+}
+
+- (id<MPEdnTaggedValueWriter>) tagWriterFor: (id) value
+{
+  for (id<MPEdnTaggedValueWriter> writer in writers)
+  {
+    if ([writer canWrite: value])
+      return writer;
+  }
+  
+  return nil;
 }
 
 - (NSString *) serialiseToEdn: (id) value;
@@ -100,9 +119,18 @@ static NSCharacterSet *QUOTE_CHARS;
     [self outputSymbol: value];
   else
   {
-    [NSException raise: @"MPEdnWriterException"
-                format: @"Don't know how to handle value of type %@ ",
-     [value class]];
+    id<MPEdnTaggedValueWriter> tagWriter = [self tagWriterFor: value];
+    
+    if (tagWriter)
+    {
+      [outputStr appendFormat: @"#%@ ", [tagWriter tagName]];
+      
+      [tagWriter writeValue: value toWriter: self];
+    } else
+    {
+      [NSException raise: @"MPEdnWriterException"
+                  format: @"Don't know how to handle value of type %@ ", [value class]];
+    }
   }
 }
 

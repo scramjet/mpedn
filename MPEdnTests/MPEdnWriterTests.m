@@ -3,6 +3,7 @@
 #import "MPEdnWriter.h"
 #import "MPEdn.h"
 #import "MPEdnSymbol.h"
+#import "MPEdnBase64Codec.h"
 
 #define MPAssertSerialisesOK(value, correct)             \
 {                                                        \
@@ -142,6 +143,18 @@
   MPAssertSerialisesAutoKeywordsOK (@{@"abc" : @1}, @"{:abc 1}");
   MPAssertSerialisesAutoKeywordsOK (@{@":abc" : @1}, @"{\":abc\" 1}");
   MPAssertSerialisesAutoKeywordsOK (@{@"e4faee275bb1740e2001d285a052474300c6921a" : @1}, @"{:e4faee275bb1740e2001d285a052474300c6921a 1}");
+}
+
+- (void) testTags
+{
+  uint8_t data [10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  
+  id map = @{[@"a" ednKeyword] : [NSData dataWithBytes: data length: sizeof (data)]};
+  
+  MPEdnWriter *writer = [MPEdnWriter new];
+  [writer addTagWriter: [MPEdnBase64Codec sharedInstance]];
+  
+  STAssertEqualObjects ([writer serialiseToEdn: map], @"{:a #base64 \"AAECAwQFBgcICQ==\"}", @"Serialise");
 }
 
 @end

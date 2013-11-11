@@ -2,6 +2,7 @@
 
 #import "MPEdn.h"
 #import "MPEdnSymbol.h"
+#import "MPEdnBase64Codec.h"
 
 #define MPAssertParseOK(expr, correctValue, message)    \
 {                                          \
@@ -23,6 +24,7 @@
   STAssertNil (value, message);            \
   STAssertNotNil (parser.error, message);  \
   STAssertTrue (parser.complete, message); \
+  NSLog (@"Error: %@", parser.error);      \
 }
 
 @implementation MPEdnParserTests
@@ -222,15 +224,46 @@
 
 - (void) testTaggedValues
 {
-  id map = [@"#hello {:a 1}" ednStringToObject];
-  
-  STAssertEqualObjects (@"hello", [MPEdnParser tagForValue: map], @"Tag");
-  STAssertEqualObjects (@{[@"a" ednKeyword] : @1}, map, @"Tag");
-
   MPAssertParseError (@"#", @"Tag");
   MPAssertParseError (@"# {", @"Tag");
   MPAssertParseError (@"# #", @"Tag");
   MPAssertParseError (@"#tag #tag {}", @"Tag");
+  MPAssertParseError (@"#non-existent-tag {}", @"Tag");
+  
+  // check custom tag reader
+  MPEdnParser *parser = [MPEdnParser new];
+
+  [parser addTagReader: [MPEdnBase64Codec sharedInstance]];
+  
+  {
+    id map = [parser parseString: @"{:a #base64 \"AAECAwQFBgcICQ==\"}"];
+    
+    uint8_t dataContents [10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    
+    NSData *data = [NSData dataWithBytes: dataContents length: sizeof (dataContents)];
+
+    STAssertTrue ([map [[@"a" ednKeyword]] isKindOfClass: [NSData class]], @"Data decoded");
+    STAssertEqualObjects ([map objectForKey: [@"a" ednKeyword]], data, @"Data decoded");
+  }
+  
+  // check Base 64 error reporting
+  [parser parseString: @"#base64 {}"];
+  
+  STAssertTrue (parser.error != nil, @"Base 64 needs a string value");
+  
+  [parser parseString: @"#base64 \"<hello!>\""];
+  
+  STAssertTrue (parser.error != nil, @"Bad Base64 data");
+  
+  // check allowUnknownTags
+  {
+    parser.allowUnknownTags = YES;
+    
+    id taggedMap = [parser parseString: @"#non-existent-tag {}"];
+    
+    STAssertEqualObjects (taggedMap, @{}, @"Tagged");
+    STAssertEqualObjects ([MPEdnParser tagForValue: taggedMap], @"non-existent-tag", @"Tagged");
+  }
 }
 
 - (void) testGeneralUsage

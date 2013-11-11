@@ -19,8 +19,6 @@
 #import "MPEdn.h"
 #import "MPEdnSymbol.h"
 
-NSString * const MPEDN_TAG_NAME = @"MPEDN_TagName";
-
 // A token is one of these or just a single character.
 typedef enum
 {
@@ -39,6 +37,8 @@ typedef enum
 
 static NSCharacterSet *QUOTE_CHARS;
 
+NSString * const MPEDN_TAG_NAME = @"MPEDNTag";
+
 @implementation MPEdnParser
 {
   NSString *inputStr;
@@ -49,9 +49,12 @@ static NSCharacterSet *QUOTE_CHARS;
   id tokenValue;
   NSError *error;
   BOOL keywordsAsStrings;
+  BOOL allowUnknownTags;
+  NSMutableDictionary *readers;
 }
 
 @synthesize keywordsAsStrings;
+@synthesize allowUnknownTags;
 
 #pragma mark - Init
 
@@ -66,6 +69,16 @@ static NSCharacterSet *QUOTE_CHARS;
 + (NSString *) tagForValue: (id) value
 {
   return objc_getAssociatedObject (value, (__bridge const void *)MPEDN_TAG_NAME);
+}
+
+- (id) init
+{
+  if (self = [super init])
+  {
+    readers = [NSMutableDictionary new];
+  }
+  
+  return self;
 }
 
 - (void) raiseError: (NSInteger) code message: (NSString *) message, ...
@@ -122,6 +135,11 @@ static NSCharacterSet *QUOTE_CHARS;
   
     return startIdx >= inputStrLen;
   }
+}
+
+- (void) addTagReader: (id<MPEdnTaggedValueReader>) reader
+{
+  [readers setObject: reader forKey: [reader tagName]];
 }
 
 #pragma mark - Tokeniser
@@ -757,8 +775,6 @@ static BOOL is_sym_punct (unichar ch)
     return [MPEdnSymbol symbolWithName: value];
 }
 
-// TODO in future we may want to allow a user-defined call back to handle the
-// tag and pre-process/transform the value.
 - (id) parseTag
 {
   NSString *tag = [self consumeTokenValue];
@@ -769,10 +785,38 @@ static BOOL is_sym_punct (unichar ch)
     
     if (!error)
     {
-      objc_setAssociatedObject (value, (__bridge const void *)MPEDN_TAG_NAME,
-                                tag, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+      id<MPEdnTaggedValueReader> reader = [readers objectForKey: tag];
       
-      return value;
+      if (reader)
+      {
+        id tagValue = [reader readValue: value];
+        
+        if ([tagValue isKindOfClass: [NSError class]])
+        {
+          token = TOKEN_ERROR;
+          error = (NSError *)tagValue;
+          
+          return nil;
+        } else
+        {
+          return tagValue;
+        }
+      } else
+      {
+        if (allowUnknownTags)
+        {
+          objc_setAssociatedObject (value, (__bridge const void *)MPEDN_TAG_NAME,
+                                    tag, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+          
+          return value;
+        } else
+        {
+          [self raiseError: ERROR_NO_READER_FOR_TAG
+                message: @"No reader for tag #%@", tag];
+        }
+        
+        return nil;
+      }
     } else
     {
       return nil;

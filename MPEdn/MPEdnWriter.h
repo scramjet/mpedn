@@ -16,6 +16,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "MPEdnTaggedValueWriter.h"
+
 /**
  * Force a given number instance to be output as a character.
  *
@@ -70,6 +72,23 @@ BOOL MPEdnIsCharacter (NSNumber *number);
  * @see [NSObject(MPEdn) objectToEdnString]
  */
 - (NSString *) serialiseToEdn: (id) value;
+
+/**
+ * Add a custom tag writer.
+ *
+ * You can use this to extend the EDN writer to support custom tagged
+ * types. See MPEdnBase64Codec for an example.
+ *
+ * @see [MPEdnParser addTagReader:]
+ */
+- (void) addTagWriter: (id<MPEdnTaggedValueWriter>) writer;
+
+/**
+ * Output an object to this writer.
+ *
+ * Primarily for use by custom tag codecs.
+ */
+- (void) outputObject: (id) value;
 
 @end
 
