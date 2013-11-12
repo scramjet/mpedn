@@ -235,6 +235,8 @@
     NSDate *correctDate = [NSDate dateWithTimeIntervalSince1970: 63115200];
     
     MPAssertParseOK (@"#inst \"1972-01-01T12:00:00.00Z\"", correctDate, @"Date");
+    MPAssertParseOK (@"#inst \"1972-01-01T12:00:00.00+00:00\"", correctDate, @"Date");
+    MPAssertParseOK (@"#inst \"1972-01-01T22:30:00.00+10:30\"", correctDate, @"Date");
   }
 
   // UUID

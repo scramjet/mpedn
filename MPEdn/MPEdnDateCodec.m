@@ -20,16 +20,6 @@
 
 static MPEdnDateCodec *sharedInstance;
 
-static NSDateFormatter *rfc3339DateFormat ()
-{
-  NSDateFormatter *formatter = [NSDateFormatter new];
-
-  formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SS'Z'";
-  formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
-
-  return formatter;
-}
-
 @implementation MPEdnDateCodec
 
 + (void) initialize
@@ -57,15 +47,26 @@ static NSDateFormatter *rfc3339DateFormat ()
 
 - (void) writeValue: (id) value toWriter: (MPEdnWriter *) writer
 {
-  [writer outputObject: [rfc3339DateFormat () stringFromDate: value]];
+  NSDateFormatter *formatter = [NSDateFormatter new];
+
+  // NN: hardcoding "Z" (UTC) as timezone rather than letting formatter
+  // output "+00:00".
+  formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SS'Z'";
+  formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
+
+  [writer outputObject: [formatter stringFromDate: value]];
 }
 
 - (id) readValue: (id) value
 {
   if ([value isKindOfClass: [NSString class]])
   {
-    NSDate *date = [rfc3339DateFormat () dateFromString: value];
+    NSDateFormatter *formatter = [NSDateFormatter new];
+
+    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSZ";
     
+    NSDate *date = [formatter dateFromString: value];
+
     if (date)
     {
       return date;
