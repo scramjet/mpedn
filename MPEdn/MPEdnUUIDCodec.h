@@ -20,14 +20,14 @@
 #import "MPEdnTaggedValueWriter.h"
 
 /**
- * Read/write `NSData` values in Base64-encoded form (tag: "#base64").
+ * Read/write `UUID` values in EDN-specified form (tag: "#uuid").
  */
-@interface MPEdnBase64Codec : 
+@interface MPEdnUUIDCodec :
   NSObject<MPEdnTaggedValueReader, MPEdnTaggedValueWriter>
 
 /**
  * The shared instance (can be used across threads).
  */
-+ (MPEdnBase64Codec *) sharedInstance;
++ (MPEdnUUIDCodec *) sharedInstance;
 
 @end

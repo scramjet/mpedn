@@ -18,6 +18,8 @@
 
 #import "MPEdn.h"
 #import "MPEdnSymbol.h"
+#import "MPEdnDateCodec.h"
+#import "MPEdnUUIDCodec.h"
 
 // A token is one of these or just a single character.
 typedef enum
@@ -35,9 +37,11 @@ typedef enum
   TOKEN_DISCARD
 } Token;
 
+NSString * const MPEDN_TAG_NAME = @"MPEDNTag";
+
 static NSCharacterSet *QUOTE_CHARS;
 
-NSString * const MPEDN_TAG_NAME = @"MPEDNTag";
+static NSDictionary *defaultReaders;
 
 @implementation MPEdnParser
 {
@@ -50,7 +54,7 @@ NSString * const MPEDN_TAG_NAME = @"MPEDNTag";
   NSError *error;
   BOOL keywordsAsStrings;
   BOOL allowUnknownTags;
-  NSMutableDictionary *readers;
+  NSDictionary *readers;
 }
 
 @synthesize keywordsAsStrings;
@@ -63,6 +67,22 @@ NSString * const MPEDN_TAG_NAME = @"MPEDNTag";
   if (self == [MPEdnParser class])
   {
     QUOTE_CHARS = [NSCharacterSet characterSetWithCharactersInString: @"\\\""];
+
+    defaultReaders =
+      @{[[MPEdnDateCodec sharedInstance] tagName] : [MPEdnDateCodec sharedInstance],
+        [[MPEdnUUIDCodec sharedInstance] tagName] : [MPEdnUUIDCodec sharedInstance]};
+  }
+}
+
++ (void) addGlobalTagReader: (id<MPEdnTaggedValueReader>) reader
+{
+  @synchronized (self)
+  {
+    NSMutableDictionary *newReaders = [defaultReaders mutableCopy];
+    
+    [newReaders setObject: reader forKey: [reader tagName]];
+    
+    defaultReaders = newReaders;
   }
 }
 
@@ -75,7 +95,7 @@ NSString * const MPEDN_TAG_NAME = @"MPEDNTag";
 {
   if (self = [super init])
   {
-    readers = [NSMutableDictionary new];
+    readers = defaultReaders;
   }
   
   return self;
@@ -139,7 +159,11 @@ NSString * const MPEDN_TAG_NAME = @"MPEDNTag";
 
 - (void) addTagReader: (id<MPEdnTaggedValueReader>) reader
 {
-  [readers setObject: reader forKey: [reader tagName]];
+  NSMutableDictionary *newReaders = [readers mutableCopy];
+  
+  [newReaders setObject: reader forKey: [reader tagName]];
+  
+  readers = newReaders;
 }
 
 #pragma mark - Tokeniser

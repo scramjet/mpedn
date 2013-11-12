@@ -58,6 +58,17 @@ BOOL MPEdnIsCharacter (NSNumber *number);
 @interface MPEdnWriter : NSObject
 
 /**
+ * Add a tag writer to the default global set.
+ *
+ * The global writer set is used as the base template for new writer
+ * instances, which may further customise the set for local use.
+ *
+ * The default writer set handles the built-in EDN "#uuid" and "#inst"
+ * tags.
+ */
++ (void) addGlobalTagWriter: (id<MPEdnTaggedValueWriter>) writer;
+
+/**
  * When true (defaults to false), automatically output string keys in
  * NSDictionary as EDN keywords where possible.
  *
@@ -78,6 +89,12 @@ BOOL MPEdnIsCharacter (NSNumber *number);
  *
  * You can use this to extend the EDN writer to support custom tagged
  * types. See MPEdnBase64Codec for an example.
+ *
+ * This method extends the default global writers: see
+ * `addGlobalTagWriter`.
+ *
+ * Where writers overlap in what they may output, those added later
+ * override previous ones.
  *
  * @see [MPEdnParser addTagReader:]
  */

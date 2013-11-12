@@ -147,14 +147,38 @@
 
 - (void) testTags
 {
-  uint8_t data [10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  // date
+  {
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970: 63115200];
+    
+    MPEdnWriter *writer = [MPEdnWriter new];
+    
+    STAssertEqualObjects ([writer serialiseToEdn: date],
+                          @"#inst \"1972-01-01T12:00:00.00Z\"", @"Serialise");
+  }
   
-  id map = @{[@"a" ednKeyword] : [NSData dataWithBytes: data length: sizeof (data)]};
-  
-  MPEdnWriter *writer = [MPEdnWriter new];
-  [writer addTagWriter: [MPEdnBase64Codec sharedInstance]];
-  
-  STAssertEqualObjects ([writer serialiseToEdn: map], @"{:a #base64 \"AAECAwQFBgcICQ==\"}", @"Serialise");
+  // UUID
+  {
+    NSUUID *uuid =
+      [[NSUUID alloc] initWithUUIDString: @"F81D4FAE-7DEC-11D0-A765-00A0C91E6BF6"];
+    
+    MPEdnWriter *writer = [MPEdnWriter new];
+    
+    STAssertEqualObjects ([writer serialiseToEdn: uuid],
+                          @"#uuid \"F81D4FAE-7DEC-11D0-A765-00A0C91E6BF6\"", @"Serialise");
+  }
+
+  // base 64
+  {
+    uint8_t data [10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    
+    id map = @{[@"a" ednKeyword] : [NSData dataWithBytes: data length: sizeof (data)]};
+    
+    MPEdnWriter *writer = [MPEdnWriter new];
+    [writer addTagWriter: [MPEdnBase64Codec sharedInstance]];
+    
+    STAssertEqualObjects ([writer serialiseToEdn: map], @"{:a #base64 \"AAECAwQFBgcICQ==\"}", @"Serialise");
+  }
 }
 
 @end

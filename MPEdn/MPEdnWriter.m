@@ -18,6 +18,8 @@
 #import "MPEdnSymbol.h"
 #import "MPEdnKeyword.h"
 #import "MPEdnTaggedValueWriter.h"
+#import "MPEdnDateCodec.h"
+#import "MPEdnUUIDCodec.h"
 
 #import <objc/runtime.h>
 
@@ -37,12 +39,13 @@ BOOL MPEdnIsCharacter (NSNumber *number)
 }
 
 static NSCharacterSet *QUOTE_CHARS;
+static NSArray *defaultWriters;
 
 @implementation MPEdnWriter
 {
   NSMutableString *outputStr;
   BOOL useKeywordsInMaps;
-  NSMutableArray *writers;
+  NSArray *writers;
 }
 
 + (void) initialize
@@ -50,6 +53,21 @@ static NSCharacterSet *QUOTE_CHARS;
   if (self == [MPEdnWriter class])
   {
     QUOTE_CHARS = [NSCharacterSet characterSetWithCharactersInString: @"\\\"\n\r"];
+    
+    defaultWriters =
+      @[[MPEdnDateCodec sharedInstance], [MPEdnUUIDCodec sharedInstance]];
+  }
+}
+
++ (void) addGlobalTagWriter: (id<MPEdnTaggedValueWriter>) writer
+{
+  @synchronized (self)
+  {
+    NSMutableArray *newWriters = [defaultWriters mutableCopy];
+    
+    [newWriters insertObject: writer atIndex: 0];
+    
+    defaultWriters = newWriters;
   }
 }
 
@@ -58,7 +76,7 @@ static NSCharacterSet *QUOTE_CHARS;
   if (self = [super init])
   {
     useKeywordsInMaps = NO;
-    writers = [NSMutableArray new];
+    writers = defaultWriters;
   }
 
   return self;
@@ -76,7 +94,11 @@ static NSCharacterSet *QUOTE_CHARS;
 
 - (void) addTagWriter: (id<MPEdnTaggedValueWriter>) writer
 {
-  [writers addObject: writer];
+  NSMutableArray *newWriters = [writers mutableCopy];
+  
+  [newWriters insertObject: writer atIndex: 0];
+  
+  writers = newWriters;
 }
 
 - (id<MPEdnTaggedValueWriter>) tagWriterFor: (id) value

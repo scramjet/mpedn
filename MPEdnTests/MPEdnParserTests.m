@@ -230,39 +230,56 @@
   MPAssertParseError (@"#tag #tag {}", @"Tag");
   MPAssertParseError (@"#non-existent-tag {}", @"Tag");
   
-  // check custom tag reader
-  MPEdnParser *parser = [MPEdnParser new];
-
-  [parser addTagReader: [MPEdnBase64Codec sharedInstance]];
-  
+  // date
   {
-    id map = [parser parseString: @"{:a #base64 \"AAECAwQFBgcICQ==\"}"];
+    NSDate *correctDate = [NSDate dateWithTimeIntervalSince1970: 63115200];
     
-    uint8_t dataContents [10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    
-    NSData *data = [NSData dataWithBytes: dataContents length: sizeof (dataContents)];
-
-    STAssertTrue ([map [[@"a" ednKeyword]] isKindOfClass: [NSData class]], @"Data decoded");
-    STAssertEqualObjects ([map objectForKey: [@"a" ednKeyword]], data, @"Data decoded");
+    MPAssertParseOK (@"#inst \"1972-01-01T12:00:00.00Z\"", correctDate, @"Date");
   }
-  
-  // check Base 64 error reporting
-  [parser parseString: @"#base64 {}"];
-  
-  STAssertTrue (parser.error != nil, @"Base 64 needs a string value");
-  
-  [parser parseString: @"#base64 \"<hello!>\""];
-  
-  STAssertTrue (parser.error != nil, @"Bad Base64 data");
-  
-  // check allowUnknownTags
+
+  // UUID
   {
-    parser.allowUnknownTags = YES;
+    NSUUID *uuid =
+      [[NSUUID alloc] initWithUUIDString: @"F81D4FAE-7DEC-11D0-A765-00A0C91E6BF6"];
     
-    id taggedMap = [parser parseString: @"#non-existent-tag {}"];
+    MPAssertParseOK (@"#uuid \"F81D4FAE-7DEC-11D0-A765-00A0C91E6BF6\"", uuid, @"UUID");
+  }
+
+  // check custom tag reader
+  {
+    MPEdnParser *parser = [MPEdnParser new];
+
+    [parser addTagReader: [MPEdnBase64Codec sharedInstance]];
     
-    STAssertEqualObjects (taggedMap, @{}, @"Tagged");
-    STAssertEqualObjects ([MPEdnParser tagForValue: taggedMap], @"non-existent-tag", @"Tagged");
+    {
+      id map = [parser parseString: @"{:a #base64 \"AAECAwQFBgcICQ==\"}"];
+      
+      uint8_t dataContents [10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+      
+      NSData *data = [NSData dataWithBytes: dataContents length: sizeof (dataContents)];
+
+      STAssertTrue ([map [[@"a" ednKeyword]] isKindOfClass: [NSData class]], @"Data decoded");
+      STAssertEqualObjects ([map objectForKey: [@"a" ednKeyword]], data, @"Data decoded");
+    }
+    
+    // check Base 64 error reporting
+    [parser parseString: @"#base64 {}"];
+    
+    STAssertTrue (parser.error != nil, @"Base 64 needs a string value");
+    
+    [parser parseString: @"#base64 \"<hello!>\""];
+    
+    STAssertTrue (parser.error != nil, @"Bad Base64 data");
+    
+    // check allowUnknownTags
+    {
+      parser.allowUnknownTags = YES;
+      
+      id taggedMap = [parser parseString: @"#non-existent-tag {}"];
+      
+      STAssertEqualObjects (taggedMap, @{}, @"Tagged");
+      STAssertEqualObjects ([MPEdnParser tagForValue: taggedMap], @"non-existent-tag", @"Tagged");
+    }
   }
 }
 

@@ -20,14 +20,15 @@
 #import "MPEdnTaggedValueWriter.h"
 
 /**
- * Read/write `NSData` values in Base64-encoded form (tag: "#base64").
+ * Read/write `NSDate` values in EDN-specified RFC 3339-encoded form 
+ * (tag: "#inst").
  */
-@interface MPEdnBase64Codec : 
+@interface MPEdnDateCodec :
   NSObject<MPEdnTaggedValueReader, MPEdnTaggedValueWriter>
 
 /**
  * The shared instance (can be used across threads).
  */
-+ (MPEdnBase64Codec *) sharedInstance;
++ (MPEdnDateCodec *) sharedInstance;
 
 @end

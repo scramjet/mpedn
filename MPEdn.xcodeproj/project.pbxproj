@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C91933161831D4D700724D6D /* MPEdnDateCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C91933151831D4D700724D6D /* MPEdnDateCodec.m */; };
+		C91933171831D4D700724D6D /* MPEdnDateCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C91933151831D4D700724D6D /* MPEdnDateCodec.m */; };
+		C919331A1831E05600724D6D /* MPEdnUUIDCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C91933191831E05600724D6D /* MPEdnUUIDCodec.m */; };
+		C919331B1831E05600724D6D /* MPEdnUUIDCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C91933191831E05600724D6D /* MPEdnUUIDCodec.m */; };
 		C92B5E7116C8C78200BEFCCA /* MPEdnSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */; };
 		C92B5E7216C8C78200BEFCCA /* MPEdnSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */; };
 		C953E0AD16CDC852007E1043 /* MPEdnParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C953E0AC16CDC852007E1043 /* MPEdnParser.m */; };
@@ -50,6 +54,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C91933141831D4D700724D6D /* MPEdnDateCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnDateCodec.h; sourceTree = "<group>"; };
+		C91933151831D4D700724D6D /* MPEdnDateCodec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnDateCodec.m; sourceTree = "<group>"; };
+		C91933181831E05600724D6D /* MPEdnUUIDCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnUUIDCodec.h; sourceTree = "<group>"; };
+		C91933191831E05600724D6D /* MPEdnUUIDCodec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnUUIDCodec.m; sourceTree = "<group>"; };
 		C92B5E6F16C8C78200BEFCCA /* MPEdnSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnSymbol.h; sourceTree = "<group>"; };
 		C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnSymbol.m; sourceTree = "<group>"; };
 		C953E0AB16CDC852007E1043 /* MPEdnParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnParser.h; sourceTree = "<group>"; };
@@ -142,6 +150,10 @@
 				C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */,
 				C98881E5183093A000B25D11 /* MPEdnBase64Codec.h */,
 				C98881E6183093A000B25D11 /* MPEdnBase64Codec.m */,
+				C91933141831D4D700724D6D /* MPEdnDateCodec.h */,
+				C91933151831D4D700724D6D /* MPEdnDateCodec.m */,
+				C91933181831E05600724D6D /* MPEdnUUIDCodec.h */,
+				C91933191831E05600724D6D /* MPEdnUUIDCodec.m */,
 				C9FD3A3716C4D04700F3757E /* Supporting Files */,
 			);
 			path = MPEdn;
@@ -221,7 +233,7 @@
 		C9FD3A2816C4D04700F3757E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Matthew Phillips";
 			};
 			buildConfigurationList = C9FD3A2B16C4D04700F3757E /* Build configuration list for PBXProject "MPEdn" */;
@@ -278,7 +290,9 @@
 				C92B5E7116C8C78200BEFCCA /* MPEdnSymbol.m in Sources */,
 				C953E0AD16CDC852007E1043 /* MPEdnParser.m in Sources */,
 				C953E0B416CDDDFA007E1043 /* MPEdnWriter.m in Sources */,
+				C919331A1831E05600724D6D /* MPEdnUUIDCodec.m in Sources */,
 				C98881E7183093A000B25D11 /* MPEdnBase64Codec.m in Sources */,
+				C91933161831D4D700724D6D /* MPEdnDateCodec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,8 +304,10 @@
 				C9FD3A5316C4D04800F3757E /* MPEdnParserTests.m in Sources */,
 				C98881E8183093A000B25D11 /* MPEdnBase64Codec.m in Sources */,
 				C92B5E7216C8C78200BEFCCA /* MPEdnSymbol.m in Sources */,
+				C919331B1831E05600724D6D /* MPEdnUUIDCodec.m in Sources */,
 				C953E0B116CDDDA9007E1043 /* MPEdnWriterTests.m in Sources */,
 				C953E0B516CDDDFA007E1043 /* MPEdnWriter.m in Sources */,
+				C91933171831D4D700724D6D /* MPEdnDateCodec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,7 +357,6 @@
 		C928A01D17D566F6001B134E /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				DSTROOT = /tmp/MPEdn.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MPEdn/MPEdn-Prefix.pch";
@@ -388,7 +403,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -417,7 +432,6 @@
 		C9FD3A5716C4D04800F3757E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				DSTROOT = /tmp/MPEdn.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MPEdn/MPEdn-Prefix.pch";
@@ -430,7 +444,6 @@
 		C9FD3A5816C4D04800F3757E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				DSTROOT = /tmp/MPEdn.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MPEdn/MPEdn-Prefix.pch";

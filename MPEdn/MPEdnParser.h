@@ -77,6 +77,18 @@ typedef enum
 @interface MPEdnParser : NSObject
 
 /**
+ * Add a tag reader to the default global set.
+ *
+ * The global tag reader set is used as the base template for new
+ * parser instances, which may further customise the set for local
+ * use.
+ *
+ * The default reader set handles the built-in EDN "#uuid" and "#inst"
+ * tags.
+ */
++ (void) addGlobalTagReader: (id<MPEdnTaggedValueReader>) reader;
+
+/**
  * The tag associated with a given value. See `allowUnknownTags`.
  */
 + (NSString *) tagForValue: (id) value;
@@ -172,6 +184,9 @@ typedef enum
  *
  * You can use this to extend the EDN parser to support custom tagged
  * types. See MPEdnBase64Codec for an example.
+ *
+ * This method extends the default global readers: see
+ * `addGlobalTagReader`.
  *
  * @see [MPEdnWriter addTagWriter:]
  */
