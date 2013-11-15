@@ -3,6 +3,7 @@
 #import "MPEdn.h"
 #import "MPEdnSymbol.h"
 #import "MPEdnBase64Codec.h"
+#import "MPEdnTaggedValue.h"
 
 #define MPAssertParseOK(expr, correctValue, message)    \
 {                                          \
@@ -228,7 +229,6 @@
   MPAssertParseError (@"# {", @"Tag");
   MPAssertParseError (@"# #", @"Tag");
   MPAssertParseError (@"#tag #tag {}", @"Tag");
-  MPAssertParseError (@"#non-existent-tag {}", @"Tag");
   
   // date
   {
@@ -274,14 +274,16 @@
     STAssertTrue (parser.error != nil, @"Bad Base64 data");
     
     // check allowUnknownTags
-    {
-      parser.allowUnknownTags = YES;
-      
-      id taggedMap = [parser parseString: @"#non-existent-tag {}"];
-      
-      STAssertEqualObjects (taggedMap, @{}, @"Tagged");
-      STAssertEqualObjects ([MPEdnParser tagForValue: taggedMap], @"non-existent-tag", @"Tagged");
-    }
+    MPEdnTaggedValue *taggedMap = [parser parseString: @"#non-existent-tag {}"];
+    
+    STAssertTrue ([taggedMap isKindOfClass: [MPEdnTaggedValue class]], @"Tagged");
+    STAssertEqualObjects (taggedMap.tag, @"non-existent-tag", @"Tagged");
+    STAssertEqualObjects (taggedMap.value, @{}, @"Tagged");
+    
+    parser.allowUnknownTags = NO;
+    
+    [parser parseString: @"#non-existent-tag {}"];
+    STAssertNotNil (parser.error, @"Tagged");
   }
 }
 

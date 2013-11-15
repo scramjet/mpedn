@@ -13,6 +13,8 @@
 		C919331B1831E05600724D6D /* MPEdnUUIDCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C91933191831E05600724D6D /* MPEdnUUIDCodec.m */; };
 		C92B5E7116C8C78200BEFCCA /* MPEdnSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */; };
 		C92B5E7216C8C78200BEFCCA /* MPEdnSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */; };
+		C92C85341835ADF800748291 /* MPEdnTaggedValue.m in Sources */ = {isa = PBXBuildFile; fileRef = C92C85331835ADF800748291 /* MPEdnTaggedValue.m */; };
+		C92C85351835ADF800748291 /* MPEdnTaggedValue.m in Sources */ = {isa = PBXBuildFile; fileRef = C92C85331835ADF800748291 /* MPEdnTaggedValue.m */; };
 		C953E0AD16CDC852007E1043 /* MPEdnParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C953E0AC16CDC852007E1043 /* MPEdnParser.m */; };
 		C953E0B116CDDDA9007E1043 /* MPEdnWriterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C953E0B016CDDDA9007E1043 /* MPEdnWriterTests.m */; };
 		C953E0B416CDDDFA007E1043 /* MPEdnWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = C953E0B316CDDDFA007E1043 /* MPEdnWriter.m */; };
@@ -60,6 +62,8 @@
 		C91933191831E05600724D6D /* MPEdnUUIDCodec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnUUIDCodec.m; sourceTree = "<group>"; };
 		C92B5E6F16C8C78200BEFCCA /* MPEdnSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnSymbol.h; sourceTree = "<group>"; };
 		C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnSymbol.m; sourceTree = "<group>"; };
+		C92C85321835ADF800748291 /* MPEdnTaggedValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnTaggedValue.h; sourceTree = "<group>"; };
+		C92C85331835ADF800748291 /* MPEdnTaggedValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnTaggedValue.m; sourceTree = "<group>"; };
 		C953E0AB16CDC852007E1043 /* MPEdnParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnParser.h; sourceTree = "<group>"; };
 		C953E0AC16CDC852007E1043 /* MPEdnParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnParser.m; sourceTree = "<group>"; };
 		C953E0AF16CDDDA9007E1043 /* MPEdnWriterTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnWriterTests.h; sourceTree = "<group>"; };
@@ -146,6 +150,8 @@
 				C97339E91817592E00E901DD /* MPEdnKeyword.m */,
 				C98881E41830907B00B25D11 /* MPEdnTaggedValueWriter.h */,
 				C98881E91830984800B25D11 /* MPEdnTaggedValueReader.h */,
+				C92C85321835ADF800748291 /* MPEdnTaggedValue.h */,
+				C92C85331835ADF800748291 /* MPEdnTaggedValue.m */,
 				C92B5E6F16C8C78200BEFCCA /* MPEdnSymbol.h */,
 				C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */,
 				C98881E5183093A000B25D11 /* MPEdnBase64Codec.h */,
@@ -288,6 +294,7 @@
 			files = (
 				C97339EA1817592E00E901DD /* MPEdnKeyword.m in Sources */,
 				C92B5E7116C8C78200BEFCCA /* MPEdnSymbol.m in Sources */,
+				C92C85341835ADF800748291 /* MPEdnTaggedValue.m in Sources */,
 				C953E0AD16CDC852007E1043 /* MPEdnParser.m in Sources */,
 				C953E0B416CDDDFA007E1043 /* MPEdnWriter.m in Sources */,
 				C919331A1831E05600724D6D /* MPEdnUUIDCodec.m in Sources */,
@@ -301,6 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C97339EB1817592E00E901DD /* MPEdnKeyword.m in Sources */,
+				C92C85351835ADF800748291 /* MPEdnTaggedValue.m in Sources */,
 				C9FD3A5316C4D04800F3757E /* MPEdnParserTests.m in Sources */,
 				C98881E8183093A000B25D11 /* MPEdnBase64Codec.m in Sources */,
 				C92B5E7216C8C78200BEFCCA /* MPEdnSymbol.m in Sources */,

@@ -60,7 +60,7 @@ To use the library, either:
 
 * EDN symbol <-> `MPEdnSymbol`.
 
-* EDN tagged values are translated by tag reader/writer classes implementing `MPEdnTaggedValueWriter` and/or `MPEdnTaggedValueReader` (see `MPEdnBase64Codec` for an example). You can allow any tag to be accepted by setting the `allowUnknownTags` property on `MPEdnParser`, and retreive tags read this way using `+[MPEdnParser tagForValue]`. `MPEdnWriter` does not currently check for values tagged by the parser, so we do not support roundtripping unknown tags yet.
+* EDN tagged values can be translated by tag reader/writer classes implementing `MPEdnTaggedValueWriter` and/or `MPEdnTaggedValueReader` (see `MPEdnBase64Codec` for an example). You can accept  any tag regardless of whether there is a reader for it or not by setting the `allowUnknownTags` property on `MPEdnParser`, which will represent unknown tagged values with `MPEdnTaggedValue` instances. `MPEdnWriter` knows how to output `MPEdnTaggedValue`'s which enables round-tripping of EDN with unknown tags.
 
 
 ## Notes

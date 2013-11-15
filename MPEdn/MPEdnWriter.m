@@ -20,6 +20,7 @@
 #import "MPEdnTaggedValueWriter.h"
 #import "MPEdnDateCodec.h"
 #import "MPEdnUUIDCodec.h"
+#import "MPEdnTaggedValue.h"
 
 #import <objc/runtime.h>
 
@@ -148,6 +149,11 @@ static NSArray *defaultWriters;
       [outputStr appendFormat: @"#%@ ", [tagWriter tagName]];
       
       [tagWriter writeValue: value toWriter: self];
+    } else if ([value isKindOfClass: [MPEdnTaggedValue class]])
+    {
+      [outputStr appendFormat: @"#%@ ", ((MPEdnTaggedValue *)value).tag];
+      
+      [self outputObject: ((MPEdnTaggedValue *)value).value];
     } else
     {
       [NSException raise: @"MPEdnWriterException"

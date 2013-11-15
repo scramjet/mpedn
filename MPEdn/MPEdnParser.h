@@ -89,11 +89,6 @@ typedef enum
 + (void) addGlobalTagReader: (id<MPEdnTaggedValueReader>) reader;
 
 /**
- * The tag associated with a given value. See `allowUnknownTags`.
- */
-+ (NSString *) tagForValue: (id) value;
-
-/**
  * The string to parse.
  * 
  * You typically set this property and then use parseNextValue (usually in a 
@@ -128,13 +123,13 @@ typedef enum
 @property (readonly) BOOL complete;
 
 /**
- * When set (default is unset), allow any tag regardless of whether we
- * have a reader for it: use [MPEdnParser tagForValue] to retreive
- * tags from values. 
+ * When set (the default), allow any tag regardless of whether we have
+ * a reader for it: in this case `MPEdnTaggedValue` instances will be
+ * used to represent unknown tagged values.
  *
- * NB: MPEdnWriter does not currently check for values tagged by the
- * parser in this way, so we do not support roundtripping unknown
- * tags.
+ * NB: MPEdnWriter handles outputting MPEdnTaggedValue's correctly, so
+ * enabling allowUnknownTags allows round-tripping of any EDN,
+ * regardless of whether all tag types are known.
  */
 @property (readwrite) BOOL allowUnknownTags;
 

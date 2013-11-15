@@ -20,6 +20,7 @@
 #import "MPEdnSymbol.h"
 #import "MPEdnDateCodec.h"
 #import "MPEdnUUIDCodec.h"
+#import "MPEdnTaggedValue.h"
 
 // A token is one of these or just a single character.
 typedef enum
@@ -86,16 +87,12 @@ static NSDictionary *defaultReaders;
   }
 }
 
-+ (NSString *) tagForValue: (id) value
-{
-  return objc_getAssociatedObject (value, (__bridge const void *)MPEDN_TAG_NAME);
-}
-
 - (id) init
 {
   if (self = [super init])
   {
     readers = defaultReaders;
+    allowUnknownTags = YES;
   }
   
   return self;
@@ -829,14 +826,11 @@ static BOOL is_sym_punct (unichar ch)
       {
         if (allowUnknownTags)
         {
-          objc_setAssociatedObject (value, (__bridge const void *)MPEDN_TAG_NAME,
-                                    tag, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-          
-          return value;
+          return [[MPEdnTaggedValue alloc] initWithTag: tag value: value];
         } else
         {
           [self raiseError: ERROR_NO_READER_FOR_TAG
-                message: @"No reader for tag #%@", tag];
+                message: @"Do not know how to handle value for tag #%@", tag];
         }
         
         return nil;

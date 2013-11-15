@@ -4,6 +4,7 @@
 #import "MPEdn.h"
 #import "MPEdnSymbol.h"
 #import "MPEdnBase64Codec.h"
+#import "MPEdnTaggedValue.h"
 
 #define MPAssertSerialisesOK(value, correct)             \
 {                                                        \
@@ -168,7 +169,7 @@
                           @"#uuid \"F81D4FAE-7DEC-11D0-A765-00A0C91E6BF6\"", @"Serialise");
   }
 
-  // base 64
+  // custom tag (base 64)
   {
     uint8_t data [10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     
@@ -176,8 +177,17 @@
     
     MPEdnWriter *writer = [MPEdnWriter new];
     [writer addTagWriter: [MPEdnBase64Codec sharedInstance]];
-    
+  
     STAssertEqualObjects ([writer serialiseToEdn: map], @"{:a #base64 \"AAECAwQFBgcICQ==\"}", @"Serialise");
+  }
+  
+  // unknown tag
+  {
+    MPEdnWriter *writer = [MPEdnWriter new];
+    
+    id map = @{[@"a" ednKeyword] : [[MPEdnTaggedValue alloc] initWithTag: @"gutentag" value: @"ja"]};
+    
+    STAssertEqualObjects ([writer serialiseToEdn: map], @"{:a #gutentag \"ja\"}", @"Tag");
   }
 }
 
