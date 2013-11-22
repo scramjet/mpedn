@@ -39,8 +39,23 @@ BOOL MPEdnIsCharacter (NSNumber *number)
   return objc_getAssociatedObject (number, (__bridge const void *)MPEDN_CHARACTER_TAG) != nil;
 }
 
+static NSMutableArray *copy (NSArray *array)
+{
+  NSMutableArray *arrayCopy = [NSMutableArray arrayWithCapacity: [array count]];
+  
+  for (id i in array)
+  {
+    if ([i respondsToSelector: @selector (copyWithZone:)])
+      [arrayCopy addObject: [i copy]];
+    else
+      [arrayCopy addObject: i];
+  }
+
+  return arrayCopy;
+}
+
 static NSCharacterSet *QUOTE_CHARS;
-static NSArray *defaultWriters;
+static NSMutableArray *defaultWriters;
 
 @implementation MPEdnWriter
 {
@@ -56,7 +71,7 @@ static NSArray *defaultWriters;
     QUOTE_CHARS = [NSCharacterSet characterSetWithCharactersInString: @"\\\"\n\r"];
     
     defaultWriters =
-      @[[MPEdnDateCodec sharedInstance], [MPEdnUUIDCodec sharedInstance]];
+      [@[[MPEdnDateCodec new], [MPEdnUUIDCodec sharedInstance]] mutableCopy];
   }
 }
 
@@ -64,11 +79,7 @@ static NSArray *defaultWriters;
 {
   @synchronized (self)
   {
-    NSMutableArray *newWriters = [defaultWriters mutableCopy];
-    
-    [newWriters insertObject: writer atIndex: 0];
-    
-    defaultWriters = newWriters;
+    [defaultWriters insertObject: writer atIndex: 0];
   }
 }
 
@@ -77,7 +88,7 @@ static NSArray *defaultWriters;
   if (self = [super init])
   {
     useKeywordsInMaps = NO;
-    writers = defaultWriters;
+    writers = copy (defaultWriters);
   }
 
   return self;

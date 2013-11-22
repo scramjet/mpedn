@@ -42,7 +42,22 @@ NSString * const MPEDN_TAG_NAME = @"MPEDNTag";
 
 static NSCharacterSet *QUOTE_CHARS;
 
-static NSDictionary *defaultReaders;
+static NSMutableDictionary *defaultReaders;
+
+static NSDictionary *copy (NSDictionary *dict)
+{
+  NSMutableDictionary *dictCopy = [dict mutableCopy];
+  
+  for (id k in dict)
+  {
+    id v = dictCopy [k];
+    
+    if ([v respondsToSelector: @selector (copyWithZone:)])
+      dictCopy [k] = [v copy];
+  }
+
+  return dictCopy;
+}
 
 @implementation MPEdnParser
 {
@@ -69,9 +84,11 @@ static NSDictionary *defaultReaders;
   {
     QUOTE_CHARS = [NSCharacterSet characterSetWithCharactersInString: @"\\\""];
 
+    MPEdnDateCodec *dateCodec = [MPEdnDateCodec new];
+    
     defaultReaders =
-      @{[[MPEdnDateCodec sharedInstance] tagName] : [MPEdnDateCodec sharedInstance],
-        [[MPEdnUUIDCodec sharedInstance] tagName] : [MPEdnUUIDCodec sharedInstance]};
+      [@{[dateCodec tagName] : dateCodec,
+         [[MPEdnUUIDCodec sharedInstance] tagName] : [MPEdnUUIDCodec sharedInstance]} mutableCopy];
   }
 }
 
@@ -79,11 +96,7 @@ static NSDictionary *defaultReaders;
 {
   @synchronized (self)
   {
-    NSMutableDictionary *newReaders = [defaultReaders mutableCopy];
-    
-    [newReaders setObject: reader forKey: [reader tagName]];
-    
-    defaultReaders = newReaders;
+    [defaultReaders setObject: reader forKey: [reader tagName]];
   }
 }
 
@@ -91,7 +104,8 @@ static NSDictionary *defaultReaders;
 {
   if (self = [super init])
   {
-    readers = defaultReaders;
+    readers = copy (defaultReaders);
+
     allowUnknownTags = YES;
   }
   

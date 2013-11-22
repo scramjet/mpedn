@@ -18,21 +18,14 @@
 #import "MPEdnWriter.h"
 #import "MPEdnParser.h"
 
-static MPEdnDateCodec *sharedInstance;
-
 @implementation MPEdnDateCodec
-
-+ (void) initialize
 {
-  if (self == [MPEdnDateCodec class])
-  {
-    sharedInstance = [MPEdnDateCodec new];
-  }
+  NSDateFormatter *dateFormatter;
 }
 
-+ (MPEdnDateCodec *) sharedInstance
+- (id) copyWithZone: (NSZone *) zone
 {
-  return sharedInstance;
+  return [MPEdnDateCodec new];
 }
 
 - (NSString *) tagName
@@ -47,25 +40,31 @@ static MPEdnDateCodec *sharedInstance;
 
 - (void) writeValue: (id) value toWriter: (MPEdnWriter *) writer
 {
-  NSDateFormatter *formatter = [NSDateFormatter new];
+  if (!dateFormatter)
+  {
+    dateFormatter = [NSDateFormatter new];
 
-  // NN: hardcoding "Z" (UTC) as timezone rather than letting formatter
-  // output "+00:00".
-  formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SS'Z'";
-  formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
+    // NN: hardcoding "Z" (UTC) as timezone rather than letting formatter
+    // output "+00:00".
+    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SS'Z'";
+    dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
+  }
 
-  [writer outputObject: [formatter stringFromDate: value]];
+  [writer outputObject: [dateFormatter stringFromDate: value]];
 }
 
 - (id) readValue: (id) value
 {
   if ([value isKindOfClass: [NSString class]])
   {
-    NSDateFormatter *formatter = [NSDateFormatter new];
+    if (!dateFormatter)
+    {
+      dateFormatter = [NSDateFormatter new];
 
-    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSZ";
+      dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSZ";
+    }
     
-    NSDate *date = [formatter dateFromString: value];
+    NSDate *date = [dateFormatter dateFromString: value];
 
     if (date)
     {

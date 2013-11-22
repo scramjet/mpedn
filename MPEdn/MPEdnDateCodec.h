@@ -24,11 +24,6 @@
  * (tag: "#inst").
  */
 @interface MPEdnDateCodec :
-  NSObject<MPEdnTaggedValueReader, MPEdnTaggedValueWriter>
-
-/**
- * The shared instance (can be used across threads).
- */
-+ (MPEdnDateCodec *) sharedInstance;
+  NSObject<MPEdnTaggedValueReader, MPEdnTaggedValueWriter, NSCopying>
 
 @end
