@@ -22,7 +22,7 @@ See the headers for API docs.
 
 ## Note To Users MPEdn 0.1
 
-Release 0.2 will break your code slightly -- sorry! The default setting for automatically outputting NSDictionary string keys as keywords (the `MPEdnWriter useKeywordsInMaps` property) has changed from YES to NO in 0.2. If you wish to preserve the 0.1 behaviour, use `objectToEdnStringAutoKeywords` rather than `objectToEdnString` to generate EDN output.
+Release 0.2 will break existing -- sorry! The default setting for automatically outputting NSDictionary string keys as keywords (the `MPEdnWriter useKeywordsInMaps` property) has changed from YES to NO in 0.2. If you wish to preserve the 0.1 behaviour, use `objectToEdnStringAutoKeywords` rather than `objectToEdnString` to generate EDN output.
 
 Also, keywords are now realised as `MPEdnKeyword` instances rather than strings as in 0.1. To get the old behaviour, set the `keywordsAsStrings` property on MPEdnParser or use `[NSString ednStringToObjectKeywordsAsStrings]`.
 
@@ -54,7 +54,7 @@ To use the library, either:
 
 * EDN boolean <-> `NSNumber` (`numberWithBool`).
 
-* EDN character <-> `NSNumber` (`numberWithUnsignedChar`). Note however that `NSNumber` appears to be quite broken when representing characters. For example, `[NSNumber numberWithChar: 'a']` produces a `NSNumber` that correctly indicates it wraps a character, but `numberWithChar` with `\n` does not, meaning `\n` will be emitted as `10`. As as workaround, you can force a number to be seen as a character using `MPEdnTagAsCharacter()`.
+* EDN character <-> `NSNumber` (`numberWithUnsignedChar`). Note however that `NSNumber` appears to be broken when representing characters. For example, `[NSNumber numberWithChar: 'a']` produces a `NSNumber` that correctly indicates it wraps a character, but `numberWithChar` with `\n` does not, meaning `\n` will be emitted as `10`. As as workaround, you can force a number to be seen as a character using `MPEdnTagAsCharacter()`.
 
 * EDN keyword <-> `MPEdnKeyword`. If the `MPEdnWriter.useKeywordsInMaps` property is true (the default is false as of 0.2), strings used as keys in `NSDictionary` will be output as keywords if possible. Note that strings and keywords never compare as equal, so this could get confusing when reading a dictionary from an external service that uses keywords: in general, prefer explicit use of keywords where possible.
 
@@ -71,11 +71,11 @@ To use the library, either:
 
 * Newlines in strings are output in their escaped form (`\n` rather than a raw `0x0a`) even though the raw form is legal in order to make it straightforward to use generated EDN strings in line-oriented protocols.
 
-* The parser and writer fully support all Unicode characters (i.e. both 'normal' characters and UTF-16 surrogate pairs) in strings, but not elsewhere. Adding general support would be straightforward, at the cost of some speed, but, since EDN syntax is defined in terms of ASCII character classes, it's not clear that using UTF-16 outside of strings would be valid EDN in any case.
+* The parser and writer fully support all Unicode code points in string values (i.e. both 'normal' characters and UTF-16 surrogate pairs), but not elsewhere. Adding general support would be straightforward, at the cost of some speed, but since EDN syntax is defined in terms of ASCII character classes it's not clear that using anything but ASCII outside of strings would be valid EDN in any case.
 
 
 ## Author And License
 
-MPEDn is developed by Matthew Phillips (<m@mattp.name>). It is licensed under the same open source license as Clojure, the [Eclipse Public License v1.0][epl] .
+MPEdn is developed by Matthew Phillips (<m@mattp.name>). It is licensed under the same open source license as Clojure, the [Eclipse Public License v1.0][epl] .
 
 [epl]: http://opensource.org/licenses/eclipse-1.0.php
