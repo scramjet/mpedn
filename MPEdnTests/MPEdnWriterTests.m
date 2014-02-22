@@ -43,6 +43,15 @@
   MPAssertSerialisesOK ([NSNumber numberWithFloat: 1.1], @"1.1000000E+00");
   MPAssertSerialisesOK (@1.1e-5, @"1.100000000000000E-05");
   
+  // decimals
+  MPAssertSerialisesOK ([NSDecimalNumber decimalNumberWithString: @"0"], @"0M");
+  MPAssertSerialisesOK ([NSDecimalNumber decimalNumberWithString: @"0.00"], @"0M");
+  MPAssertSerialisesOK ([NSDecimalNumber decimalNumberWithString: @"1.2300"], @"1.23M");
+  MPAssertSerialisesOK ([NSDecimalNumber decimalNumberWithString: @"123E-2"], @"1.23M");
+  MPAssertSerialisesOK ([NSDecimalNumber decimalNumberWithString: @"0.123E1"], @"1.23M");
+  
+  MPAssertSerialisesOK ([NSDecimalNumber decimalNumberWithString: @"5.568E15"], @"5568000000000000M");
+  
   // boolean
   MPAssertSerialisesOK (@YES, @"true");
   MPAssertSerialisesOK (@NO, @"false");

@@ -372,28 +372,31 @@ static BOOL is_sym_punct (unichar ch)
       ch = [self advanceEndIdx];
   }
 
-  if (ch == 'm' || ch == 'M' || ch == 'n' || ch == 'N')
+  NSString *numberStr =
+    [inputStr substringWithRange: NSMakeRange (startIdx, endIdx - startIdx)];
+
+  if (ch == 'm' || ch == 'M')
+  {
+    [self advanceEndIdx];
+
+    token = TOKEN_NUMBER;
+    tokenValue = [NSDecimalNumber decimalNumberWithString: numberStr];
+  } else if (ch == 'n' || ch == 'N')
   {
     [self advanceEndIdx];
     
     [self raiseError: ERROR_UNSUPPORTED_FEATURE
-             message: @"M and N number suffixes are not supported"];
-    
-    return;
-  }
-
-  // NB: NSNumberFormatter throws exceptions on error and may or may not parse
-  // floats according to the spec. Using strtod and and strtol instead.
-  NSString *numberStr =
-    [inputStr substringWithRange: NSMakeRange (startIdx, endIdx - startIdx)];
-                          
-  const char *numberStrUtf8 =
-    [numberStr cStringUsingEncoding: NSUTF8StringEncoding];
-  
-  char *numberStrEnd = (char *)numberStrUtf8;
-  
-  if (isFloat)
+             message: @"Big integers (N suffix) are not supported"];
+  } else if (isFloat)
   {
+    // NB: NSNumberFormatter throws exceptions on error and may or may not parse
+    // floats according to the spec. Using strtod and and strtol instead.
+  
+    const char *numberStrUtf8 =
+      [numberStr cStringUsingEncoding: NSUTF8StringEncoding];
+    
+    char *numberStrEnd = (char *)numberStrUtf8;
+
     double number = strtod (numberStrUtf8, &numberStrEnd);
     
     if (numberStrEnd - numberStrUtf8 == endIdx - startIdx)
@@ -415,6 +418,11 @@ static BOOL is_sym_punct (unichar ch)
     }
   } else
   {
+    const char *numberStrUtf8 =
+      [numberStr cStringUsingEncoding: NSUTF8StringEncoding];
+    
+    char *numberStrEnd = (char *)numberStrUtf8;
+
     long int number = strtol (numberStrUtf8, &numberStrEnd, 10);
     
     if (numberStrEnd - numberStrUtf8 == endIdx - startIdx)

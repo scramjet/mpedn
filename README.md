@@ -48,9 +48,11 @@ To use the library, either:
 
 * EDN string <-> `NSString`.
 
-* EDN float <-> `NSNumber` (`numberWithDouble`). The `N` suffix is not supported.
+* EDN float <-> `NSNumber` (`numberWithDouble`).
 
-* EDN int <-> `NSNumber` (`numberWithLong`). The `M` suffix is not supported.
+* EDN int <-> `NSNumber` (`numberWithLong`). The `N` (bigint) suffix is not supported.
+
+* EDN decimal ('M' suffix, `BigDecimal` in Clojure) <-> `NSDecimalNumber`.
 
 * EDN boolean <-> `NSNumber` (`numberWithBool`).
 

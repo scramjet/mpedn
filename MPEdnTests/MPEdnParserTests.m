@@ -43,10 +43,16 @@
   MPAssertParseOK (@"1.2e4", @1.2e4, @"Float");
   MPAssertParseOK (@"-42.2e-2", @-42.2e-2, @"Float");
   MPAssertParseOK (@".2", @.2, @"Float");
+
+  // decimal
+  MPAssertParseOK (@"1.0M", [NSDecimalNumber decimalNumberWithString: @"1.0"], @"Decimal");
+  MPAssertParseOK (@"3.14159M", [NSDecimalNumber decimalNumberWithString: @"3.14159"], @"Decimal");
+  MPAssertParseOK (@"42.221E10M", [NSDecimalNumber decimalNumberWithString: @"42.221E10M"], @"Decimal");
+  MPAssertParseOK (@"1234E-3M", [NSDecimalNumber decimalNumberWithString: @"1234E-3M"], @"Decimal");
   
-  // does not allow M or N (not implemented)
-  MPAssertParseError (@"1.0M", @"Float");
-  
+  // does not allow N (not implemented)
+  MPAssertParseError (@"1.0N", @"Float");
+
   // errors
   MPAssertParseError (@"1.", @"Float");
   MPAssertParseError (@"1e", @"Float");

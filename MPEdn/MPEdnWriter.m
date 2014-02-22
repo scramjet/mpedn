@@ -175,34 +175,41 @@ static NSMutableArray *defaultWriters;
 
 - (void) outputNumber: (NSNumber *) value
 {
-  switch ([value objCType] [0])
+  if ([value isKindOfClass: [NSDecimalNumber class]])
   {
-    case 'i':
-    case 'q':
-    case 's':
-      if (MPEdnIsCharacter (value))
-        [outputStr appendFormat: @"\\%c", [value charValue]];
-      else
-        [outputStr appendFormat: @"%@", value];
-      break;
-    case 'd':
-      [outputStr appendFormat: @"%.15E", [value doubleValue]];
-      break;
-    case 'f':
-      [outputStr appendFormat: @"%.7E", [value doubleValue]];
-      break;
-    case 'c':
+    [outputStr appendString: [value description]];
+    [outputStr appendString: @"M"];
+  } else
+  {
+    switch ([value objCType] [0])
     {
-      if ([NSStringFromClass ([value class]) isEqualToString: @"__NSCFBoolean"])
-        [outputStr appendString: [value boolValue] ? @"true" : @"false"];
-      else
-        [outputStr appendFormat: @"\\%c", [value charValue]];
+      case 'i':
+      case 'q':
+      case 's':
+        if (MPEdnIsCharacter (value))
+          [outputStr appendFormat: @"\\%c", [value charValue]];
+        else
+          [outputStr appendFormat: @"%@", value];
+        break;
+      case 'd':
+        [outputStr appendFormat: @"%.15E", [value doubleValue]];
+        break;
+      case 'f':
+        [outputStr appendFormat: @"%.7E", [value doubleValue]];
+        break;
+      case 'c':
+      {
+        if ([NSStringFromClass ([value class]) isEqualToString: @"__NSCFBoolean"])
+          [outputStr appendString: [value boolValue] ? @"true" : @"false"];
+        else
+          [outputStr appendFormat: @"\\%c", [value charValue]];
 
-      break;
-    default:
-      [NSException raise: @"MPEdnWriterException"
-                  format: @"Don't know how to handle NSNumber "
-                           "value %@, class %@", value, [value class]];
+        break;
+      default:
+        [NSException raise: @"MPEdnWriterException"
+                    format: @"Don't know how to handle NSNumber "
+                             "value %@, class %@", value, [value class]];
+      }
     }
   }
 }
