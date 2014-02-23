@@ -177,7 +177,7 @@ static NSMutableArray *defaultWriters;
 {
   if ([value isKindOfClass: [NSDecimalNumber class]])
   {
-    [outputStr appendString: [value description]];
+    [outputStr appendString: [value stringValue]];
     [outputStr appendString: @"M"];
   } else
   {
