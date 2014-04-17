@@ -19,6 +19,8 @@
 #import "MPEdnTaggedValueWriter.h"
 
 /**
+ * DEPRECATED: it seems that this is fixed in iOS 7.1.
+ *
  * Force a given number instance to be output as a character.
  *
  * NSNumber is quite broken for representing characters. For example,
@@ -38,6 +40,8 @@
 NSNumber *MPEdnTagAsCharacter (NSNumber *number);
 
 /**
+ * DEPRECATED: it seems that this is fixed in iOS 7.1.
+ *
  * Test if MPEdnTagAsCharacter() has been used to tag a given number.
  * 
  * @see MPEdnTagAsCharacter()

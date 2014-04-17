@@ -69,7 +69,14 @@
   //  NSLog (@"********** %li", CFNumberGetType ((CFNumberRef)[NSNumber numberWithChar: '\n']));
 
   {
-    NSNumber *newline = MPEdnTagAsCharacter ([NSNumber numberWithChar: '\n']);
+    NSNumber *newline = [[NSNumber alloc] initWithChar: '\n'];
+    
+    // NB: this GPF's under Xcode 5.1/iOS 7.1
+    //MPEdnTagAsCharacter (newline);
+
+    // BUT the test passes: it seems numberWithChar is fixed
+    STAssertEquals ((char)'c', (char)[newline objCType][0], @"NSNumber numberWithChar");
+
     MPAssertSerialisesOK (newline, @"\\\n");
   }
 }

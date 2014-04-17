@@ -29,8 +29,8 @@ const NSString *MPEDN_CHARACTER_TAG = @"MPEDN_CHARACTER_TAG";
 NSNumber *MPEdnTagAsCharacter (NSNumber *number)
 {
   objc_setAssociatedObject (number, (__bridge const void *)MPEDN_CHARACTER_TAG,
-                            @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  
+                            MPEDN_CHARACTER_TAG, OBJC_ASSOCIATION_ASSIGN);
+
   return number;
 }
 

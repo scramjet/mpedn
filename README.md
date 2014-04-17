@@ -56,7 +56,7 @@ To use the library, either:
 
 * EDN boolean <-> `NSNumber` (`numberWithBool`).
 
-* EDN character <-> `NSNumber` (`numberWithUnsignedChar`). Note however that `NSNumber` appears to be broken when representing characters. For example, `[NSNumber numberWithChar: 'a']` produces a `NSNumber` that correctly indicates it wraps a character, but `numberWithChar` with `\n` does not, meaning `\n` will be emitted as `10`. As as workaround, you can force a number to be seen as a character using `MPEdnTagAsCharacter()`.
+* EDN character <-> `NSNumber` (`numberWithUnsignedChar`).
 
 * EDN keyword <-> `MPEdnKeyword`. If the `MPEdnWriter.useKeywordsInMaps` property is true (the default is false as of 0.2), strings used as keys in `NSDictionary` will be output as keywords if possible. Note that strings and keywords never compare as equal, so this could get confusing when reading a dictionary from an external service that uses keywords: in general, prefer explicit use of keywords where possible.
 
