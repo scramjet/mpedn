@@ -30,6 +30,7 @@
 		C9FD3A4A16C4D04800F3757E /* libMPEdn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FD3A3116C4D04700F3757E /* libMPEdn.a */; };
 		C9FD3A5016C4D04800F3757E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C9FD3A4E16C4D04800F3757E /* InfoPlist.strings */; };
 		C9FD3A5316C4D04800F3757E /* MPEdnParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FD3A5216C4D04800F3757E /* MPEdnParserTests.m */; };
+		D9D0A49A18FEB2170052B00F /* MPEdnKeyword.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C97339E81817592E00E901DD /* MPEdnKeyword.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D9D0A49A18FEB2170052B00F /* MPEdnKeyword.h in CopyFiles */,
 				C9FD3A3A16C4D04700F3757E /* MPEdn.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
