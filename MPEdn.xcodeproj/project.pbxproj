@@ -233,7 +233,7 @@
 			name = MPEdnTests;
 			productName = MPEdnTests;
 			productReference = C9FD3A4216C4D04800F3757E /* MPEdnTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -241,8 +241,8 @@
 		C9FD3A2816C4D04700F3757E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastTestingUpgradeCheck = 0510;
-				LastUpgradeCheck = 0510;
+				LastTestingUpgradeCheck = 0610;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Matthew Phillips";
 			};
 			buildConfigurationList = C9FD3A2B16C4D04700F3757E /* Build configuration list for PBXProject "MPEdn" */;
