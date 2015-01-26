@@ -82,6 +82,16 @@ static NSMutableDictionary *ednKeywordTable;
   return self;
 }
 
+- (instancetype) initWithCoder: (NSCoder *) coder
+{
+  return [MPEdnKeyword keyword: [coder decodeObjectForKey: @"name"]];
+}
+
+- (void) encodeWithCoder: (NSCoder *) coder
+{
+  [coder encodeObject: name forKey: @"name"];
+}
+
 - (id) copyWithZone: (NSZone *) zone
 {
   return self;
