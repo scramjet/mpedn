@@ -20,20 +20,15 @@ And to generate EDN from a Cocoa object:
 
 See the headers for API docs.
 
-## Note To Users MPEdn 0.1
-
-Release 0.2 will break existing -- sorry! The default setting for automatically outputting NSDictionary string keys as keywords (the `MPEdnWriter useKeywordsInMaps` property) has changed from YES to NO in 0.2. If you wish to preserve the 0.1 behaviour, use `objectToEdnStringAutoKeywords` rather than `objectToEdnString` to generate EDN output.
-
-Also, keywords are now realised as `MPEdnKeyword` instances rather than strings as in 0.1. To get the old behaviour, set the `keywordsAsStrings` property on MPEdnParser or use `[NSString ednStringToObjectKeywordsAsStrings]`.
-
-
 ## Using It In Your Project
 
-To use the library, either:
+To use the library, use one of (in order of ease of use):
 
-* Generate `libMPEdn.a` using the supplied Xcode project and copy that and the `.h` files to your project, or;
+* Install via [Cocoapods](http://cocoapods.org): add `pod 'MPEDN', '~> 1.0.0'` to your Podfile.
 
 * Use a workspace containing your project and MPEdn as described [here][xcode_static_lib]. You may also need to add the `-all_load` flag to the "Other Linker Flags" section of your project if the `ednStringToObject` and `objectToEdnString` category methods do not get linked in.
+
+* Generate `libMPEdn.a` using the supplied Xcode project and copy that and the `.h` files to your project, or;
 
 [xcode_static_lib]: http://developer.apple.com/library/ios/#documentation/Xcode/Conceptual/ios_development_workflow/AA-Developing_a_Static_Library_and_Incorporating_It_in_Your_Application/archiving_an_application_that_uses_a_static_library.html
 
