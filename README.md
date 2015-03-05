@@ -22,13 +22,13 @@ See the headers for API docs.
 
 ## Using It In Your Project
 
-To use the library, use one of (in order of ease of use):
+To use the library, use one of (in decreasing order of ease-of-use):
 
 * Install via [Cocoapods](http://cocoapods.org): add `pod 'MPEDN', '~> 1.0.0'` to your Podfile.
 
 * Use a workspace containing your project and MPEdn as described [here][xcode_static_lib]. You may also need to add the `-all_load` flag to the "Other Linker Flags" section of your project if the `ednStringToObject` and `objectToEdnString` category methods do not get linked in.
 
-* Generate `libMPEdn.a` using the supplied Xcode project and copy that and the `.h` files to your project, or;
+* Generate `libMPEdn.a` using the supplied Xcode project and copy that and the `.h` files to your project.
 
 [xcode_static_lib]: http://developer.apple.com/library/ios/#documentation/Xcode/Conceptual/ios_development_workflow/AA-Developing_a_Static_Library_and_Incorporating_It_in_Your_Application/archiving_an_application_that_uses_a_static_library.html
 
