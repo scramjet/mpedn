@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C901C24C1B0DB5CE002EE8C1 /* MPEdnURLCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C901C24A1B0DB5CE002EE8C1 /* MPEdnURLCodec.m */; };
 		C91933161831D4D700724D6D /* MPEdnDateCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C91933151831D4D700724D6D /* MPEdnDateCodec.m */; };
 		C91933171831D4D700724D6D /* MPEdnDateCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C91933151831D4D700724D6D /* MPEdnDateCodec.m */; };
 		C919331A1831E05600724D6D /* MPEdnUUIDCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C91933191831E05600724D6D /* MPEdnUUIDCodec.m */; };
@@ -58,6 +59,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C901C24A1B0DB5CE002EE8C1 /* MPEdnURLCodec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnURLCodec.m; sourceTree = "<group>"; };
+		C901C24B1B0DB5CE002EE8C1 /* MPEdnURLCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnURLCodec.h; sourceTree = "<group>"; };
 		C91933141831D4D700724D6D /* MPEdnDateCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnDateCodec.h; sourceTree = "<group>"; };
 		C91933151831D4D700724D6D /* MPEdnDateCodec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnDateCodec.m; sourceTree = "<group>"; };
 		C91933181831E05600724D6D /* MPEdnUUIDCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnUUIDCodec.h; sourceTree = "<group>"; };
@@ -162,6 +165,8 @@
 				C91933151831D4D700724D6D /* MPEdnDateCodec.m */,
 				C91933181831E05600724D6D /* MPEdnUUIDCodec.h */,
 				C91933191831E05600724D6D /* MPEdnUUIDCodec.m */,
+				C901C24B1B0DB5CE002EE8C1 /* MPEdnURLCodec.h */,
+				C901C24A1B0DB5CE002EE8C1 /* MPEdnURLCodec.m */,
 				C9FD3A3716C4D04700F3757E /* Supporting Files */,
 			);
 			path = MPEdn;
@@ -298,6 +303,7 @@
 				C97339EA1817592E00E901DD /* MPEdnKeyword.m in Sources */,
 				C92B5E7116C8C78200BEFCCA /* MPEdnSymbol.m in Sources */,
 				C92C85341835ADF800748291 /* MPEdnTaggedValue.m in Sources */,
+				C901C24C1B0DB5CE002EE8C1 /* MPEdnURLCodec.m in Sources */,
 				C953E0AD16CDC852007E1043 /* MPEdnParser.m in Sources */,
 				C953E0B416CDDDFA007E1043 /* MPEdnWriter.m in Sources */,
 				C919331A1831E05600724D6D /* MPEdnUUIDCodec.m in Sources */,

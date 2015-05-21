@@ -4,6 +4,7 @@
 #import "MPEdnSymbol.h"
 #import "MPEdnBase64Codec.h"
 #import "MPEdnTaggedValue.h"
+#import "MPEdnURLCodec.h"
 
 #define MPAssertParseOK(expr, correctValue, message)    \
 {                                          \
@@ -290,6 +291,20 @@
     
     [parser parseString: @"#non-existent-tag {}"];
     STAssertNotNil (parser.error, @"Tagged");
+  }
+}
+
+- (void) testURLReader
+{
+  MPEdnParser *parser = [MPEdnParser new];
+
+  [parser addTagReader: [[MPEdnURLCodec alloc] initWithTag: @"test/url"]];
+
+  {
+    id map = [parser parseString: @"{:a #test/url \"http://example.com\"}"];
+    
+    STAssertTrue ([map [[@"a" ednKeyword]] isKindOfClass: [NSURL class]], @"Data decoded");
+    STAssertEqualObjects (map [[@"a" ednKeyword]], [[NSURL alloc] initWithString: @"http://example.com"], @"Data decoded");
   }
 }
 

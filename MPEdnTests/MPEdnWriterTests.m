@@ -5,6 +5,7 @@
 #import "MPEdnSymbol.h"
 #import "MPEdnBase64Codec.h"
 #import "MPEdnTaggedValue.h"
+#import "MPEdnURLCodec.h"
 
 #define MPAssertSerialisesOK(value, correct)             \
 {                                                        \
@@ -205,6 +206,15 @@
     
     STAssertEqualObjects ([writer serialiseToEdn: map], @"{:a #gutentag \"ja\"}", @"Tag");
   }
+}
+
+- (void) testURL
+{
+  MPEdnWriter *writer = [MPEdnWriter new];
+  [writer addTagWriter: [[MPEdnURLCodec alloc] initWithTag: @"test/url"]];
+
+  STAssertEqualObjects ([writer serialiseToEdn: @{[@"a" ednKeyword] : [[NSURL alloc] initWithString: @"http://example.com"]}],
+                        @"{:a #test/url \"http://example.com\"}", @"Serialise");
 }
 
 @end
