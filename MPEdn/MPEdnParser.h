@@ -16,7 +16,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "MPEdnTaggedValueReader.h"
+@protocol MPEdnTaggedValueReader;
 
 /**
  * Codes for parse errors reported in EdnParser.error.

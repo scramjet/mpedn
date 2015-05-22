@@ -16,7 +16,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "MPEdnTaggedValueWriter.h"
+//#import "MPEdnTaggedValueWriter.h"
+@protocol MPEdnTaggedValueWriter;
 
 /**
  * DEPRECATED: it seems that this is fixed in iOS 7.1.
