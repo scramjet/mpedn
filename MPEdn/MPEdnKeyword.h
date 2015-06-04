@@ -27,7 +27,7 @@
  * 
  * See also [NSString(MPEdn) ednKeyword]
  */
-@interface MPEdnKeyword : NSObject<NSCopying>
+@interface MPEdnKeyword : NSObject<NSCopying, NSCoding>
 
 /**
  * Test if a given name is a valid EDN keyword.

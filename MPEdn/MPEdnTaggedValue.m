@@ -29,4 +29,16 @@
   return self;
 }
 
+- (instancetype) initWithCoder: (NSCoder *) coder
+{
+  return [self initWithTag: [coder decodeObjectForKey: @"tag"]
+                     value: [coder decodeObjectForKey: @"value"]];
+}
+
+- (void) encodeWithCoder: (NSCoder *) coder
+{
+  [coder encodeObject: _tag forKey: @"tag"];
+  [coder encodeObject: _value forKey: @"value"];
+}
+
 @end
