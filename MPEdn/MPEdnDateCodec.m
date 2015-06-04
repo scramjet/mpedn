@@ -44,9 +44,8 @@
   {
     dateFormatter = [NSDateFormatter new];
 
-    // NN: hardcoding "Z" (UTC) as timezone rather than letting formatter
-    // output "+00:00".
-    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    // NB: hardcoding "-00:00" (UTC) as timezone
+    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'-00:00'";
     dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
   }
 
