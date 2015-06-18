@@ -172,7 +172,7 @@
     MPEdnWriter *writer = [MPEdnWriter new];
     
     STAssertEqualObjects ([writer serialiseToEdn: date],
-                          @"#inst \"1972-01-01T12:00:00.000Z\"", @"Serialise");
+                          @"#inst \"1972-01-01T12:00:00.000-00:00\"", @"Serialise");
   }
   
   // UUID
