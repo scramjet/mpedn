@@ -246,8 +246,8 @@
 		C9FD3A2816C4D04700F3757E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastTestingUpgradeCheck = 0610;
-				LastUpgradeCheck = 0610;
+				LastTestingUpgradeCheck = 0630;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Matthew Phillips";
 			};
 			buildConfigurationList = C9FD3A2B16C4D04700F3757E /* Build configuration list for PBXProject "MPEdn" */;
