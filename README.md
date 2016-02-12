@@ -24,7 +24,7 @@ See the headers for API docs.
 
 To use the library, use one of (in decreasing order of ease-of-use):
 
-* Install via [Cocoapods](http://cocoapods.org): add `pod 'MPEDN', '~> 1.0.0'` to your Podfile.
+* Install via [CocoaPods](http://cocoapods.org): add `pod 'MPEDN', '~> 1.0.0'` to your Podfile.
 
 * Use a workspace containing your project and MPEdn as described [here][xcode_static_lib]. You may also need to add the `-all_load` flag to the "Other Linker Flags" section of your project if the `ednStringToObject` and `objectToEdnString` category methods do not get linked in.
 
