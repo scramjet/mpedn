@@ -18,9 +18,23 @@
 #import "MPEdnWriter.h"
 #import "MPEdnParser.h"
 
+static NSDateFormatter *dateFormatter;
+
 @implementation MPEdnDateCodec
+
++ (void) initialize
 {
-  NSDateFormatter *dateFormatter;
+  if (self == [MPEdnDateCodec class])
+  {
+    // NSDateFormatter is *very* slow to create, pre-allocate one
+    // NB NSDateFormatter is thread safe only in iOS 7+ and OS X 10.9+
+    // TODO warn if being compiled on a platform where this is unsafe
+    dateFormatter = [NSDateFormatter new];
+
+    // NB: hardcoding "-00:00" (UTC) as timezone
+    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'-00:00'";
+    dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
+  }
 }
 
 - (id) copyWithZone: (NSZone *) zone
@@ -40,15 +54,6 @@
 
 - (void) writeValue: (id) value toWriter: (MPEdnWriter *) writer
 {
-  if (!dateFormatter)
-  {
-    dateFormatter = [NSDateFormatter new];
-
-    // NB: hardcoding "-00:00" (UTC) as timezone
-    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'-00:00'";
-    dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
-  }
-
   [writer outputObject: [dateFormatter stringFromDate: value]];
 }
 
@@ -56,13 +61,6 @@
 {
   if ([value isKindOfClass: [NSString class]])
   {
-    if (!dateFormatter)
-    {
-      dateFormatter = [NSDateFormatter new];
-
-      dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ";
-    }
-    
     NSDate *date = [dateFormatter dateFromString: value];
 
     if (date)
