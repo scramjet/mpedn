@@ -61,6 +61,11 @@
  */
 - (NSString *) ednName;
 
+/**
+ * The keyword as a readable string.
+ */
+- (NSString *) stringValue;
+
 @end
 
 @interface NSString (MPEdn)

@@ -109,6 +109,11 @@ static NSMutableDictionary *ednKeywordTable;
 
 - (NSString *) description
 {
+  return [self stringValue];
+}
+
+- (NSString *) stringValue
+{
   return [NSString stringWithFormat: @":%@", name];
 }
 
