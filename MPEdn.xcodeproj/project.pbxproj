@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A018818B213669CF0044C958 /* MPEdnParser.h in Headers */ = {isa = PBXBuildFile; fileRef = C953E0AB16CDC852007E1043 /* MPEdnParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A018818C213669D70044C958 /* MPEdnParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C953E0AC16CDC852007E1043 /* MPEdnParser.m */; };
+		A018818D213669DC0044C958 /* MPEdnWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = C953E0B216CDDDFA007E1043 /* MPEdnWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A018818E213669E10044C958 /* MPEdnWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = C953E0B316CDDDFA007E1043 /* MPEdnWriter.m */; };
+		A018818F213669E70044C958 /* NSString+MPEdnParser.h in Headers */ = {isa = PBXBuildFile; fileRef = C9701C761CEAF9DE00C7755B /* NSString+MPEdnParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0188190213669ED0044C958 /* NSString+MPEdnParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C9701C771CEAF9DE00C7755B /* NSString+MPEdnParser.m */; };
+		A0188191213669F20044C958 /* MPEdnKeyword.h in Headers */ = {isa = PBXBuildFile; fileRef = C97339E81817592E00E901DD /* MPEdnKeyword.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0188192213669F70044C958 /* MPEdnKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = C97339E91817592E00E901DD /* MPEdnKeyword.m */; };
+		A018819321366A520044C958 /* MPEdnTaggedValue.m in Sources */ = {isa = PBXBuildFile; fileRef = C92C85331835ADF800748291 /* MPEdnTaggedValue.m */; };
+		A018819421366A570044C958 /* MPEdnSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B5E7016C8C78200BEFCCA /* MPEdnSymbol.m */; };
+		A018819521366A5A0044C958 /* MPEdnBase64Codec.m in Sources */ = {isa = PBXBuildFile; fileRef = C98881E6183093A000B25D11 /* MPEdnBase64Codec.m */; };
+		A018819621366A5D0044C958 /* MPEdnDateCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C91933151831D4D700724D6D /* MPEdnDateCodec.m */; };
+		A018819721366A5F0044C958 /* MPEdnUUIDCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C91933191831E05600724D6D /* MPEdnUUIDCodec.m */; };
+		A018819821366A620044C958 /* MPEdnURLCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C901C24A1B0DB5CE002EE8C1 /* MPEdnURLCodec.m */; };
+		A018819921366A6C0044C958 /* MPEdnURLCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C901C24A1B0DB5CE002EE8C1 /* MPEdnURLCodec.m */; };
+		A08A9682213663F4000930F4 /* MPEdnFwk.h in Headers */ = {isa = PBXBuildFile; fileRef = A08A9680213663F4000930F4 /* MPEdnFwk.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C901C24C1B0DB5CE002EE8C1 /* MPEdnURLCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C901C24A1B0DB5CE002EE8C1 /* MPEdnURLCodec.m */; };
 		C91933161831D4D700724D6D /* MPEdnDateCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C91933151831D4D700724D6D /* MPEdnDateCodec.m */; };
 		C91933171831D4D700724D6D /* MPEdnDateCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = C91933151831D4D700724D6D /* MPEdnDateCodec.m */; };
@@ -61,6 +77,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A08A967E213663F4000930F4 /* MPEdnFwk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MPEdnFwk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A08A9680213663F4000930F4 /* MPEdnFwk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPEdnFwk.h; sourceTree = "<group>"; };
+		A08A9681213663F4000930F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C901C24A1B0DB5CE002EE8C1 /* MPEdnURLCodec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnURLCodec.m; sourceTree = "<group>"; };
 		C901C24B1B0DB5CE002EE8C1 /* MPEdnURLCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnURLCodec.h; sourceTree = "<group>"; };
 		C91933141831D4D700724D6D /* MPEdnDateCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnDateCodec.h; sourceTree = "<group>"; };
@@ -98,6 +117,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A08A967A213663F4000930F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9FD3A2E16C4D04700F3757E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -119,11 +145,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A08A967F213663F4000930F4 /* MPEdnFwk */ = {
+			isa = PBXGroup;
+			children = (
+				A08A9680213663F4000930F4 /* MPEdnFwk.h */,
+				A08A9681213663F4000930F4 /* Info.plist */,
+			);
+			path = MPEdnFwk;
+			sourceTree = "<group>";
+		};
 		C9FD3A2616C4D04700F3757E = {
 			isa = PBXGroup;
 			children = (
 				C9FD3A3616C4D04700F3757E /* MPEdn */,
 				C9FD3A4B16C4D04800F3757E /* MPEdnTests */,
+				A08A967F213663F4000930F4 /* MPEdnFwk */,
 				C9FD3A3316C4D04700F3757E /* Frameworks */,
 				C9FD3A3216C4D04700F3757E /* Products */,
 			);
@@ -134,6 +170,7 @@
 			children = (
 				C9FD3A3116C4D04700F3757E /* libMPEdn.a */,
 				C9FD3A4216C4D04800F3757E /* MPEdnTests.octest */,
+				A08A967E213663F4000930F4 /* MPEdnFwk.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -209,7 +246,40 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		A08A967B213663F4000930F4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0188191213669F20044C958 /* MPEdnKeyword.h in Headers */,
+				A018818F213669E70044C958 /* NSString+MPEdnParser.h in Headers */,
+				A018818B213669CF0044C958 /* MPEdnParser.h in Headers */,
+				A08A9682213663F4000930F4 /* MPEdnFwk.h in Headers */,
+				A018818D213669DC0044C958 /* MPEdnWriter.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		A08A967D213663F4000930F4 /* MPEdnFwk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A08A9686213663F4000930F4 /* Build configuration list for PBXNativeTarget "MPEdnFwk" */;
+			buildPhases = (
+				A08A9679213663F4000930F4 /* Sources */,
+				A08A967A213663F4000930F4 /* Frameworks */,
+				A08A967B213663F4000930F4 /* Headers */,
+				A08A967C213663F4000930F4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MPEdnFwk;
+			productName = MPEdnFwk;
+			productReference = A08A967E213663F4000930F4 /* MPEdnFwk.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		C9FD3A3016C4D04700F3757E /* MPEdn */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C9FD3A5616C4D04800F3757E /* Build configuration list for PBXNativeTarget "MPEdn" */;
@@ -255,6 +325,12 @@
 				LastTestingUpgradeCheck = 0630;
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Matthew Phillips";
+				TargetAttributes = {
+					A08A967D213663F4000930F4 = {
+						CreatedOnToolsVersion = 9.4;
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = C9FD3A2B16C4D04700F3757E /* Build configuration list for PBXProject "MPEdn" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -270,11 +346,19 @@
 			targets = (
 				C9FD3A3016C4D04700F3757E /* MPEdn */,
 				C9FD3A4116C4D04800F3757E /* MPEdnTests */,
+				A08A967D213663F4000930F4 /* MPEdnFwk */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		A08A967C213663F4000930F4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9FD3A3F16C4D04800F3757E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -302,6 +386,23 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A08A9679213663F4000930F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0188190213669ED0044C958 /* NSString+MPEdnParser.m in Sources */,
+				A018819321366A520044C958 /* MPEdnTaggedValue.m in Sources */,
+				A018818C213669D70044C958 /* MPEdnParser.m in Sources */,
+				A018819621366A5D0044C958 /* MPEdnDateCodec.m in Sources */,
+				A0188192213669F70044C958 /* MPEdnKeyword.m in Sources */,
+				A018819421366A570044C958 /* MPEdnSymbol.m in Sources */,
+				A018818E213669E10044C958 /* MPEdnWriter.m in Sources */,
+				A018819521366A5A0044C958 /* MPEdnBase64Codec.m in Sources */,
+				A018819721366A5F0044C958 /* MPEdnUUIDCodec.m in Sources */,
+				A018819821366A620044C958 /* MPEdnURLCodec.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9FD3A2D16C4D04700F3757E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -332,6 +433,7 @@
 				C953E0B116CDDDA9007E1043 /* MPEdnWriterTests.m in Sources */,
 				C953E0B516CDDDFA007E1043 /* MPEdnWriter.m in Sources */,
 				C91933171831D4D700724D6D /* MPEdnDateCodec.m in Sources */,
+				A018819921366A6C0044C958 /* MPEdnURLCodec.m in Sources */,
 				C9701C791CEAF9DE00C7755B /* NSString+MPEdnParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,6 +460,124 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		A08A9683213663F4000930F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = MPEdnFwk/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = scramjet.MPEdnFwk;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		A08A9684213663F4000930F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = MPEdnFwk/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = scramjet.MPEdnFwk;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		A08A9685213663F4000930F4 /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = MPEdnFwk/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = scramjet.MPEdnFwk;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = AdHoc;
+		};
 		C928A01C17D566F6001B134E /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -569,6 +789,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A08A9686213663F4000930F4 /* Build configuration list for PBXNativeTarget "MPEdnFwk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A08A9683213663F4000930F4 /* Debug */,
+				A08A9684213663F4000930F4 /* Release */,
+				A08A9685213663F4000930F4 /* AdHoc */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C9FD3A2B16C4D04700F3757E /* Build configuration list for PBXProject "MPEdn" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
