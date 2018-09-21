@@ -1,6 +1,6 @@
 # MPEdn
 
-An EDN ([Extensible Data Notation](http://github.com/edn-format/edn)) Objective C I/O library for OS X and iOS.
+An EDN ([Extensible Data Notation](http://github.com/edn-format/edn)) Objective C I/O library for MacOS and iOS.
 
 The library includes:
 
