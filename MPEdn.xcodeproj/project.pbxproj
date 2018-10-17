@@ -488,6 +488,7 @@
 				INFOPLIST_FILE = MPEdnFwk/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = scramjet.MPEdnFwk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -528,6 +529,7 @@
 				INFOPLIST_FILE = MPEdnFwk/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = scramjet.MPEdnFwk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -568,6 +570,7 @@
 				INFOPLIST_FILE = MPEdnFwk/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = scramjet.MPEdnFwk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
