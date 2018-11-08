@@ -31,7 +31,7 @@ static NSMutableDictionary *ednKeywordTable;
     ednKeywordTable = [NSMutableDictionary new];
 
     NSMutableCharacterSet *nonKeywordChars =
-      [NSMutableCharacterSet characterSetWithCharactersInString: @".*+!-_?$%&=/"];
+      [NSMutableCharacterSet characterSetWithCharactersInString: @".*+!-_?$%&=/#:"];
     
     [nonKeywordChars addCharactersInRange: NSMakeRange ('a', 'z' - 'a' + 1)];
     [nonKeywordChars addCharactersInRange: NSMakeRange ('A', 'Z' - 'A' + 1)];
