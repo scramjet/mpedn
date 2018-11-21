@@ -22,7 +22,7 @@
  *
  * The MPEdnWriter class also supports outputting MPEdnSymbol's.
  */
-@interface MPEdnSymbol : NSObject
+@interface MPEdnSymbol : NSObject<NSCopying, NSCoding>
 {
   NSString *name;
 }

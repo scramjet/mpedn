@@ -32,6 +32,21 @@
   return self;
 }
 
+- (instancetype) initWithCoder: (NSCoder *) coder
+{
+  return [[MPEdnSymbol alloc] initWithName: [coder decodeObjectForKey: @"name"]];
+}
+
+- (void) encodeWithCoder: (NSCoder *) coder
+{
+  [coder encodeObject: name forKey: @"name"];
+}
+
+- (id) copyWithZone: (NSZone *) zone
+{
+  return self;
+}
+
 - (NSString *) name
 {
   return name;
