@@ -423,12 +423,12 @@ static BOOL is_sym_punct (unichar ch)
     
     char *numberStrEnd = (char *)numberStrUtf8;
 
-    long int number = strtol (numberStrUtf8, &numberStrEnd, 10);
+    long long number = strtoll (numberStrUtf8, &numberStrEnd, 10);
     
     if (numberStrEnd - numberStrUtf8 == endIdx - startIdx)
     {
       token = TOKEN_NUMBER;
-      tokenValue = [NSNumber numberWithLong: number];
+      tokenValue = [NSNumber numberWithLongLong: number];
     } else
     {
       [self raiseError: ERROR_INVALID_NUMBER
