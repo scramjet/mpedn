@@ -812,7 +812,7 @@ static BOOL is_sym_punct (unichar ch)
     return @YES;
   else if ([value isEqualToString: @"false"])
     return @NO;
-  if ([value isEqualToString: @"nil"])
+  else if ([value isEqualToString: @"nil"])
     return [NSNull null];
   else
     return [MPEdnSymbol symbolWithName: value];
