@@ -66,6 +66,11 @@ static NSMutableDictionary *ednKeywordTable;
   }
 }
 
++ (BOOL) supportsSecureCoding
+{
+  return YES;
+}
+
 - (instancetype) initWithName: (NSString *) initName
 {
   if (![MPEdnKeyword isValidKeyword: initName])
@@ -84,7 +89,7 @@ static NSMutableDictionary *ednKeywordTable;
 
 - (instancetype) initWithCoder: (NSCoder *) coder
 {
-  return [MPEdnKeyword keyword: [coder decodeObjectForKey: @"name"]];
+  return [MPEdnKeyword keyword: [coder decodeObjectOfClass: [NSString class] forKey: @"name"]];
 }
 
 - (void) encodeWithCoder: (NSCoder *) coder

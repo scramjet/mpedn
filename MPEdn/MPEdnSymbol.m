@@ -22,6 +22,11 @@
   return [[MPEdnSymbol alloc] initWithName: name];
 }
 
++ (BOOL) supportsSecureCoding
+{
+  return YES;
+}
+
 - (id) initWithName: (NSString *) initName
 {
   if (self = [super init])
@@ -34,7 +39,7 @@
 
 - (instancetype) initWithCoder: (NSCoder *) coder
 {
-  return [[MPEdnSymbol alloc] initWithName: [coder decodeObjectForKey: @"name"]];
+  return [[MPEdnSymbol alloc] initWithName: [coder decodeObjectOfClass: [NSString class] forKey: @"name"]];
 }
 
 - (void) encodeWithCoder: (NSCoder *) coder

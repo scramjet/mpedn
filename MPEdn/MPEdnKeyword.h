@@ -27,7 +27,9 @@
  * 
  * See also [NSString(MPEdn) ednKeyword]
  */
-@interface MPEdnKeyword : NSObject<NSCopying, NSCoding>
+@interface MPEdnKeyword : NSObject<NSCopying, NSSecureCoding>
+
+@property (class, readonly) BOOL supportsSecureCoding;
 
 /**
  * Test if a given name is a valid EDN keyword.

@@ -18,6 +18,11 @@
 
 @implementation MPEdnTaggedValue
 
++ (BOOL) supportsSecureCoding
+{
+  return YES;
+}
+
 - (instancetype) initWithTag: (NSString *) tag value: (id) value
 {
   if (self = [super init])
@@ -31,8 +36,8 @@
 
 - (instancetype) initWithCoder: (NSCoder *) coder
 {
-  return [self initWithTag: [coder decodeObjectForKey: @"tag"]
-                     value: [coder decodeObjectForKey: @"value"]];
+  return [self initWithTag: [coder decodeObjectOfClass: [NSString class] forKey: @"tag"]
+                     value: [coder decodeObjectOfClass: [NSObject class] forKey: @"value"]];
 }
 
 - (void) encodeWithCoder: (NSCoder *) coder

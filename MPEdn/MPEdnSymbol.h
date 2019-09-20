@@ -22,10 +22,12 @@
  *
  * The MPEdnWriter class also supports outputting MPEdnSymbol's.
  */
-@interface MPEdnSymbol : NSObject<NSCopying, NSCoding>
+@interface MPEdnSymbol : NSObject<NSCopying, NSSecureCoding>
 {
   NSString *name;
 }
+
+@property (class, readonly) BOOL supportsSecureCoding;
 
 /**
  * The symbol name.
