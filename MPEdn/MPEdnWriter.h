@@ -16,7 +16,6 @@
 
 #import <Foundation/Foundation.h>
 
-//#import "MPEdnTaggedValueWriter.h"
 @protocol MPEdnTaggedValueWriter;
 
 /**
@@ -81,6 +80,13 @@ BOOL MPEdnIsCharacter (NSNumber *number);
  * MPEdnKeyword instances, but you wish to treat them all as such.
  */
 @property (readwrite) BOOL useKeywordsInMaps;
+
+/**
+ * When true (default false), use a single space rather than a comma as the
+ * separator between items in lists, vectors, and sets, and between pairs of
+ * items in maps.
+ */
+@property (readwrite) BOOL useSpaceAsSeparator;
 
 /**
  * Take a Cocoa object, and generate an EDN-formatted string.

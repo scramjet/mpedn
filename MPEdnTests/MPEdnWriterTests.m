@@ -128,6 +128,16 @@
     NSArray *list = @[@"hello", @1];
     MPAssertSerialisesOK (list, @"[\"hello\",1]");
   }
+
+  // test useSpaceAsSeparator
+  {
+    MPEdnWriter *writer = [MPEdnWriter new];
+    writer.useSpaceAsSeparator = YES;
+
+    NSString *str = [writer serialiseToEdn: @[@1, @2]];
+
+    XCTAssertEqualObjects (str, @"[1 2]", @"Serialise");
+  }
 }
 
 - (void) testSets

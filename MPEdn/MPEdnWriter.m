@@ -61,6 +61,7 @@ static NSMutableArray *defaultWriters;
 {
   NSMutableString *outputStr;
   BOOL useKeywordsInMaps;
+  NSString *separator;
   NSArray *writers;
 }
 
@@ -89,6 +90,7 @@ static NSMutableArray *defaultWriters;
   {
     useKeywordsInMaps = NO;
     writers = copy (defaultWriters);
+    separator = @",";
   }
 
   return self;
@@ -102,6 +104,16 @@ static NSMutableArray *defaultWriters;
 - (void) setUseKeywordsInMaps: (BOOL) newValue
 {
   useKeywordsInMaps = newValue;
+}
+
+- (BOOL) useSpaceAsSeparator
+{
+  return [separator isEqualToString: @" "];
+}
+
+- (void) setUseSpaceAsSeparator: (BOOL) newValue
+{
+  separator = newValue ? @" " : @",";
 }
 
 - (void) addTagWriter: (id<MPEdnTaggedValueWriter>) writer
@@ -293,7 +305,7 @@ static NSMutableArray *defaultWriters;
   for (id key in value)
   {
     if (!firstItem)
-      [outputStr appendString: @","];
+      [outputStr appendString: separator];
     
     if (useKeywordsInMaps && [key isKindOfClass: [NSString class]])
     {
@@ -323,8 +335,8 @@ static NSMutableArray *defaultWriters;
   for (id item in value)
   {
     if (!firstItem)
-      [outputStr appendString: @","];
-    
+      [outputStr appendString: separator];
+
     [self outputObject: item];
     
     firstItem = NO;
@@ -342,7 +354,7 @@ static NSMutableArray *defaultWriters;
   for (id item in value)
   {
     if (!firstItem)
-      [outputStr appendString: @","];
+      [outputStr appendString: separator];
     
     [self outputObject: item];
     
