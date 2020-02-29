@@ -6,6 +6,7 @@
 #import "MPEdnBase64Codec.h"
 #import "MPEdnTaggedValue.h"
 #import "MPEdnURLCodec.h"
+#import "NSString+MPEdnParser.h"
 
 #define MPAssertSerialisesOK(value, correct)             \
 {                                                        \
@@ -13,7 +14,7 @@
                                                          \
   NSString *str = [writer serialiseToEdn: value];        \
                                                          \
-  STAssertEqualObjects (str, correct, @"Serialise");     \
+  XCTAssertEqualObjects (str, correct, @"Serialise");     \
 }
 
 #define MPAssertSerialisesAutoKeywordsOK(value, correct) \
@@ -23,7 +24,7 @@
                                                          \
   NSString *str = [writer serialiseToEdn: value];        \
                                                          \
-  STAssertEqualObjects (str, correct, @"Serialise");     \
+  XCTAssertEqualObjects (str, correct, @"Serialise");     \
 }
 
 @implementation MPEdnWriterTests
@@ -76,7 +77,7 @@
     //MPEdnTagAsCharacter (newline);
 
     // BUT the test passes: it seems numberWithChar is fixed
-    STAssertEquals ((char)'c', (char)[newline objCType][0], @"NSNumber numberWithChar");
+    XCTAssertEqual ((char)'c', (char)[newline objCType][0], @"NSNumber numberWithChar");
 
     MPAssertSerialisesOK (newline, @"\\\n");
   }
@@ -99,8 +100,8 @@
   MPAssertSerialisesOK (@"line 1\nline 2", @"\"line 1\\nline 2\"");
   MPAssertSerialisesOK (@"line 1\r\nline 2", @"\"line 1\\r\\nline 2\"");
   
-  STAssertEqualObjects ([@{@"a" : @1} objectToEdnString], @"{\"a\" 1}", @"Test category");
-  STAssertEqualObjects ([@{@"a" : @1} objectToEdnStringAutoKeywords], @"{:a 1}", @"Test category");
+  XCTAssertEqualObjects ([@{@"a" : @1} objectToEdnString], @"{\"a\" 1}", @"Test category");
+  XCTAssertEqualObjects ([@{@"a" : @1} objectToEdnStringAutoKeywords], @"{:a 1}", @"Test category");
 }
 
 - (void) testNil
@@ -171,7 +172,7 @@
     
     MPEdnWriter *writer = [MPEdnWriter new];
     
-    STAssertEqualObjects ([writer serialiseToEdn: date],
+    XCTAssertEqualObjects ([writer serialiseToEdn: date],
                           @"#inst \"1972-01-01T12:00:00.000-00:00\"", @"Serialise");
   }
   
@@ -182,7 +183,7 @@
     
     MPEdnWriter *writer = [MPEdnWriter new];
     
-    STAssertEqualObjects ([writer serialiseToEdn: uuid],
+    XCTAssertEqualObjects ([writer serialiseToEdn: uuid],
                           @"#uuid \"F81D4FAE-7DEC-11D0-A765-00A0C91E6BF6\"", @"Serialise");
   }
 
@@ -195,7 +196,7 @@
     MPEdnWriter *writer = [MPEdnWriter new];
     [writer addTagWriter: [MPEdnBase64Codec sharedInstance]];
   
-    STAssertEqualObjects ([writer serialiseToEdn: map], @"{:a #base64 \"AAECAwQFBgcICQ==\"}", @"Serialise");
+    XCTAssertEqualObjects ([writer serialiseToEdn: map], @"{:a #base64 \"AAECAwQFBgcICQ==\"}", @"Serialise");
   }
   
   // unknown tag
@@ -204,7 +205,7 @@
     
     id map = @{[@"a" ednKeyword] : [[MPEdnTaggedValue alloc] initWithTag: @"gutentag" value: @"ja"]};
     
-    STAssertEqualObjects ([writer serialiseToEdn: map], @"{:a #gutentag \"ja\"}", @"Tag");
+    XCTAssertEqualObjects ([writer serialiseToEdn: map], @"{:a #gutentag \"ja\"}", @"Tag");
   }
 }
 
@@ -213,7 +214,7 @@
   MPEdnWriter *writer = [MPEdnWriter new];
   [writer addTagWriter: [[MPEdnURLCodec alloc] initWithTag: @"test/url"]];
 
-  STAssertEqualObjects ([writer serialiseToEdn: @{[@"a" ednKeyword] : [[NSURL alloc] initWithString: @"http://example.com"]}],
+  XCTAssertEqualObjects ([writer serialiseToEdn: @{[@"a" ednKeyword] : [[NSURL alloc] initWithString: @"http://example.com"]}],
                         @"{:a #test/url \"http://example.com\"}", @"Serialise");
 }
 

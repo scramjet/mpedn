@@ -1,6 +1,7 @@
 #import "MPEdnParserTests.h"
 
 #import "MPEdn.h"
+#import "MPEdnParser.h"
 #import "MPEdnSymbol.h"
 #import "MPEdnBase64Codec.h"
 #import "MPEdnTaggedValue.h"
@@ -12,9 +13,9 @@
                                            \
   id value = [parser parseString: expr];   \
                                            \
-  STAssertEqualObjects (value, correctValue, message);         \
-  STAssertNil (parser.error, message);     \
-  STAssertTrue (parser.complete, message); \
+  XCTAssertEqualObjects (value, correctValue, message);         \
+  XCTAssertNil (parser.error, message);     \
+  XCTAssertTrue (parser.complete, message); \
 }
 
 #define MPAssertParseError(expr, message)  \
@@ -23,9 +24,9 @@
                                            \
   id value = [parser parseString: expr];   \
                                            \
-  STAssertNil (value, message);            \
-  STAssertNotNil (parser.error, message);  \
-  STAssertTrue (parser.complete, message); \
+  XCTAssertNil (value, message);            \
+  XCTAssertNotNil (parser.error, message);  \
+  XCTAssertTrue (parser.complete, message); \
   NSLog (@"Error: %@", parser.error);      \
 }
 
@@ -83,9 +84,9 @@
   id value1 = [parser parseNextValue];
   id value2 = [parser parseNextValue];
   
-  STAssertEqualObjects (value1, @1, @"Value 1");
-  STAssertEqualObjects (value2, @2, @"Value 2");
-  STAssertTrue (parser.complete, @"Complete");
+  XCTAssertEqualObjects (value1, @1, @"Value 1");
+  XCTAssertEqualObjects (value2, @2, @"Value 2");
+  XCTAssertTrue (parser.complete, @"Complete");
 }
 
 - (void) testStrings
@@ -139,14 +140,14 @@
   MPAssertParseError (@":", @"Keyword");
   
   // keyword accessed after parsing
-  STAssertTrue ([@":a" ednStringToObject] == [@"a" ednKeyword], @"Equal keyword");
+  XCTAssertTrue ([@":a" ednStringToObject] == [@"a" ednKeyword], @"Equal keyword");
   
   // keyword accessed before parsing
   MPEdnKeyword *kwdB = [@"b" ednKeyword];
-  STAssertTrue ([@":b" ednStringToObject] == kwdB, @"Equal keyword");
+  XCTAssertTrue ([@":b" ednStringToObject] == kwdB, @"Equal keyword");
   
   // keywords as strings
-  STAssertEqualObjects ([@":b" ednStringToObjectNoKeywords], @"b", @"Equal keyword");
+  XCTAssertEqualObjects ([@":b" ednStringToObjectNoKeywords], @"b", @"Equal keyword");
 }
 
 - (void) testSets
@@ -190,7 +191,9 @@
   {
     id list = @[[@"a" ednKeyword], @1];
     MPAssertParseOK (@"[:a, 1]", list, @"List");
-    MPAssertParseOK (@"(:a, 1)", list, @"List");
+    MPAssertParseOK (@"(:a 1)", list, @"List");
+    MPAssertParseOK (@"(:a,,,, 1)", list, @"List");
+    MPAssertParseOK (@"(:a 1)", list, @"List");
   }
   
   {
@@ -240,10 +243,12 @@
   // date
   {
     NSDate *correctDate = [NSDate dateWithTimeIntervalSince1970: 63115200];
-    
-    MPAssertParseOK (@"#inst \"1972-01-01T12:00:00.00Z\"", correctDate, @"Date");
-    MPAssertParseOK (@"#inst \"1972-01-01T12:00:00.00+00:00\"", correctDate, @"Date");
-    MPAssertParseOK (@"#inst \"1972-01-01T22:30:00.00+10:30\"", correctDate, @"Date");
+
+    MPAssertParseOK (@"#inst \"1972-01-01T12:00:00.00-00:00\"", correctDate, @"Date");
+
+    // these formats used to parse under older iOS's but do not any more
+    //MPAssertParseOK (@"#inst \"1972-01-01T12:00:00.00Z\"", correctDate, @"Date");
+    //MPAssertParseOK (@"#inst \"1972-01-01T22:30:00.00+10:30\"", correctDate, @"Date");
   }
 
   // UUID
@@ -267,30 +272,30 @@
       
       NSData *data = [NSData dataWithBytes: dataContents length: sizeof (dataContents)];
 
-      STAssertTrue ([map [[@"a" ednKeyword]] isKindOfClass: [NSData class]], @"Data decoded");
-      STAssertEqualObjects ([map objectForKey: [@"a" ednKeyword]], data, @"Data decoded");
+      XCTAssertTrue ([map [[@"a" ednKeyword]] isKindOfClass: [NSData class]], @"Data decoded");
+      XCTAssertEqualObjects ([map objectForKey: [@"a" ednKeyword]], data, @"Data decoded");
     }
     
     // check Base 64 error reporting
     [parser parseString: @"#base64 {}"];
     
-    STAssertTrue (parser.error != nil, @"Base 64 needs a string value");
+    XCTAssertTrue (parser.error != nil, @"Base 64 needs a string value");
     
     [parser parseString: @"#base64 \"<hello!>\""];
     
-    STAssertTrue (parser.error != nil, @"Bad Base64 data");
+    XCTAssertTrue (parser.error != nil, @"Bad Base64 data");
     
     // check allowUnknownTags
     MPEdnTaggedValue *taggedMap = [parser parseString: @"#non-existent-tag {}"];
     
-    STAssertTrue ([taggedMap isKindOfClass: [MPEdnTaggedValue class]], @"Tagged");
-    STAssertEqualObjects (taggedMap.tag, @"non-existent-tag", @"Tagged");
-    STAssertEqualObjects (taggedMap.value, @{}, @"Tagged");
+    XCTAssertTrue ([taggedMap isKindOfClass: [MPEdnTaggedValue class]], @"Tagged");
+    XCTAssertEqualObjects (taggedMap.tag, @"non-existent-tag", @"Tagged");
+    XCTAssertEqualObjects (taggedMap.value, @{}, @"Tagged");
     
     parser.allowUnknownTags = NO;
     
     [parser parseString: @"#non-existent-tag {}"];
-    STAssertNotNil (parser.error, @"Tagged");
+    XCTAssertNotNil (parser.error, @"Tagged");
   }
 }
 
@@ -303,8 +308,8 @@
   {
     id map = [parser parseString: @"{:a #test/url \"http://example.com\"}"];
     
-    STAssertTrue ([map [[@"a" ednKeyword]] isKindOfClass: [NSURL class]], @"Data decoded");
-    STAssertEqualObjects (map [[@"a" ednKeyword]], [[NSURL alloc] initWithString: @"http://example.com"], @"Data decoded");
+    XCTAssertTrue ([map [[@"a" ednKeyword]] isKindOfClass: [NSURL class]], @"Data decoded");
+    XCTAssertEqualObjects (map [[@"a" ednKeyword]], [[NSURL alloc] initWithString: @"http://example.com"], @"Data decoded");
   }
 }
 
@@ -320,15 +325,15 @@
     
     NSLog (@"Value %@", value);
     
-    STAssertNotNil (value, @"Value");
+    XCTAssertNotNil (value, @"Value");
   }
   
   parser.inputString = @"[:unterminated";
   
   id value = [parser parseNextValue];
   
-  STAssertNil (value, @"Nil on parse error");
-  STAssertNotNil (parser.error, @"Error set on parse error");
+  XCTAssertNil (value, @"Nil on parse error");
+  XCTAssertNotNil (parser.error, @"Error set on parse error");
   
   NSLog (@"Error: %@", parser.error);
 }
