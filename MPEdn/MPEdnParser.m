@@ -179,14 +179,22 @@ static NSDictionary *copy (NSDictionary *dict)
 
 #pragma mark - Tokeniser
 
-static BOOL is_sym_punct (unichar ch)
+/// is this a character that may begin a symbol?
+static BOOL isStartSymPunct (unichar ch)
 {
   // NB: '/' is added to the specified EDN set of punctuation allowed in
   // symbol names. The check for its valid use will be done by the parser.
   return (ch >= '!' && ch <= '_' &&
           (ch == '!' || ch == '$' || ch == '%' || ch == '&' || ch == '*' ||
            ch == '+' || ch == '-' || ch == '.' || ch == '=' || ch == '?' ||
-           ch == '_' || ch == '/' || ch == ':' || ch == '#'));
+           ch == '_' || ch == '/' || ch == ':' || ch == '#' || ch == '<' ||
+           ch == '>'));
+}
+
+/// is this a character that may be in a symbol?
+static BOOL isSymPunct (unichar ch)
+{
+  return isStartSymPunct (ch) || ch == ':' || ch == '#';
 }
 
 - (unichar) currentEndIdxChar
@@ -326,7 +334,7 @@ static BOOL is_sym_punct (unichar ch)
       {
         [self readTagName];
       }
-    } else if (isalpha (ch) || is_sym_punct (ch))
+    } else if (isalpha (ch) || isStartSymPunct (ch))
     {
       [self readNameToken];
     } else
@@ -507,7 +515,7 @@ static BOOL is_sym_punct (unichar ch)
   do
   {
     ch = [self advanceEndIdx];
-  } while (isalnum (ch) || is_sym_punct (ch));
+  } while (isalnum (ch) || isSymPunct (ch));
   
   token = TOKEN_NAME;
   tokenValue =
@@ -521,7 +529,7 @@ static BOOL is_sym_punct (unichar ch)
   do
   {
     ch = [self advanceEndIdx];
-  } while (isalnum (ch) || is_sym_punct (ch));
+  } while (isalnum (ch) || isSymPunct (ch));
   
   NSInteger length = endIdx - startIdx - 1;
   
@@ -627,8 +635,8 @@ static BOOL is_sym_punct (unichar ch)
   do
   {
     ch = [self advanceEndIdx];
-  } while (isalnum (ch) || is_sym_punct (ch));
-  
+  } while (isalnum (ch) || isStartSymPunct (ch));
+
   NSInteger tagLen = endIdx - startIdx - 1;
   
   if (tagLen > 0)

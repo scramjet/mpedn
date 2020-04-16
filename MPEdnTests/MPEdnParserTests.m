@@ -121,11 +121,13 @@
   
   MPAssertParseOK (@"+", [MPEdnSymbol symbolWithName: @"+"], @"Symbol");
   MPAssertParseOK (@"-", [MPEdnSymbol symbolWithName: @"-"], @"Symbol");
+  MPAssertParseOK (@"<", [MPEdnSymbol symbolWithName: @"<"], @"Symbol");
+  MPAssertParseOK (@"<:>", [MPEdnSymbol symbolWithName: @"<:>"], @"Symbol");
   MPAssertParseOK (@"+a", [MPEdnSymbol symbolWithName: @"+a"], @"Symbol");
   MPAssertParseOK (@"?", [MPEdnSymbol symbolWithName: @"?"], @"Symbol");
   MPAssertParseOK (@"?a", [MPEdnSymbol symbolWithName: @"?a"], @"Symbol");
   MPAssertParseOK (@"a?", [MPEdnSymbol symbolWithName: @"a?"], @"Symbol");
-  
+
   MPAssertParseError (@"}", @"Not a symbol");
   MPAssertParseError (@"]", @"Not a symbol");
   MPAssertParseError (@")", @"Not a symbol");
