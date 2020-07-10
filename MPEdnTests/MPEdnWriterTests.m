@@ -161,7 +161,8 @@
 - (void) testKeywords
 {
   MPAssertSerialisesOK ([@"abc" ednKeyword], @":abc");
-  
+  MPAssertSerialisesOK ([@"abc/def" ednKeyword], @":abc/def");
+
   {
     NSArray *list = @[[@"abc" ednKeyword], [@"def" ednKeyword]];
     
