@@ -22,6 +22,7 @@ static NSMutableDictionary *ednKeywordTable;
 @implementation MPEdnKeyword
 {
   NSString *name;
+  NSString *namespace;
 }
 
 + (void) initialize
@@ -82,8 +83,14 @@ static NSMutableDictionary *ednKeywordTable;
   if (self = [super init])
   {
     name = initName;
+    CFIndex nsIndex = [name rangeOfString: @"/"].location;
+
+    if (nsIndex == NSNotFound)
+      namespace = @"";
+    else
+      namespace = [name substringToIndex: nsIndex];
   }
-  
+
   return self;
 }
 
@@ -109,7 +116,12 @@ static NSMutableDictionary *ednKeywordTable;
 
 - (NSComparisonResult) compare: (MPEdnKeyword *) object
 {
-  return [name compare: [object ednName]];
+  NSComparisonResult nsCompare = [self->namespace compare: object->namespace];
+
+  if (nsCompare == 0)
+    return [self->name compare: object->name];
+  else
+    return nsCompare;
 }
 
 - (NSString *) description

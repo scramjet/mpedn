@@ -68,6 +68,8 @@
  */
 - (NSString *) stringValue;
 
+- (NSComparisonResult) compare: (MPEdnKeyword *) object;
+
 @end
 
 @interface NSString (MPEdn)

@@ -150,6 +150,10 @@
   
   // keywords as strings
   XCTAssertEqualObjects ([@":b" ednStringToObjectNoKeywords], @"b", @"Equal keyword");
+
+  // test comparison uses namespace like Clojure does (this test doesn't really belong here...)
+  XCTAssert ([[@"z" ednKeyword] compare: [@"a/a" ednKeyword]] < 0, @"Compare using ns");
+  XCTAssert ([[@"a/z" ednKeyword] compare: [@"z/a" ednKeyword]] < 0, @"Compare using ns");
 }
 
 - (void) testSets
