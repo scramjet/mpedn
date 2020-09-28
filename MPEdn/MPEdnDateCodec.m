@@ -18,7 +18,9 @@
 #import "MPEdnWriter.h"
 #import "MPEdnParser.h"
 
-static NSDateFormatter *dateFormatter;
+static NSDateFormatter *dateFormatterTimezone;
+static NSDateFormatter *dateFormatterIso8601;
+static NSDateFormatter *dateFormatterClojure;
 
 @implementation MPEdnDateCodec
 
@@ -29,13 +31,24 @@ static NSDateFormatter *dateFormatter;
     // NSDateFormatter is *very* slow to create, pre-allocate one
     // NB NSDateFormatter is thread safe only in iOS 7+ and OS X 10.9+
     // TODO warn if being compiled on a platform where this is unsafe
-    dateFormatter = [NSDateFormatter new];
+    dateFormatterTimezone = [NSDateFormatter new];
+    dateFormatterIso8601 = [NSDateFormatter new];
+    dateFormatterClojure = [NSDateFormatter new];
 
-    // NB: hardcoding "-00:00" (UTC) as timezone
-    // TODO this does not fully handle RFC 3339 dates. fractional seconds are optional
-    // and timezone is fixed at UTC
-    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'-00:00'";
-    dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
+    // Support parsing dates with timezone information
+    dateFormatterTimezone.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ";
+    dateFormatterTimezone.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormatterTimezone.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+
+    // Support parsing dates optionally ending with 'Z'
+    dateFormatterIso8601.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    dateFormatterIso8601.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormatterIso8601.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+
+    // NB: hardcoding "-00:00" (UTC) as timezone for writing
+    dateFormatterClojure.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'-00:00'";
+    dateFormatterClojure.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormatterClojure.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
   }
 }
 
@@ -56,14 +69,21 @@ static NSDateFormatter *dateFormatter;
 
 - (void) writeValue: (id) value toWriter: (MPEdnWriter *) writer
 {
-  [writer outputObject: [dateFormatter stringFromDate: value]];
+  [writer outputObject: [dateFormatterClojure stringFromDate: value]];
 }
 
 - (id) readValue: (id) value
 {
   if ([value isKindOfClass: [NSString class]])
   {
-    NSDate *date = [dateFormatter dateFromString: value];
+    // Try the timezone date formatter first (which is more likely to parse successfully)
+    NSDate *date = [dateFormatterTimezone dateFromString: value];
+      
+    if (!date)
+    {
+      // If unsuccessful, try the ISO 8601 formatter
+      date = [dateFormatterIso8601 dateFromString: value];
+    }
 
     if (date)
     {
