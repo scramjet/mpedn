@@ -307,11 +307,11 @@ static BOOL isSymPunct (unichar ch)
     } else if (ch == '+' || ch == '-' || ch == '.')
     {
       unichar lookahead = [self charAt: startIdx + 1];
-      
-      if (isalpha (lookahead) || lookahead == 0)
-        [self readNameToken];
-      else
+
+      if (isdigit (lookahead))
         [self readNumberToken];
+      else
+        [self readNameToken];
     } else if (ch == ':')
     {
       [self readKeywordToken];

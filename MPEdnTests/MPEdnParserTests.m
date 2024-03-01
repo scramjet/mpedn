@@ -120,6 +120,11 @@
   MPAssertParseOK (@"nil", [NSNull null], @"Nil");
   
   MPAssertParseOK (@"+", [MPEdnSymbol symbolWithName: @"+"], @"Symbol");
+  MPAssertParseOK (@"+-", [MPEdnSymbol symbolWithName: @"+-"], @"Symbol");
+  MPAssertParseOK (@"[+]", @[[MPEdnSymbol symbolWithName: @"+"]], @"Symbol");
+  MPAssertParseOK (@"[-]", @[[MPEdnSymbol symbolWithName: @"-"]], @"Symbol");
+  MPAssertParseOK (@"[.]", @[[MPEdnSymbol symbolWithName: @"."]], @"Symbol");
+  MPAssertParseOK (@"[+a]", @[[MPEdnSymbol symbolWithName: @"+a"]], @"Symbol");
   MPAssertParseOK (@"-", [MPEdnSymbol symbolWithName: @"-"], @"Symbol");
   MPAssertParseOK (@"<", [MPEdnSymbol symbolWithName: @"<"], @"Symbol");
   MPAssertParseOK (@"<:>", [MPEdnSymbol symbolWithName: @"<:>"], @"Symbol");
