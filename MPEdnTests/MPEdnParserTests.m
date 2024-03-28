@@ -132,10 +132,34 @@
   MPAssertParseOK (@"?", [MPEdnSymbol symbolWithName: @"?"], @"Symbol");
   MPAssertParseOK (@"?a", [MPEdnSymbol symbolWithName: @"?a"], @"Symbol");
   MPAssertParseOK (@"a?", [MPEdnSymbol symbolWithName: @"a?"], @"Symbol");
+  MPAssertParseOK (@"/a", [MPEdnSymbol symbolWithName: @"/a"], @"Symbol");
 
   MPAssertParseError (@"}", @"Not a symbol");
   MPAssertParseError (@"]", @"Not a symbol");
   MPAssertParseError (@")", @"Not a symbol");
+  MPAssertParseError (@"@", @"Not a symbol");
+}
+
+/*
+ * ' (quote) is not in the EDN spec, and doesn't make any sense outside of an evaluated environment
+ * and yet:
+ *
+ *   user> (pr-str (clojure.edn/read-string "'a"))
+ *   "'a"
+ *
+ * Since Clojure can generate EDN like this, we also accept it (but do not generate it).
+ */
+- (void) testQuote
+{
+  MPAssertParseOK (@"'", [MPEdnSymbol symbolWithName: @"'"], @"Quote");
+  MPAssertParseOK (@"''", [MPEdnSymbol symbolWithName: @"''"], @"Quote");
+  MPAssertParseOK (@"'a", [MPEdnSymbol symbolWithName: @"'a"], @"Quote");
+  MPAssertParseOK (@"'.1", [MPEdnSymbol symbolWithName: @"'.1"], @"Quote");
+  MPAssertParseOK (@"'a/a", [MPEdnSymbol symbolWithName: @"'a/a"], @"Quote");
+
+  // this should be an error according to clojure.edn, but no idea why. since we would need a special
+  // logic path for this edge case, leaving for now
+  // MPAssertParseError (@"'/", @"Quote");
 }
 
 - (void) testKeywords

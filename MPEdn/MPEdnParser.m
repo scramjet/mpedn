@@ -188,7 +188,7 @@ static BOOL isStartSymPunct (unichar ch)
           (ch == '!' || ch == '$' || ch == '%' || ch == '&' || ch == '*' ||
            ch == '+' || ch == '-' || ch == '.' || ch == '=' || ch == '?' ||
            ch == '_' || ch == '/' || ch == ':' || ch == '#' || ch == '<' ||
-           ch == '>'));
+           ch == '>' || ch == '\''));
 }
 
 /// is this a character that may be in a symbol?
