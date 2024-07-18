@@ -257,13 +257,13 @@
 
 - (void) testCharacters
 {
-  MPAssertParseOK (@"\\a", @'a', @"Character");
-  MPAssertParseOK (@"\\ ", @' ', @"Character");
-  MPAssertParseOK (@"\\newline", @'\n', @"Character");
-  MPAssertParseOK (@"\\tab", @'\t', @"Character");
-  MPAssertParseOK (@"\\return", @'\r', @"Character");
-  MPAssertParseOK (@"\\space", @' ', @"Character");
-  
+  MPAssertParseOK (@"\\a", [MPEdnCharacter character: 'a'], @"Character");
+  MPAssertParseOK (@"\\ ", [MPEdnCharacter character: ' '], @"Character");
+  MPAssertParseOK (@"\\newline", [MPEdnCharacter character: '\n'], @"Character");
+  MPAssertParseOK (@"\\tab", [MPEdnCharacter character: '\t'], @"Character");
+  MPAssertParseOK (@"\\return", [MPEdnCharacter character: '\r'], @"Character");
+  MPAssertParseOK (@"\\space", [MPEdnCharacter character: ' '], @"Character");
+
   MPAssertParseError (@"\\", @"Character");
   MPAssertParseError (@"\\hello", @"Character");
 }

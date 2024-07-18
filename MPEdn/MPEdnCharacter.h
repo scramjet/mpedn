@@ -16,9 +16,30 @@
 
 #import <Foundation/Foundation.h>
 
-#import "MPEdnParser.h"
-#import "NSString+MPEdnParser.h"
-#import "MPEdnWriter.h"
-#import "MPEdnKeyword.h"
-#import "MPEdnSymbol.h"
-#import "MPEdnCharacter.h"
+/**
+ * Represents an EDN character instance.
+ */
+@interface MPEdnCharacter : NSObject<NSCopying, NSSecureCoding>
+
+@property (class, readonly) BOOL supportsSecureCoding;
+
+@property (readonly) unichar character;
+
+/**
+ * Create a character.
+ */
++ (MPEdnCharacter *) character: (unichar) ch;
+
+/**
+ * Create a new character.
+ */
+- (instancetype) initWithCharacter: (unichar) ch;
+
+/**
+ * The character as a readable string.
+ */
+- (NSString *) stringValue;
+
+- (NSComparisonResult) compare: (id) object;
+
+@end

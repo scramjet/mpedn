@@ -19,36 +19,6 @@
 @protocol MPEdnTaggedValueWriter;
 
 /**
- * DEPRECATED: it seems that this is fixed in iOS 7.1.
- *
- * Force a given number instance to be output as a character.
- *
- * NSNumber is quite broken for representing characters. For example,
- * `[NSNumber numberWithChar: 'a']` produces an NSNumber that
- * correctly indicates it wraps a character, but when using
- * numberWithChar with `\n` it does not (meaning `\n` will be emitted
- * as `10`).
- *
- * As as workaround, you can force a number to be seen as a character
- * using MPEdnTagAsCharacter.
- *
- * See this discussion for more information on the NSNumber issue:
- * http://www.cocoabuilder.com/archive/cocoa/136956-nsnumber-is-completely-broken.html.
- *
- * @see MPEdnIsCharacter()
- */
-NSNumber *MPEdnTagAsCharacter (NSNumber *number);
-
-/**
- * DEPRECATED: it seems that this is fixed in iOS 7.1.
- *
- * Test if MPEdnTagAsCharacter() has been used to tag a given number.
- * 
- * @see MPEdnTagAsCharacter()
- */
-BOOL MPEdnIsCharacter (NSNumber *number);
-
-/**
  * Converts Cocoa data objects into EDN-formatted strings.
  * 
  * If you want to simply turn an object into an EDN string, use

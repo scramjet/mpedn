@@ -21,23 +21,9 @@
 #import "MPEdnDateCodec.h"
 #import "MPEdnUUIDCodec.h"
 #import "MPEdnTaggedValue.h"
+#import "MPEdnCharacter.h"
 
 #import <objc/runtime.h>
-
-const NSString *MPEDN_CHARACTER_TAG = @"MPEDN_CHARACTER_TAG";
-
-NSNumber *MPEdnTagAsCharacter (NSNumber *number)
-{
-  objc_setAssociatedObject (number, (__bridge const void *)MPEDN_CHARACTER_TAG,
-                            MPEDN_CHARACTER_TAG, OBJC_ASSOCIATION_ASSIGN);
-
-  return number;
-}
-
-BOOL MPEdnIsCharacter (NSNumber *number)
-{
-  return objc_getAssociatedObject (number, (__bridge const void *)MPEDN_CHARACTER_TAG) != nil;
-}
 
 static NSMutableArray *copy (NSArray *array)
 {
@@ -163,6 +149,8 @@ static NSMutableArray *defaultWriters;
     [self outputSet: value];
   else if ([value isKindOfClass: [MPEdnSymbol class]])
     [self outputSymbol: value];
+  else if ([value isKindOfClass: [MPEdnCharacter class]])
+    [self outputCharacter: value];
   else
   {
     id<MPEdnTaggedValueWriter> tagWriter = [self tagWriterFor: value];
@@ -191,38 +179,64 @@ static NSMutableArray *defaultWriters;
   {
     [outputStr appendString: [value stringValue]];
     [outputStr appendString: @"M"];
+  } else if (CFGetTypeID ((CFNumberRef)value) == CFBooleanGetTypeID ())
+  {
+    [outputStr appendString: [value boolValue] ? @"true" : @"false"];
   } else
   {
-    switch ([value objCType] [0])
+    CFNumberType typeId = CFNumberGetType ((CFNumberRef)value);
+
+    switch (typeId)
     {
-      case 'i':
-      case 'q':
-      case 's':
-        if (MPEdnIsCharacter (value))
-          [outputStr appendFormat: @"\\%c", [value charValue]];
-        else
-          [outputStr appendFormat: @"%@", value];
-        break;
-      case 'd':
+      case kCFNumberDoubleType:
+      case kCFNumberFloat64Type:
         [outputStr appendFormat: @"%.15E", [value doubleValue]];
         break;
-      case 'f':
+
+      case kCFNumberFloatType:
+      case kCFNumberFloat32Type:
         [outputStr appendFormat: @"%.7E", [value doubleValue]];
         break;
-      case 'c':
-      {
-        if ([NSStringFromClass ([value class]) isEqualToString: @"__NSCFBoolean"])
-          [outputStr appendString: [value boolValue] ? @"true" : @"false"];
-        else
-          [outputStr appendFormat: @"\\%c", [value charValue]];
 
-        break;
       default:
-        [NSException raise: @"MPEdnWriterException"
-                    format: @"Don't know how to handle NSNumber "
-                             "value %@, class %@", value, [value class]];
-      }
+        [outputStr appendFormat: @"%@", value];
+        break;
     }
+  }
+}
+
+- (void) outputCharacter: (MPEdnCharacter *) value
+{
+  unichar ch = value.character;
+
+  // attempt to output \uABCD form for 'non printable' chars
+  //
+  //  if ([NSCharacterSet.letterCharacterSet characterIsMember: ch] ||
+  //      [NSCharacterSet.punctuationCharacterSet characterIsMember: ch] ||
+  //      [NSCharacterSet.symbolCharacterSet characterIsMember: ch])
+  //  {
+  //    [outputStr appendFormat: @"\\%C", ch];
+  //  } else
+  //  {
+  //    [outputStr appendFormat: @"\\u%04X", ch];
+  //  }
+
+  switch (ch)
+  {
+    case '\n':
+      [outputStr appendString: @"\\newline"];
+      break;
+
+    case '\r':
+      [outputStr appendString: @"\\return"];
+      break;
+
+    case '\t':
+      [outputStr appendString: @"\\tab"];
+      break;
+
+    default:
+      [outputStr appendFormat: @"\\%C", ch];
   }
 }
 

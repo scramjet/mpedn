@@ -464,35 +464,26 @@ static BOOL isSymPunct (unichar ch)
     } while (isalpha (ch));
     
     NSUInteger length = endIdx - startIdx - 1;
-    NSNumber *charValue = nil;
-    
+    MPEdnCharacter *charValue = nil;
+
     if (length == 1)
     {
       unichar c = [inputStr characterAtIndex: startIdx + 1];
       
-      if (c < 256)
-      {
-        charValue = [NSNumber numberWithUnsignedChar: c];
-      } else
-      {
-        // TODO use [NSString stringWithFormat :@"%C", c]?
-        [self raiseError: ERROR_INVALID_CHARACTER
-                 message: @"MPEdn cannot represent Unicode character points "
-                           "greater than 255"];
-      }
+      charValue = [MPEdnCharacter character: c];
     } else
     {
       NSString *name =
         [inputStr substringWithRange: NSMakeRange (startIdx + 1, length)];
       
       if ([name isEqualToString: @"newline"])
-        charValue = @'\n';
+        charValue = [MPEdnCharacter character: '\n'];
       else if ([name isEqualToString: @"space"])
-        charValue = @' ';
+        charValue = [MPEdnCharacter character: ' '];
       else if ([name isEqualToString: @"tab"])
-        charValue = @'\t';
+        charValue = [MPEdnCharacter character: '\t'];
       else if ([name isEqualToString: @"return"])
-        charValue = @'\r';
+        charValue = [MPEdnCharacter character: '\r'];
       else
       {
         [self raiseError: ERROR_INVALID_CHARACTER

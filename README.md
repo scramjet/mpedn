@@ -51,7 +51,7 @@ To use the library, use one of (in decreasing order of ease-of-use):
 
 * EDN boolean <-> `NSNumber` (`numberWithBool`).
 
-* EDN character <-> `NSNumber` (`numberWithUnsignedChar`).
+* EDN character <-> `MPEdnCharacter`. Objective-C does not have a separate character type comparable to EDN's: ObjC code tends to either use single-character strings or C-style unsigned bytes (which cannot be distinguished reflectively from any other NSNumber-based types).
 
 * EDN keyword <-> `MPEdnKeyword`. If the `MPEdnWriter.useKeywordsInMaps` property is true (the default is false as of 0.2), strings used as keys in `NSDictionary` will be output as keywords if possible. Note that strings and keywords never compare as equal, so this could get confusing when reading a dictionary from an external service that uses keywords: in general, prefer explicit use of keywords where possible.
 
@@ -61,8 +61,6 @@ To use the library, use one of (in decreasing order of ease-of-use):
 
 
 ## Notes
-
-* Symbols would probably be better handled in future by resolving them to a mapped value, either through a symbol table or a user-defined callback.
 
 * Floats are output in full to avoid loss of precision.
 

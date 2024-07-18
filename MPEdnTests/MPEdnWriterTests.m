@@ -44,7 +44,18 @@
   MPAssertSerialisesOK ([NSNumber numberWithDouble: 1.1], @"1.100000000000000E+00");
   MPAssertSerialisesOK ([NSNumber numberWithFloat: 1.1], @"1.1000000E+00");
   MPAssertSerialisesOK (@1.1e-5, @"1.100000000000000E-05");
-  
+  MPAssertSerialisesOK (@(1.1e-5), @"1.100000000000000E-05");
+
+  {
+    int8_t foo = 1;
+    MPAssertSerialisesOK (@(foo), @"1");
+  }
+
+  {
+    uint8_t foo = 1;
+    MPAssertSerialisesOK (@(foo), @"1");
+  }
+
   // decimals
   MPAssertSerialisesOK ([NSDecimalNumber decimalNumberWithString: @"0"], @"0M");
   MPAssertSerialisesOK ([NSDecimalNumber decimalNumberWithString: @"0.00"], @"0M");
@@ -61,26 +72,26 @@
   // characters
   // NSNumber is pretty broken wrt characters. [NSNumber numberWithChar: 'a']
   // produces a number that is reported as a character, but '\n' doesn't. As
-  // as workaround, you can force a number to be seen as a character using
+  // as workaround, you can force a single char string to be seen as an EDN character using
   // MPEdnTagAsCharacter. See discussion here:
   // http://www.cocoabuilder.com/archive/cocoa/136956-nsnumber-is-completely-broken.html
-  MPAssertSerialisesOK (@'a', @"\\a");
+  // you might assume this works: it doesn't
+  // MPAssertSerialisesOK (@'a', @"\\a");
+  MPAssertSerialisesOK (@'a', @"97");
 
   //  NSLog (@"********** %s", [[NSNumber numberWithChar: '\n'] objCType]);
   //  NSLog (@"********** %@", [[NSNumber numberWithChar: '\n'] class]);
   //  NSLog (@"********** %li", CFNumberGetType ((CFNumberRef)[NSNumber numberWithChar: '\n']));
 
-  {
-    NSNumber *newline = [[NSNumber alloc] initWithChar: '\n'];
-    
-    // NB: this GPF's under Xcode 5.1/iOS 7.1
-    //MPEdnTagAsCharacter (newline);
-
-    // BUT the test passes: it seems numberWithChar is fixed
-    XCTAssertEqual ((char)'c', (char)[newline objCType][0], @"NSNumber numberWithChar");
-
-    MPAssertSerialisesOK (newline, @"\\\n");
-  }
+  // this also does not work
+  //  {
+  //    NSNumber *newline = [[NSNumber alloc] initWithChar: '\n'];
+  //
+  //    // BUT the test passes: it seems numberWithChar is fixed
+  //    XCTAssertEqual ((char)'c', (char)[newline objCType][0], @"NSNumber numberWithChar");
+  //
+  //    MPAssertSerialisesOK (newline, @"\\\n");
+  //  }
 }
 
 - (void) testStrings
@@ -102,6 +113,18 @@
   
   XCTAssertEqualObjects ([@{@"a" : @1} objectToEdnString], @"{\"a\" 1}", @"Test category");
   XCTAssertEqualObjects ([@{@"a" : @1} objectToEdnStringAutoKeywords], @"{:a 1}", @"Test category");
+}
+
+- (void) testCharacters
+{
+  MPAssertSerialisesOK ([MPEdnCharacter character: 'a'], @"\\a");
+  MPAssertSerialisesOK ([MPEdnCharacter character: '+'], @"\\+");
+  // INVERTED QUESTION MARK
+  MPAssertSerialisesOK ([MPEdnCharacter character: 0x00BF], @"\\¿");
+
+  MPAssertSerialisesOK ([MPEdnCharacter character: '\t'], @"\\tab");
+  MPAssertSerialisesOK ([MPEdnCharacter character: '\n'], @"\\newline");
+  MPAssertSerialisesOK ([MPEdnCharacter character: '\r'], @"\\return");
 }
 
 - (void) testNil

@@ -45,6 +45,7 @@
 		C9701C781CEAF9DE00C7755B /* NSString+MPEdnParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C9701C771CEAF9DE00C7755B /* NSString+MPEdnParser.m */; };
 		C97339EA1817592E00E901DD /* MPEdnKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = C97339E91817592E00E901DD /* MPEdnKeyword.m */; };
 		C98881E7183093A000B25D11 /* MPEdnBase64Codec.m in Sources */ = {isa = PBXBuildFile; fileRef = C98881E6183093A000B25D11 /* MPEdnBase64Codec.m */; };
+		C99293952C48DBBD00134A27 /* MPEdnCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = C99293942C48DBBD00134A27 /* MPEdnCharacter.m */; };
 		C9FD3A3516C4D04700F3757E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FD3A3416C4D04700F3757E /* Foundation.framework */; };
 		C9FD3A3A16C4D04700F3757E /* MPEdn.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C9FD3A3916C4D04700F3757E /* MPEdn.h */; };
 		D9D0A49A18FEB2170052B00F /* MPEdnKeyword.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C97339E81817592E00E901DD /* MPEdnKeyword.h */; };
@@ -104,6 +105,8 @@
 		C98881E5183093A000B25D11 /* MPEdnBase64Codec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnBase64Codec.h; sourceTree = "<group>"; };
 		C98881E6183093A000B25D11 /* MPEdnBase64Codec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnBase64Codec.m; sourceTree = "<group>"; };
 		C98881E91830984800B25D11 /* MPEdnTaggedValueReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEdnTaggedValueReader.h; sourceTree = "<group>"; };
+		C99293912C48DA9500134A27 /* MPEdnCharacter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPEdnCharacter.h; sourceTree = "<group>"; };
+		C99293942C48DBBD00134A27 /* MPEdnCharacter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEdnCharacter.m; sourceTree = "<group>"; };
 		C9FD3A3116C4D04700F3757E /* libMPEdn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMPEdn.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9FD3A3416C4D04700F3757E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C9FD3A3816C4D04700F3757E /* MPEdn-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MPEdn-Prefix.pch"; sourceTree = "<group>"; };
@@ -201,6 +204,8 @@
 				C9701C761CEAF9DE00C7755B /* NSString+MPEdnParser.h */,
 				C9701C771CEAF9DE00C7755B /* NSString+MPEdnParser.m */,
 				C97339E81817592E00E901DD /* MPEdnKeyword.h */,
+				C99293912C48DA9500134A27 /* MPEdnCharacter.h */,
+				C99293942C48DBBD00134A27 /* MPEdnCharacter.m */,
 				C97339E91817592E00E901DD /* MPEdnKeyword.m */,
 				C98881E41830907B00B25D11 /* MPEdnTaggedValueWriter.h */,
 				C98881E91830984800B25D11 /* MPEdnTaggedValueReader.h */,
@@ -423,6 +428,7 @@
 				C92B5E7116C8C78200BEFCCA /* MPEdnSymbol.m in Sources */,
 				C92C85341835ADF800748291 /* MPEdnTaggedValue.m in Sources */,
 				C901C24C1B0DB5CE002EE8C1 /* MPEdnURLCodec.m in Sources */,
+				C99293952C48DBBD00134A27 /* MPEdnCharacter.m in Sources */,
 				C953E0AD16CDC852007E1043 /* MPEdnParser.m in Sources */,
 				C953E0B416CDDDFA007E1043 /* MPEdnWriter.m in Sources */,
 				C919331A1831E05600724D6D /* MPEdnUUIDCodec.m in Sources */,
@@ -641,6 +647,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -669,6 +676,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -699,6 +707,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
