@@ -46,6 +46,8 @@
 		C97339EA1817592E00E901DD /* MPEdnKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = C97339E91817592E00E901DD /* MPEdnKeyword.m */; };
 		C98881E7183093A000B25D11 /* MPEdnBase64Codec.m in Sources */ = {isa = PBXBuildFile; fileRef = C98881E6183093A000B25D11 /* MPEdnBase64Codec.m */; };
 		C99293952C48DBBD00134A27 /* MPEdnCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = C99293942C48DBBD00134A27 /* MPEdnCharacter.m */; };
+		C9952CE52D494B6B00B9C4B6 /* MPEdnCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = C99293942C48DBBD00134A27 /* MPEdnCharacter.m */; };
+		C9952CE62D494CE800B9C4B6 /* MPEdnCharacter.h in Headers */ = {isa = PBXBuildFile; fileRef = C99293912C48DA9500134A27 /* MPEdnCharacter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9FD3A3516C4D04700F3757E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FD3A3416C4D04700F3757E /* Foundation.framework */; };
 		C9FD3A3A16C4D04700F3757E /* MPEdn.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C9FD3A3916C4D04700F3757E /* MPEdn.h */; };
 		D9D0A49A18FEB2170052B00F /* MPEdnKeyword.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C97339E81817592E00E901DD /* MPEdnKeyword.h */; };
@@ -69,6 +71,7 @@
 			dstSubfolderSpec = 16;
 			files = (
 				D9D0A49A18FEB2170052B00F /* MPEdnKeyword.h in CopyFiles */,
+				C9952CE62D494CE800B9C4B6 /* MPEdnCharacter.h in CopyFiles */,
 				C9FD3A3A16C4D04700F3757E /* MPEdn.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -263,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0188191213669F20044C958 /* MPEdnKeyword.h in Headers */,
+				C9952CE62D494CE800B9C4B6 /* MPEdnCharacter.h in Headers */,
 				A018818F213669E70044C958 /* NSString+MPEdnParser.h in Headers */,
 				A018818B213669CF0044C958 /* MPEdnParser.h in Headers */,
 				A08A9682213663F4000930F4 /* MPEdnFwk.h in Headers */,
@@ -393,6 +397,7 @@
 				A018818C213669D70044C958 /* MPEdnParser.m in Sources */,
 				A018819621366A5D0044C958 /* MPEdnDateCodec.m in Sources */,
 				A0188192213669F70044C958 /* MPEdnKeyword.m in Sources */,
+				C9952CE52D494B6B00B9C4B6 /* MPEdnCharacter.m in Sources */,
 				A018819421366A570044C958 /* MPEdnSymbol.m in Sources */,
 				A018818E213669E10044C958 /* MPEdnWriter.m in Sources */,
 				A018819521366A5A0044C958 /* MPEdnBase64Codec.m in Sources */,
