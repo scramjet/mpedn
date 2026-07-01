@@ -73,6 +73,11 @@
          [[object name] isEqualToString: name];
 }
 
+- (NSComparisonResult) compare: (MPEdnSymbol *) object
+{
+  return [self->name compare: object->name];
+}
+
 - (NSUInteger) hash
 {
   return [name hash];
